@@ -1,0 +1,86 @@
+<<global_options,include=FALSE>>=
+library(knitr)
+opts_chunk$set(
+concordance=TRUE,fig.width=12,fig.height=6,include=FALSE,cache = F
+)
+annee=2023
+options(encoding = "UTF-8")
+@
+
+
+\documentclass[11pt,titlepage,twoside]{report}
+\usepackage[a4paper, inner=1.5cm, outer=1.5cm, top=2cm, bottom=3cm]{geometry}
+
+\usepackage[utf8]{inputenc} 
+\usepackage[T1]{fontenc}
+\usepackage[sort&compress]{natbib}
+\usepackage[french]{babel}
+
+\addto\captionsfrench{\def\tablename{Tableau}}
+\addto\captionsfrench{\renewcommand*{\contentsname}{Sommaire:}}
+\addto\captionsfrench{%
+  \renewcommand{\listfigurename}{Liste des figures:}%
+  \renewcommand{\listtablename}{Liste des tableaux:}%
+  \renewcommand{\abstractname}{Résumé}%
+}
+\usepackage{caption}
+\usepackage[labelsep=endash]{caption}
+\usepackage{graphicx}
+\usepackage{colortbl}
+\usepackage{booktabs}
+\usepackage{longtable}
+\usepackage{array}
+\usepackage{multirow}
+\usepackage{wrapfig}
+\usepackage{float}
+\usepackage{pdflscape}
+\usepackage{tabu}
+\usepackage{threeparttable}
+\usepackage{threeparttablex}
+\usepackage[normalem]{ulem}
+\usepackage{makecell}
+\usepackage[table]{xcolor}
+\usepackage{ae,aeguill}
+\usepackage{subcaption}
+\usepackage{textcomp}
+\usepackage{hyperref}
+\pdfstringdefDisableCommands{%
+  \def\\{}%
+  }
+\hypersetup{ 
+colorlinks=true, 
+linkcolor=marron, 
+citecolor=blueazur, 
+filecolor=bleufonce, 
+urlcolor=bleufonce, 
+pdftitle= {Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine\\ Année \Sexpr{annee} }, pdfauthor={Sébastien Grall},
+pdfsubject={stacomi},
+ pdfkeywords={stacomi} {migrateurs} {Seine} {poissons}
+}
+\pdfoptionpdfminorversion=7
+\renewcommand{\sectionmark}[1]{\markboth{}{\emph{\thesection~#1}}}
+\renewcommand{\subsectionmark}[1]{\markboth{}{\emph{\thesubsection~#1}}}
+\renewcommand{\subsubsectionmark}[1]{\markboth{}{\emph{\thesubsection~#1}}}
+
+\usepackage{fancyhdr}
+\pagestyle{fancy}
+\fancyhf{}
+\rhead{\rightmark}
+\lhead{Migration Bassin Seine \Sexpr{annee}}
+\cfoot{\thepage}
+\setlength{\headheight}{15pt}
+
+\usepackage{pdfpages}
+\usepackage{setspace}
+
+
+\begin{document}
+
+\begin{abstract}
+
+Le résumé
+
+\end{abstract}
+
+
+\end{document}
