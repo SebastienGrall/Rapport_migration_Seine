@@ -92,10 +92,10 @@
   }
 \hypersetup{ 
 colorlinks=true, 
-linkcolor=marron, 
-citecolor=blueazur, 
-filecolor=bleufonce, 
-urlcolor=bleufonce, 
+linkcolor=blue, 
+citecolor=blue, 
+filecolor=blue, 
+urlcolor=blue, 
 pdftitle= {Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine\\ Année 2023 }, pdfauthor={Sébastien Grall},
 pdfsubject={stacomi},
  pdfkeywords={stacomi} {migrateurs} {Seine} {poissons}
@@ -115,14 +115,128 @@ pdfsubject={stacomi},
 
 \usepackage{pdfpages}
 \usepackage{setspace}
+
+ %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%% CHUNK DE CHARGEMENT INITIAL  %%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+
+%% Makes a path to your graphics' folder.
+\graphicspath{{image/}}
+
+\title{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine,
+année 2023}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
+
+\hypersetup{pageanchor=false}
+
+\begin{titlepage}
+
+\includepdf[pages=-]{frontpage.pdf}
+
+\end{titlepage}
+
+
+
+\newpage
+\thispagestyle{empty}
+\strut
+\newpage
+
+\pagenumbering{roman} \setcounter{page}{1} 
 
 \begin{abstract}
 
 Le résumé
 
 \end{abstract}
+
+\newpage
+
+\tableofcontents
+
+\clearpage
+
+\listoffigures
+
+\listoftables
+
+\hypersetup{pageanchor=false}
+
+\clearpage
+
+\pagenumbering{arabic} \setcounter{page}{1} 
+
+
+
+\section{Introduction}
+
+La situation de l'ensemble des poissons migrateurs dans le monde
+est similaire : le nombre de populations,
+les aires de répartition et les abondances sont en déclin depuis la fin du 19\up{ème} siècle
+\citep{saunders_atlantic_1981,bagliniere_reintroductions_1990,parrish_why_2011,jonsson_extinction_1999,
+keith_atlas_2001,rochard_identification_2007,limburg_dramatic_2009}.
+Le besoin de ces espèces de migrer entre différents habitats essentiels à la finalisation
+de leur cycle biologique, implique une vulnérabilité particulière aux perturbations de l'environnement.
+Aujourd'hui, la majorité des poissons amphihalins figure dans la liste rouge
+des espèces menacées de l'IUCN \citep{limburg_dramatic_2009}.
+
+Sur la Seine, le constat est analogue. Historiquement, 10 espèces amphihalines, dont 8 poissons grands migrateurs
+fréquentaient le fleuve sur presque l'ensemble de son bassin versant \citep{moreau_histoire_1881,moreau_les_1898,
+poplin_peuplement_1952,euzenat_migren_1992,rochard_identification_2007}, souvent en abondance. Cependant,
+en raison d'une anthropisation toujours croissante du fleuve, c'est dès les années 1850 que le déclin s'est amorcé.
+Les dégradations sont multiples et semblables à ce qui a été démontré sur d'autres systèmes fluviaux
+\citep{nehlsen_pacific_2011,mcdowall_different_1999,lichatowich_depletion_1999,mckinnell_spatial_1999,
+limburg_dramatic_2009}. L'édification de barrages, la chenalisation, la pollution, la dégradation des habitats et la surpêche ont conduit au cours du 20\up{ème} siècle à l'extinction des derniers grands migrateurs
+\citep{euzenat_migren_1992,belliard_peuplement_1994,mouchel_bassin_1998,boet_multiple_1999,rochard_identification_2007},
+seule l'Anguille européenne subsistait encore \citep{boet_multiple_1999,rochard_identification_2007}.
+
+Néanmoins, les efforts entrepris dans le traitement des effluents anthropiques, notamment ceux de l'agglomération parisienne, durant ces deux dernières décennies ont contribué à la franche amélioration de la qualité de l'eau de la Seine \citep{billen_programme_1999,belliard_return_2009,
+gousailles_limpact_2009}. Ceci s'est rapidement traduit par le retour des poissons amphihalins, parmi lesquelles deux espèces estuariennes, l'Eperlan (\textit{Osmerus eperlanus}) \citep{pomfret_spatial_1991} et le Flet commun
+(\textit{Platichthys flesus}); mais notamment 6 espèces appartenant à la communauté historique des grands poissons
+migrateurs de la Seine \citep{rochard_identification_2009} telles que le Saumon atlantique (\textit{Salmo salar}),
+la Truite de mer (\textit{Salmo trutta trutta}), la Grande alose (\textit{Alosa alosa}), l'Alose feinte
+(\textit{Alosa fallax}) \citep{duhamel_peuplement_2004}, la Lamproie marine (\textit{Petromyzon marinus}) et la
+Lamproie fluviatile (\textit{Lampetra fluviatilis}), qui recolonisent peu à peu les parties les plus basses du bassin. L'Anguille européenne (\textit{Anguilla anguilla}) est, quant à elle, présente également sur les zones amonts bien que ses effectifs soient relictuels.
+
+Dès lors, il s'est rapidement avéré primordial de suivre l'évolution de la recolonisation de ces espèces. Pour ce faire, il s'agit de s'intéresser aux éléments clés du cycle biologique liés au domaine continental chaque année. Cela implique
+le recensement des zones de frayères et du succès reproducteur; mais avant tout, le dénombrement des géniteurs en montaison en différents points du bassin versant en réponse notamment aux travaux de restauration de la continuité écologique sur le fleuve.
+
+C'est au barrage de Poses dans l'Eure (27), le premier ouvrage sur l'axe Seine, que se sont organisés les premiers éléments de ce suivi, avec la mise en place d'une Station de Contrôle des Migrations (STACOMI) sur la passe à poissons existante en rive gauche depuis octobre 2007. Afin d'assurer la mise en conformité de l'ouvrage dans le cadre du plan de gestion Anguille, le dispositif a été complété en 2013 par l'ajout d'une passe piège à anguilles sur cette même rive.
+
+En raison de la longueur de l'ouvrage (470m) et de la localisation sur le bassin, la rive droite a également été aménagée par les Voies Navigables de France (VNF). Ce nouveau dispositif, mis en service à l'automne 2017 est constitué d'une passe à bassins équipée d'une chambre de vidéo-comptage ainsi qu'une passe piège à anguilles.
+
+Investie depuis plus de 16 ans dans le suivi de la recolonisation du bassin de la Seine par les différentes espèces franchissant à nouveau l'estuaire, Seine-Normandie Migrateurs (Seinormigr) est en charge de l'intégralité des suivi de montaison par vidéo-comptage et par piégeage des anguilles sur le barrage.
+
+Ce rapport présente les résultats des suivis sur les dispositifs de franchissement en rive droite et en rive gauche du barrage de Poses - Amfreville-sous-les-Monts et les associent avec les données historiques afin de donner une vision globale de l'activité migratoire à l'entrée du bassin de la Seine.
+
+\clearpage
+
+\section{Contexte de l'étude}
+
+\clearpage
+%\twocolumn
+% biblio commune aux différentes années
+\bibliographystyle{apalike}
+\bibliography{rapport_poses}
+\normalsize
+\null
+\vfill
+
+Rapport Sweave \LaTeX \\
+------------------------\\
+packages R : \vspace{1mm}
+StacomiR \citep{legrand_stacomir_2019}\\
+\LaTeX \ :Hmisc, xtable\\
+graphiques : ggplot2, cowplot\\
+traitements : stringr, lubridate, reshape2, dplyr, plyr, questionr\\
+------------------------\\
+Dernière compilation : le \today \\
+ R version 4.4.1 (2024-06-14 ucrt)\\
+ plateforme x86-64-w64-mingw32
+
+\clearpage
 
 
 \end{document}
