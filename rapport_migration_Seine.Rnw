@@ -7,7 +7,7 @@ annee=2023
 options(encoding = "UTF-8")
 @
 
-
+%test
 \documentclass[11pt,titlepage,twoside]{article}
 \usepackage[a4paper, inner=1.5cm, outer=1.5cm, top=2cm, bottom=3cm]{geometry}
 
