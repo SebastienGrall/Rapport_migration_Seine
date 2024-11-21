@@ -75,14 +75,14 @@ pdfsubject={stacomi},
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\rightmark}
-\lhead{Migration Bassin Seine \Sexpr{annee}}
-\cfoot{\thepage}
+\lfoot{\footnotesize{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine, année \Sexpr{annee}}} %Insere un pied de page avec le texte a gauche.
+\rfoot{\thepage}
 \setlength{\headheight}{15pt}
 
 \usepackage{pdfpages}
 \usepackage{setspace}
 
- %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% CHUNK DE CHARGEMENT INITIAL  %%%%%%%
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 <<init,echo=FALSE,eval=TRUE,results='hide'>>=
