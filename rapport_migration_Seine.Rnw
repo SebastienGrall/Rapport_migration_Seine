@@ -3,11 +3,11 @@ library(knitr)
 opts_chunk$set(
 concordance=TRUE,fig.width=12,fig.height=6,include=FALSE,cache = F
 )
-annee=2023
+annee=2024
 options(encoding = "UTF-8")
 @
 
-%test
+
 \documentclass[11pt,titlepage,twoside]{article}
 \usepackage[a4paper, inner=1.5cm, outer=1.5cm, top=2cm, bottom=3cm]{geometry}
 
@@ -58,7 +58,7 @@ linkcolor=blue,
 citecolor=blue, 
 filecolor=blue, 
 urlcolor=blue, 
-pdftitle= {Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine\\ Année \Sexpr{annee} }, pdfauthor={Sébastien Grall},
+pdftitle= {Suivi des poissons migrateurs sur les stations de contrôle des migrations (STACOMI) du bassin de la Seine\\ Année \Sexpr{annee} }, pdfauthor={Sébastien Grall},
 pdfsubject={stacomi},
  pdfkeywords={stacomi} {migrateurs} {Seine} {poissons}
 }
@@ -75,12 +75,16 @@ pdfsubject={stacomi},
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\rightmark}
-\lfoot{\footnotesize{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine, année \Sexpr{annee}}} %Insere un pied de page avec le texte a gauche.
+\lfoot{\footnotesize{Suivi des poissons migrateurs sur les stations de contrôle des migrations (STACOMI) du bassin de la Seine, année \Sexpr{annee}}} %Insere un pied de page avec le texte a gauche.
 \rfoot{\thepage}
 \setlength{\headheight}{15pt}
 
 \usepackage{pdfpages}
 \usepackage{setspace}
+
+% Définition des couleurs
+\definecolor{bleuTitre}{RGB}{0,70,140} % Bleu profond
+\definecolor{grisBloc}{RGB}{240,240,240} % Gris clair
 
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 %%%%%% CHUNK DE CHARGEMENT INITIAL  %%%%%%%
@@ -96,8 +100,10 @@ require(Hmisc)
 require(questionr)
 require(ggplot2)
 require(dplyr)
+require(tidyr)
 require(cowplot)
 require(lubridate)
+require(hubeau)
 
 
 #repertoire contenant les images
@@ -130,36 +136,178 @@ integer_breaks <- function(n = 5, ...) {
     return(fxn)
 }
 
-##graph debit histo Seine
+## Debit histo Seine ##
 
+QmM<-get_hydrometrie_obs_elab(code_entite = "H320000104", grandeur_hydro_elab = "QmM")
+QmM<-subset(QmM,date_obs_elab<=str_c(annee,"12-01"))
+QmM$mois<-month(QmM$date_obs_elab)
+QmM<-summarise(group_by(QmM,mois),Q_mean_month=round(mean(resultat_obs_elab/1000)))
+QmM$mois<-as.Date(str_c(annee,"-",QmM$mois,"-01"),tz="GMT")
 
-r_env<-new("report_env")
-r_env<-choice_c(r_env,
-                stationMesure=c("Poses_debit"),
-                datedebut=str_c(annee-11,"-01-01"),
-                datefin=str_c(annee,"-12-31"),
-                silent=FALSE)	
-r_env<-connect(r_env)
-debit<-r_env@data
-debit$year<-strftime(debit$env_date_debut,format="%Y")
-debit$mois<-strftime(debit$env_date_debut,format="%m")
+QmM_poly <- QmM %>%
+  mutate(
+    date_debut = as_date(mois),
+    date_fin   = (as_date(mois) %m+% months(1)) - days(1),
+    mois_centre = date_debut + (date_fin - date_debut) / 2   
+  )
 
-debit_inter<-subset(debit,year<annee)
-debit_annee<-subset(debit,year==annee)
+# Liste des breaks EXACTS (pas d'extra)
+breaks_mois <- QmM_poly$mois_centre
+labels_mois <- format(breaks_mois, "%B")  # noms des mois en français
 
-debit_inter<-summarise(group_by(debit_inter,mois),debit=mean(env_valeur_quantitatif)) %>%
-      as.data.frame()
-debit_inter$mois<-as.POSIXct(str_c(annee,"-",debit_inter$mois,"-01"),tz="GMT")
+QmnJ<-get_hydrometrie_obs_elab(code_entite = "H320000104",date_debut_obs_elab = str_c(annee,"-01-01"),
+                               date_fin_obs_elab = str_c(annee,"-12-31"),grandeur_hydro_elab = "QmnJ")
+QmnJ$resultat_obs_elab<-QmnJ$resultat_obs_elab/1000
+QmnJ$date_obs_elab<-as.Date(QmnJ$date_obs_elab)
 
+debit_seine_histo<-ggplot() +
+  geom_rect(
+    data = QmM_poly,
+    aes(
+      xmin = date_debut,
+      xmax = date_fin,
+      ymin = 0,
+      ymax = Q_mean_month
+    ),
+    fill = "#2C80D3", alpha = 0.8, color = NA
+  )+
+  geom_line(data = QmnJ,
+            aes(x = date_obs_elab, y = resultat_obs_elab),
+            color = "black", linewidth = 1) +
 
-debit_seine_histo<-ggplot()+geom_area(data=debit_inter,aes(x=mois,y=debit), fill="#318CE7")+
-  geom_line(data=debit_annee,aes(x=env_date_debut,y=env_valeur_quantitatif),colour="black",linewidth=1)+theme_bw()+
-  scale_x_datetime(date_labels = "%B", date_breaks = "month",limits = c(min(debit_inter$mois),
-          max(debit_inter$mois)),expand = c(0,0))+xlab("")+ylab(bquote(bold('débits ('* ~ m^3/s*')')))+
-  theme(axis.text = element_text(size=15),axis.title = element_text(size=15,face="bold"),plot.margin = unit(c(1,1.3,1,1), "cm"))+
-  scale_y_continuous(expand = expansion(mult = c(0,0.1)))
-png(file=str_c(imgwd,"debit_seine_histo.png"),width=42,height=20,unit="cm",res=200)
+    scale_x_date(
+    breaks = breaks_mois,
+    labels = labels_mois,
+    expand = c(0,0)
+  ) +
+  labs(x = "", y = bquote(bold('débits de la Seine ('* ~ m^3/s*')')),caption = "Source des données : HydroPortail") +
+  theme_bw()+
+    theme(
+    axis.text = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    legend.position = "right",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 15)
+  )
+
+png(file=str_c(imgwd,"debit_seine_histo.png"),width=14,height=6,unit="in",res=200)
 print(debit_seine_histo)
+dev.off()
+
+## Debit histo Oise ##
+
+QmM<-get_hydrometrie_obs_elab(code_entite = "H208000104", grandeur_hydro_elab = "QmM")
+QmM<-subset(QmM,date_obs_elab<=str_c(annee,"12-01"))
+QmM$mois<-month(QmM$date_obs_elab)
+QmM<-summarise(group_by(QmM,mois),Q_mean_month=round(mean(resultat_obs_elab/1000)))
+QmM$mois<-as.Date(str_c(annee,"-",QmM$mois,"-01"),tz="GMT")
+
+QmM_poly <- QmM %>%
+  mutate(
+    date_debut = as_date(mois),
+    date_fin   = (as_date(mois) %m+% months(1)) - days(1),
+    mois_centre = date_debut + (date_fin - date_debut) / 2   
+  )
+
+# Liste des breaks EXACTS (pas d'extra)
+breaks_mois <- QmM_poly$mois_centre
+labels_mois <- format(breaks_mois, "%B")  # noms des mois en français
+
+QmnJ<-get_hydrometrie_obs_elab(code_entite = "H208000104",date_debut_obs_elab = str_c(annee,"-01-01"),
+                               date_fin_obs_elab = str_c(annee,"-12-31"),grandeur_hydro_elab = "QmnJ")
+QmnJ$resultat_obs_elab<-QmnJ$resultat_obs_elab/1000
+QmnJ$date_obs_elab<-as.Date(QmnJ$date_obs_elab)
+
+debit_oise_histo<-ggplot() +
+  geom_rect(
+    data = QmM_poly,
+    aes(
+      xmin = date_debut,
+      xmax = date_fin,
+      ymin = 0,
+      ymax = Q_mean_month
+    ),
+    fill = "#2C80D3", alpha = 0.8, color = NA
+  )+
+  geom_line(data = QmnJ,
+            aes(x = date_obs_elab, y = resultat_obs_elab),
+            color = "black", linewidth = 1) +
+
+    scale_x_date(
+    breaks = breaks_mois,
+    labels = labels_mois,
+    expand = c(0,0)
+  ) +
+  labs(x = "", y = bquote(bold('débits ('* ~ m^3/s*')')),caption = "Source des données : HydroPortail") +
+  theme_bw()+
+    theme(
+    axis.text = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    legend.position = "right",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 15)
+  )
+
+png(file=str_c(imgwd,"debit_oise_histo.png"),width=14,height=6,unit="in",res=200)
+print(debit_oise_histo)
+dev.off()
+
+### Debit Aisne #### 
+
+QmM<-get_hydrometrie_obs_elab(code_entite = "H1680005", grandeur_hydro_elab = "QmM")
+QmM<-subset(QmM,date_obs_elab<=str_c(annee,"12-01"))
+QmM$mois<-month(QmM$date_obs_elab)
+QmM<-summarise(group_by(QmM,mois),Q_mean_month=round(mean(resultat_obs_elab/1000)))
+QmM$mois<-as.Date(str_c(annee,"-",QmM$mois,"-01"),tz="GMT")
+
+QmM_poly <- QmM %>%
+  mutate(
+    date_debut = as_date(mois),
+    date_fin   = (as_date(mois) %m+% months(1)) - days(1),
+    mois_centre = date_debut + (date_fin - date_debut) / 2   
+  )
+
+# Liste des breaks EXACTS (pas d'extra)
+breaks_mois <- QmM_poly$mois_centre
+labels_mois <- format(breaks_mois, "%B")  # noms des mois en français
+
+QmnJ<-get_hydrometrie_obs_elab(code_entite = "H1680005",date_debut_obs_elab = str_c(annee,"-01-01"),
+                               date_fin_obs_elab = str_c(annee,"-12-31"),grandeur_hydro_elab = "QmnJ")
+QmnJ$resultat_obs_elab<-QmnJ$resultat_obs_elab/1000
+QmnJ$date_obs_elab<-as.Date(QmnJ$date_obs_elab)
+
+debit_aisne_histo<-ggplot() +
+  geom_rect(
+    data = QmM_poly,
+    aes(
+      xmin = date_debut,
+      xmax = date_fin,
+      ymin = 0,
+      ymax = Q_mean_month
+    ),
+    fill = "#2C80D3", alpha = 0.8, color = NA
+  )+
+  geom_line(data = QmnJ,
+            aes(x = date_obs_elab, y = resultat_obs_elab),
+            color = "black", linewidth = 1) +
+
+    scale_x_date(
+    breaks = breaks_mois,
+    labels = labels_mois,
+    expand = c(0,0)
+  ) +
+  labs(x = "", y = bquote(bold('débits ('* ~ m^3/s*')')),caption = "Source des données : HydroPortail") +
+  theme_bw()+
+    theme(
+    axis.text = element_text(size = 15),
+    axis.title.y = element_text(size = 15),
+    legend.position = "right",
+    legend.title = element_blank(),
+    legend.text = element_text(size = 15)
+  )
+
+png(file=str_c(imgwd,"debit_aisne_histo.png"),width=14,height=6,unit="in",res=200)
+print(debit_aisne_histo)
 dev.off()
 
 @
@@ -167,14 +315,15 @@ dev.off()
 %% Makes a path to your graphics' folder.
 \graphicspath{{image/}}
 
-\title{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine,
+\title{Suivi des poissons migrateurs sur les stations de contrôle des migrations du bassin de la Seine,
 année \Sexpr{annee}}
 
 \author[1]{Sébastien Grall}
 \author[1]{Alice Lemonnier}
 \author[1]{Romain Dupuy-Jandard}
 \author[2]{Mathilde Castro}
-\affil[1]{Seine-Normandie Migrateurs, 11 cours Clemenceau 76100 Rouen}
+\author[2]{Mathias Lambin}
+\affil[1]{Seine-Normandie Migrateurs, 40 avenue Robert Hooke 76800 Saint-Étienne-du-Rouvray}
 \affil[2]{Fédération Départementale de l’Oise pour la Pêche et la protection des Milieux Aquatiques, 28 rue Jules Méline 60200 Compiègne}
 
 
@@ -184,7 +333,67 @@ année \Sexpr{annee}}
 
 \begin{titlepage}
 
-\includepdf[pages=-]{frontpage.pdf}
+   \centering
+
+    % --- Bandeau supérieur avec logos ---
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[height=4cm]{logos/logo_seinormigr.png}\hspace{1cm}
+    \end{minipage}
+    \vspace{1.5cm}
+    
+        \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[height=1.5cm]{logos/logo_fd60.png}\hspace{1cm}
+        \includegraphics[height=1.5cm]{logos/logo_vnf.jpg}\hspace{1cm}
+        \includegraphics[height=1.5cm]{logos/logo_hydrowatt.jpg}\hspace{1cm}
+        \includegraphics[height=1.5cm]{logos/logo_semao.png}
+    \end{minipage}
+    \vspace{1.5cm}
+
+    % --- Bandeau bleu pour le titre ---
+    \colorbox{bleuTitre}{
+        \parbox{\textwidth}{
+            \centering
+            \vspace{0.5cm}
+            {\Huge \textbf{\textcolor{white}{Suivi des poissons migrateurs sur les stations de contrôle des migrations du bassin de la Seine}}}\par
+            \vspace{0.3cm}
+            {\LARGE \textbf{\textcolor{white}{Année \Sexpr{annee}}}}\par
+            \vspace{0.3cm}
+        }
+    }
+    \vspace{2cm}
+
+    % --- Bloc Association avec fond gris ---
+    \colorbox{grisBloc}{
+        \parbox{0.9\textwidth}{
+            \centering
+            \vspace{0.5cm}
+            {\Large \textbf{Seine-Normandie Migrateurs}}\par
+            \vspace{0.3cm}
+            \textit{Association interrégionale pour la restauration et la gestion des populations de poissons migrateurs}\par
+            Association Loi 1901 déclarée le 2 janvier 2007 à la Préfecture de la Seine-Maritime\par
+            Agréée sur la région Normandie en qualité d’association de protection de l’environnement\par
+            par arrêté préfectoral du 20 décembre 2022
+            \vspace{0.5cm}
+        }
+    }
+    \vspace{1.5cm}
+
+    % --- Coordonnées ---
+    \begin{spacing}{1.2}
+    \textbf{Adresse :} 40 avenue Robert Hooke - 76800 Saint-Étienne-du-Rouvray\par
+    %\textbf{Tél :} 02 35 62 01 55 \quad \textbf{Fax :} 02 35 62 01 72\par
+    \textbf{Email :} seinormigr@gmail.com \quad \textbf{Site :} www.seinormigr.fr
+    \end{spacing}
+
+    \vfill
+    % --- Bandeau inférieur avec logos partenaires ---
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[height=2cm]{logos/LOGO RF AESN_RVB.png}\hspace{1cm}
+        \includegraphics[height=2cm]{logos/logo_fnpf.png}
+    \end{minipage}
 
 \end{titlepage}
 
@@ -257,7 +466,7 @@ C'est au barrage de Poses dans l'Eure (27), le premier ouvrage sur l'axe Seine, 
 
 En raison de la longueur de l'ouvrage (470m) et de la localisation sur le bassin, la rive droite a également été aménagée par les Voies Navigables de France (VNF). Ce nouveau dispositif, mis en service à l'automne 2017 est constitué d'une passe à bassins équipée d'une chambre de vidéo-comptage ainsi qu'une passe piège à anguilles. A la même période une autre installation à vue le jour sur le barrage de Carandeau, première ouvrage sur l'Aisne. Depuis avril 2023, le barrage de Pontoise, première ouvrage sur l'Oise a également été équipé d'un système de vidéo-comptage.
 
-Ce rapport présente les résultats des suivis sur les dispositifs de ,comptage des 3 ouvrages cités précédemment et les associent avec les données historiques afin de donner une vision globale de l'activité migratoire sur le bassin de la Seine.
+Ce rapport présente les résultats des suivis sur les dispositifs de comptage des 3 ouvrages cités précédemment et les associent avec les données historiques afin de donner une vision globale de l'activité migratoire sur le bassin de la Seine.
 
 \clearpage
 
