@@ -43,6 +43,16 @@ options(encoding = "UTF-8")
 \usepackage{ae,aeguill}
 \usepackage{subcaption}
 
+
+% Colonne centrée horizontalement avec largeur fixe
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% Optionnel : colonne alignée à droite
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Colonne alignée à gauche (par défaut)
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
 \usepackage{authblk}
 \renewcommand\Authand{ et }
 \renewcommand\Authands{ et }
@@ -96,6 +106,7 @@ require(plyr)
 require(stringr)
 require(stacomiR)
 require(xtable)
+require(kableExtra)
 require(reshape2)
 require(Hmisc)
 require(questionr)
@@ -105,7 +116,7 @@ require(tidyr)
 require(cowplot)
 require(lubridate)
 require(hubeau)
-require(cowplot)
+require(patchwork)
 
 
 #repertoire contenant les images
@@ -294,24 +305,10 @@ debit_aisne_histo<-ggplot() +
     legend.text = element_text(size = 15)
   )
 
-plot_debit <- plot_grid(
-  debit_seine_histo,
-  debit_oise_histo,
-  debit_aisne_histo,
-  nrow = 3,                             # empiler les deux lignes
-  rel_heights = c(1, 1,1)                 # tu peux ajuster la hauteur relative (ex: c(1.2, 1))
-)
-
-source_label <- ggdraw() +
-  draw_label("Source des données : HydroPortail",
-             x = 0.5, hjust = 0.5, size = 10, fontface = "italic")
-
-debit_seine_oise_aisne <- plot_grid(
-  plot_debit,    # Graphiques au centre
-  source_label, # Source en bas
-  ncol = 1,
-  rel_heights = c(1, 0.08) # Ajuste la place relative des éléments
-)
+debit_seine_oise_aisne <-  debit_seine_histo/
+  debit_oise_histo/
+  debit_aisne_histo + 
+  plot_annotation(caption = "Source des données : HydroPortail")           
 
 png(file=str_c(imgwd,"debit_seine_oise_aisne.png"),width=10,height=8,unit="in",res=200)
 print(debit_seine_oise_aisne)
@@ -613,16 +610,124 @@ mig_annee_poses_rg<-subset(bilesp_poses_vc_rg,tax_nom_latin %in% c("Anguilla ang
                            "Lampetra fluviatilis","Petromyzon marinus","Chelon ramada"))
 mig_annee_poses_rd<-subset(bilesp_poses_vc_rd,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
                            "Lampetra fluviatilis","Petromyzon marinus","Chelon ramada"))
+
+mig_ang_poses_piege_rg<-subset(data_ang[[1]]@data,bjo_labelquantite=="Effectif_total" & bjo_annee==annee)
+mig_ang_poses_piege_rg<-summarise(group_by(mig_ang_poses_piege_rg,bjo_tax_code,bjo_std_code),effectifs_poses_rg=round(sum(bjo_valeur)))
+mig_ang_poses_piege_rg$bjo_std_code<-"CIV"
+mig_ang_poses_piege_rg <- mig_ang_poses_piege_rg %>% rename(lot_tax_code = bjo_tax_code,lot_std_code = bjo_std_code)
+
+mig_ang_poses_piege_rd<-subset(data_ang[[2]]@data,bjo_labelquantite=="Effectif_total" & bjo_annee==annee)
+mig_ang_poses_piege_rd<-summarise(group_by(mig_ang_poses_piege_rd,bjo_tax_code,bjo_std_code),effectifs_poses_rd=round(sum(bjo_valeur)))
+mig_ang_poses_piege_rd$bjo_std_code<-"CIV"
+mig_ang_poses_piege_rd <- mig_ang_poses_piege_rd %>% rename(lot_tax_code = bjo_tax_code,lot_std_code = bjo_std_code)
+
+mig_annee_poses_rg<-summarise(group_by(mig_annee_poses_rg,lot_tax_code,lot_std_code),effectifs_poses_rg=sum(lot_effectif))
+mig_annee_poses_rd<-summarise(group_by(mig_annee_poses_rd,lot_tax_code,lot_std_code),effectifs_poses_rd=sum(lot_effectif))
+
+mig_annee_poses_rg<-rbind(mig_annee_poses_rg,mig_ang_poses_piege_rg)
+mig_annee_poses_rd<-rbind(mig_annee_poses_rd,mig_ang_poses_piege_rd)
+
+mig_annee_poses_rg<-mig_annee_poses_rg %>% mutate(Espèces = case_when(
+                            lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
+                            lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
+                            lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
+                            lot_tax_code == "2011" & lot_std_code =="5" ~ "Lamproie fluviatile",
+                            lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
+                            lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
+                            lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
+                            lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
+                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
+                           )) %>% ungroup() %>% select(4,3)
+
+mig_annee_poses_rd<-mig_annee_poses_rd %>% mutate(Espèces = case_when(
+                            lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
+                            lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
+                            lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
+                            lot_tax_code == "2011" & lot_std_code =="5" ~ "Lamproie fluviatile",
+                            lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
+                            lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
+                            lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
+                            lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
+                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
+                           )) %>% ungroup() %>% select(4,3)
+
 mig_annee_pontoise<-subset(bilesp_pontoise,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
                            "Lampetra fluviatilis","Petromyzon marinus","Chelon ramada"))
+mig_annee_pontoise<-summarise(group_by(mig_annee_pontoise,lot_tax_code,lot_std_code),effectifs_pontoise=sum(lot_effectif))
+mig_annee_pontoise<-mig_annee_pontoise %>% mutate(Espèces = case_when(
+                            #lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
+                            lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
+                            lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
+                            lot_tax_code == "2011" & lot_std_code =="5" ~ "Lamproie fluviatile",
+                            lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
+                            lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
+                            lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
+                            lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
+                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
+                           ))%>% ungroup() %>% select(4,3)
+
+
 mig_annee_carandeau<-subset(bilesp_carandeau,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
                            "Lampetra fluviatilis","Petromyzon marinus","Chelon ramada"))
+mig_annee_carandeau<-summarise(group_by(mig_annee_carandeau,lot_tax_code,lot_std_code),effectifs_carandeau=sum(lot_effectif))
+mig_annee_carandeau<- mig_annee_carandeau %>% mutate(Espèces = case_when(
+                            #lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
+                            lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
+                            lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
+                            lot_tax_code == "2011" & lot_std_code =="5" ~ "Lamproie fluviatile",
+                            lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
+                            lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
+                            lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
+                            lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
+                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
+                           )) %>% ungroup() %>% select(4,3)
 
+resume_poses<-full_join(mig_annee_poses_rg,mig_annee_poses_rd,by=c("Espèces")) %>%
+  rowwise(Espèces) %>% 
+  mutate(total_poses = sum(c(effectifs_poses_rg,effectifs_poses_rd),na.rm = T))
+
+resume <-resume_poses %>% full_join(mig_annee_pontoise,by=c("Espèces")) %>% 
+  full_join(mig_annee_carandeau,by=c("Espèces"))
+
+resume<-resume %>% rename("Poses rive gauche" = effectifs_poses_rg, "Poses rive droite" = effectifs_poses_rd, "Total Poses" = total_poses,
+                  "Pontoise" = effectifs_pontoise, "Carandeau" = effectifs_carandeau) %>% as.data.frame()
+rownames(resume)<-resume[,1]
+resume<-select(resume,-1) 
+
+resume2 <- resume %>%
+  tibble::rownames_to_column(var = "Espèce")
+
+resume_latex <- resume2 %>%
+  kbl(
+    caption = "Effectifs annuels des poissons migrateurs",
+    booktabs = TRUE,
+    format = "latex",
+    escape = FALSE,
+    linesep = ""
+  ) %>%
+  kable_styling(
+    latex_options = c("striped","hold_position", "scale_down"),
+    position = "center",
+    full_width = FALSE
+  ) %>%
+  column_spec(1, width = "6cm") %>%
+  column_spec(2, latex_column_spec = "C{2cm}", bold = F) %>%
+  column_spec(3, latex_column_spec = "C{2cm}", bold = F) %>%
+  column_spec(4, latex_column_spec = "C{2cm}", bold = TRUE) %>%
+  column_spec(5, latex_column_spec = "C{2cm}", bold = TRUE) %>%
+  column_spec(6, latex_column_spec = "C{2cm}", bold = TRUE) %>%
+  add_header_above(c(" " = 1, "Seine" = 3, "Oise" = 1, "Aisne" = 1))
+
+writeLines(resume_latex, str_c(tabwd, "recap.tex"))
 
 @
 
 
 Le résumé
+
+
+\input{table/recap.tex}
+
 
 \end{abstract}
 
@@ -944,7 +1049,7 @@ Rapport Sweave \LaTeX \\
 packages R : \vspace{1mm}
 StacomiR \citep{legrand_stacomir_2019}, hubeau\\
 \LaTeX \ :Hmisc, xtable\\
-graphiques : ggplot2, cowplot\\
+graphiques : ggplot2, patchwork\\
 traitements : stringr, lubridate, reshape2, dplyr, plyr, questionr\\
 ------------------------\\
 Dernière compilation : le \today \\
