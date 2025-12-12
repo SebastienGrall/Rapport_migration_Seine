@@ -145,6 +145,30 @@ pdfsubject={stacomi},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %% Makes a path to your graphics' folder.
 \graphicspath{{image/}}
 
@@ -241,7 +265,7 @@ année 2024}
 
 
 
-Le résumé
+Les poissons migrateurs entrant dans l'estuaire de la Seine sont contrôlés au niveau du barrage de Poses, marquant la fin de l'estuaire et qui est équipé de dispositifs de comptage sur les deux rives. Les poissons qui s'engagent sur l'axe Oise peuvent ensuite être retrouvés au niveau du barrage de Pontoise, équipé d'un système de vidéo-comptage depuis 2023. Il existe un dernier point de contrôle pour les poissons empruntant ensuite l'Aisne au niveau du barrage de Carandeau. Les effectifs comptabilisés en 2024 au niveau de ces stations sont présentés dans le tableau \ref{tab:recap}.
 
 
 \input{table/recap.tex}
@@ -552,6 +576,18 @@ Pendant la période de migration, le piège est relevé tous les jours, hors wee
 
 \clearpage
 
+\section{Suivi des migrations 2024}
+
+\subsection{Alose (\textit{Alosa alosa})}
+
+
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{p_seasonal_ala}
+\caption{Rythmes migratoires des aloses au barrage de Poses - Amfreville-sous-les-Monts. En violet pâle, moyenne interannuelle des montaisons hebdomadaires; en violet foncé, effectifs hebdomadaires des montaisons de l'année.}
+\label{p_seasonal_ala}
+\end{figure}
 
 \begin{singlespace}
 %\twocolumn
@@ -566,9 +602,9 @@ Rapport Sweave \LaTeX \\
 ------------------------\\
 packages R : \vspace{1mm}
 StacomiR \citep{legrand_stacomir_2019}, hubeau\\
-\LaTeX \ :Hmisc, xtable\\
+\LaTeX \ :Hmisc, kableExtra, xtable\\
 graphiques : ggplot2, patchwork\\
-traitements : stringr, lubridate, reshape2, dplyr, plyr, questionr\\
+traitements : stringr, lubridate, reshape2, dplyr, plyr, tidyr, questionr\\
 ------------------------\\
 Dernière compilation : le \today \\
  R version 4.5.2 (2025-10-31 ucrt)\\

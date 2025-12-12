@@ -105,15 +105,14 @@ pdfsubject={stacomi},
 require(plyr)
 require(stringr)
 require(stacomiR)
-require(xtable)
 require(kableExtra)
+require(xtable)
 require(reshape2)
 require(Hmisc)
 require(questionr)
 require(ggplot2)
 require(dplyr)
 require(tidyr)
-require(cowplot)
 require(lubridate)
 require(hubeau)
 require(patchwork)
@@ -142,6 +141,9 @@ integer_breaks <- function(n = 5, ...) {
     return(fxn)
 }
 
+@
+
+<<chunk debit,echo=FALSE,eval=TRUE,results='hide'>>=
 ## Debit histo Seine ##
 
 QmM<-get_hydrometrie_obs_elab(code_entite = "H320000104", grandeur_hydro_elab = "QmM")
@@ -314,6 +316,9 @@ png(file=str_c(imgwd,"debit_seine_oise_aisne.png"),width=10,height=8,unit="in",r
 print(debit_seine_oise_aisne)
 dev.off()
 
+@
+
+<<chunk fonction r_mig_inter et connexion base,echo=FALSE,eval=TRUE,results='hide'>>=
 ###### connexion à la base Stacomi, schéma Seinormigr ###########
 
 
@@ -352,23 +357,36 @@ r_mig_interannual<-connect(r_mig_interannual,check=TRUE,silent=TRUE)
 r_mig_interannual<-calcule(r_mig_interannual,silent=TRUE)
 
 return(r_mig_interannual)
-}
-# data alose 
-r_mig_inter_ala_poses_rg<-fn_rmiginter(le_dc=c(101),espece=c("Alosa"),stade=c("5"),annee_debut = 2008)
-r_mig_inter_ala_poses_rd<-fn_rmiginter(le_dc=c(103,105),espece=c("Alosa"),stade=c("5"),annee_debut = 2018)
+}}
+
+@
+
+<<chunk data alose,echo=FALSE,eval=TRUE,results='hide'>>=
+# data alose
+
+if(exists("con")){
+
+r_mig_inter_ala_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Alosa"),stade=c("5"),annee_debut = 2008)
 r_mig_inter_ala_carandeau<-fn_rmiginter(le_dc=c(106,107),espece=c("Alosa"),stade=c("5"),annee_debut = 2018)
 r_mig_inter_ala_pontoise<-fn_rmiginter(le_dc=c(108),espece=c("Alosa"),stade=c("5"),annee_debut = 2023)
 
-data_alose<-c(r_mig_inter_ala_poses_rg,r_mig_inter_ala_poses_rd,r_mig_inter_ala_carandeau,r_mig_inter_ala_pontoise)
-rm(r_mig_inter_ala_poses_rg,r_mig_inter_ala_poses_rd,r_mig_inter_ala_carandeau,r_mig_inter_ala_pontoise)
+data_alose<-c(r_mig_inter_ala_poses,r_mig_inter_ala_carandeau,r_mig_inter_ala_pontoise)
+rm(r_mig_inter_ala_poses,r_mig_inter_ala_carandeau,r_mig_inter_ala_pontoise)
+
+}
+
+@
+
+<<chunk data anguille,echo=FALSE,eval=TRUE,results='hide'>>=
+# data alose
+
+if(exists("con")){
 
 #data anguille
 r_mig_inter_ang_poses_rg_piege<-fn_rmiginter(le_dc=c(102),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2014)
 r_mig_inter_ang_poses_rd_piege<-fn_rmiginter(le_dc=c(104),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2018)
-r_mig_inter_ang_poses_rg_video_agj<-fn_rmiginter(le_dc=c(101),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2008)
-r_mig_inter_ang_poses_rg_video_agg<-fn_rmiginter(le_dc=c(101),espece=c("Anguilla anguilla"),stade=c("AGG"),annee_debut = 2008)
-r_mig_inter_ang_poses_rd_video_agj<-fn_rmiginter(le_dc=c(103,105),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2018)
-r_mig_inter_ang_poses_rd_video_agg<-fn_rmiginter(le_dc=c(103,105),espece=c("Anguilla anguilla"),stade=c("AGG"),annee_debut = 2018)
+r_mig_inter_ang_poses_video_agj<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2008)
+r_mig_inter_ang_poses_video_agg<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Anguilla anguilla"),stade=c("AGG"),annee_debut = 2008)
 r_mig_inter_ang_carandeau_video_agj<-fn_rmiginter(le_dc=c(106,107),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2018)
 r_mig_inter_ang_carandeau_video_agg<-fn_rmiginter(le_dc=c(106,107),espece=c("Anguilla anguilla"),stade=c("AGG"),annee_debut = 2018)
 r_mig_inter_ang_pontoise_agj<-fn_rmiginter(le_dc=c(108),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2023)
@@ -376,67 +394,92 @@ r_mig_inter_ang_pontoise_agg<-fn_rmiginter(le_dc=c(108),espece=c("Anguilla angui
 
 data_ang<-c(r_mig_inter_ang_poses_rg_piege,
                 r_mig_inter_ang_poses_rd_piege,
-                r_mig_inter_ang_poses_rg_video_agj,
-                r_mig_inter_ang_poses_rg_video_agg,
-                r_mig_inter_ang_poses_rd_video_agj,
-                r_mig_inter_ang_poses_rd_video_agg,
+                r_mig_inter_ang_poses_video_agj,
+                r_mig_inter_ang_poses_video_agg,
                 r_mig_inter_ang_carandeau_video_agj,
                 r_mig_inter_ang_carandeau_video_agg,
                 r_mig_inter_ang_pontoise_agj,
                 r_mig_inter_ang_pontoise_agg)
 rm(r_mig_inter_ang_poses_rg_piege,
                 r_mig_inter_ang_poses_rd_piege,
-                r_mig_inter_ang_poses_rg_video_agj,
-                r_mig_inter_ang_poses_rg_video_agg,
-                r_mig_inter_ang_poses_rd_video_agj,
-                r_mig_inter_ang_poses_rd_video_agg,
+                r_mig_inter_ang_poses_video_agj,
+                r_mig_inter_ang_poses_video_agg,
                 r_mig_inter_ang_carandeau_video_agj,
                 r_mig_inter_ang_carandeau_video_agg,
                 r_mig_inter_ang_pontoise_agj,
                 r_mig_inter_ang_pontoise_agg)
 
+}
+
+@
+
+<<chunk data lamproie fluviatile,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+
 #data lamproie fluviatile
-r_mig_inter_lpf_poses_rg<-fn_rmiginter(le_dc=c(101),espece=c("Lampetra fluviatilis"),stade=c("5"),annee_debut = 2008)
-r_mig_inter_lpf_poses_rd<-fn_rmiginter(le_dc=c(103,105),espece=c("Lampetra fluviatilis"),stade=c("5"),annee_debut = 2018)
+r_mig_inter_lpf_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Lampetra fluviatilis"),stade=c("5"),annee_debut = 2008)
 
-data_lpf<-c(r_mig_inter_lpf_poses_rg,r_mig_inter_lpf_poses_rd)
-rm(r_mig_inter_lpf_poses_rg,r_mig_inter_lpf_poses_rd)
+data_lpf<-r_mig_inter_lpf_poses
+rm(r_mig_inter_lpf_poses)
 
+}
+@
+
+<<chunk data lamproie marine,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
 #data lamproie marine
-r_mig_inter_lpm_poses_rg<-fn_rmiginter(le_dc=c(101),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2008)
-r_mig_inter_lpm_poses_rd<-fn_rmiginter(le_dc=c(103,105),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2018)
+r_mig_inter_lpm_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2008)
 r_mig_inter_lpm_carandeau_P1<-fn_rmiginter(le_dc=c(106),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2018)
 #r_mig_inter_lpm_carandeau_P2<-fn_rmiginter(le_dc=c(107),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2018)
 r_mig_inter_lpm_pontoise<-fn_rmiginter(le_dc=c(108),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2023)
 
-data_lpm<-c(r_mig_inter_lpm_poses_rg,r_mig_inter_lpm_poses_rd,r_mig_inter_lpm_carandeau_P1,r_mig_inter_lpm_pontoise)
-rm(r_mig_inter_lpm_poses_rg,r_mig_inter_lpm_poses_rd,r_mig_inter_lpm_carandeau_P1,r_mig_inter_lpm_pontoise)
+data_lpm<-c(r_mig_inter_lpm_poses,r_mig_inter_lpm_carandeau_P1,r_mig_inter_lpm_pontoise)
+rm(r_mig_inter_lpm_poses,r_mig_inter_lpm_carandeau_P1,r_mig_inter_lpm_pontoise)
+}
+@
 
+<<chunk data mulet porc,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
 #data mulet porc
-r_mig_inter_mup_poses_rg<-fn_rmiginter(le_dc=c(101),espece=c("Chelon ramada"),stade=c("5"),annee_debut = 2008)
-r_mig_inter_mup_poses_rd<-fn_rmiginter(le_dc=c(103,105),espece=c("Chelon ramada"),stade=c("5"),annee_debut = 2018)
+r_mig_inter_mup_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Chelon ramada"),stade=c("5"),annee_debut = 2008)
 
-data_mup<-c(r_mig_inter_mup_poses_rg,r_mig_inter_mup_poses_rd)
-rm(r_mig_inter_mup_poses_rg,r_mig_inter_mup_poses_rd)
+data_mup<-c(r_mig_inter_mup_poses)
+rm(r_mig_inter_mup_poses)
+}
+@
 
+<<chunk data saumon,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
 #data sat
-r_mig_inter_sat_poses_rg<-fn_rmiginter(le_dc=c(101),espece=c("Salmo salar"),stade=c("5"),annee_debut = 2008)
-r_mig_inter_sat_poses_rd<-fn_rmiginter(le_dc=c(103,105),espece=c("Salmo salar"),stade=c("5"),annee_debut = 2018)
+r_mig_inter_sat_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Salmo salar"),stade=c("5"),annee_debut = 2008)
 r_mig_inter_sat_carandeau<-fn_rmiginter(le_dc=c(106,107),espece=c("Salmo salar"),stade=c("5"),annee_debut = 2018)
 r_mig_inter_sat_pontoise<-fn_rmiginter(le_dc=c(108),espece=c("Salmo salar"),stade=c("5"),annee_debut = 2023)
 
-data_sat<-c(r_mig_inter_sat_poses_rg,r_mig_inter_sat_poses_rd,r_mig_inter_sat_carandeau,r_mig_inter_sat_pontoise)
-rm(r_mig_inter_sat_poses_rg,r_mig_inter_sat_poses_rd,r_mig_inter_sat_carandeau,r_mig_inter_sat_pontoise)
+data_sat<-c(r_mig_inter_sat_poses,r_mig_inter_sat_carandeau,r_mig_inter_sat_pontoise)
+rm(r_mig_inter_sat_poses,r_mig_inter_sat_carandeau,r_mig_inter_sat_pontoise)
+}
+@
 
+<<chunk data truite de mer,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
 #data trm
-r_mig_inter_trm_poses_rg<-fn_rmiginter(le_dc=c(101),espece=c("Salmo trutta trutta"),stade=c("5"),annee_debut = 2008)
-r_mig_inter_trm_poses_rd<-fn_rmiginter(le_dc=c(103,105),espece=c("Salmo trutta trutta"),stade=c("5"),annee_debut = 2018)
+r_mig_inter_trm_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Salmo trutta trutta"),stade=c("5"),annee_debut = 2008)
 r_mig_inter_trm_carandeau<-fn_rmiginter(le_dc=c(106,107),espece=c("Salmo trutta trutta"),stade=c("5"),annee_debut = 2018)
 r_mig_inter_trm_pontoise<-fn_rmiginter(le_dc=c(108),espece=c("Salmo trutta trutta"),stade=c("5"),annee_debut = 2023)
 
-data_trm<-c(r_mig_inter_trm_poses_rg,r_mig_inter_trm_poses_rd,r_mig_inter_trm_carandeau,r_mig_inter_trm_pontoise)
-rm(r_mig_inter_trm_poses_rg,r_mig_inter_trm_poses_rd,r_mig_inter_trm_carandeau,r_mig_inter_trm_pontoise)
+data_trm<-c(r_mig_inter_trm_poses,r_mig_inter_trm_carandeau,r_mig_inter_trm_pontoise)
+rm(r_mig_inter_trm_poses,r_mig_inter_trm_carandeau,r_mig_inter_trm_pontoise)
+}
+@
 
+<<chunk data taille,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
 ### données taille 
 
 r_sample_char<-new("report_sample_char")
@@ -453,7 +496,12 @@ r_sample_char<-connect(r_sample_char)
 r_sample_char<-calcule(r_sample_char,silent=TRUE)
 report_sample_char=get("report_sample_char",envir_stacomi)
 data_taille_video<-report_sample_char@data
+}
+@
 
+<<chunk data bilan especes,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
 # bilan espèces
 
 bilesp<-new("report_species")
@@ -499,7 +547,12 @@ bilesp<-new("report_species")
   bilesp <- connect(bilesp)
   bilesp <- calcule(bilesp)
 bilesp_pontoise<-bilesp@data
+}
+@
 
+<<chunk saving or loading data,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
 # sauvegarde data
 save(data_alose,data_ang,data_lpf,data_lpm,data_mup,data_sat,data_trm,data_taille_video,
      bilesp_poses_vc_rg,bilesp_poses_vc_rd,bilesp_carandeau,bilesp_pontoise,
@@ -694,16 +747,28 @@ resume<-resume %>% rename("Poses rive gauche" = effectifs_poses_rg, "Poses rive 
 rownames(resume)<-resume[,1]
 resume<-select(resume,-1) 
 
+resume<-resume[c("Alose","Anguille en montaison (passe piège)","Anguille jaune (vidéo-comptage)","Anguille argentée","Lamproie fluviatile",
+          "Lamproie marine","Mulet porc","Saumon atlantique","Truite de mer"),]
+
 resume2 <- resume %>%
-  tibble::rownames_to_column(var = "Espèce")
+  tibble::rownames_to_column(var = "Espèce")%>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+resume2[2:6]<-format(resume2[2:6],big.mark = " ")
+
+resume2 <- resume2 %>%
+  mutate(
+    Pontoise  = if_else(`Espèce` == "Anguille en montaison (passe piège)", "", Pontoise),
+    Carandeau = if_else(`Espèce` == "Anguille en montaison (passe piège)", "", Carandeau)) 
 
 resume_latex <- resume2 %>%
   kbl(
-    caption = "Effectifs annuels des poissons migrateurs",
+    caption = "Effectifs annuels des poissons migrateurs comptabilisés sur les stations de contrôle des migrations du bassin de la Seine",
     booktabs = TRUE,
     format = "latex",
     escape = FALSE,
-    linesep = ""
+    linesep = "",
+    label = "recap"
   ) %>%
   kable_styling(
     latex_options = c("striped","hold_position", "scale_down"),
@@ -723,7 +788,7 @@ writeLines(resume_latex, str_c(tabwd, "recap.tex"))
 @
 
 
-Le résumé
+Les poissons migrateurs entrant dans l'estuaire de la Seine sont contrôlés au niveau du barrage de Poses, marquant la fin de l'estuaire et qui est équipé de dispositifs de comptage sur les deux rives. Les poissons qui s'engagent sur l'axe Oise peuvent ensuite être retrouvés au niveau du barrage de Pontoise, équipé d'un système de vidéo-comptage depuis 2023. Il existe un dernier point de contrôle pour les poissons empruntant ensuite l'Aisne au niveau du barrage de Carandeau. Les effectifs comptabilisés en \Sexpr{annee} au niveau de ces stations sont présentés dans le tableau \ref{tab:recap}.
 
 
 \input{table/recap.tex}
@@ -1034,6 +1099,28 @@ Pendant la période de migration, le piège est relevé tous les jours, hors wee
 
 \clearpage
 
+\section{Suivi des migrations \Sexpr{annee}}
+
+\subsection{Alose (\textit{Alosa alosa})}
+
+<<chunk alose, echo=FALSE, eval=TRUE,results='hide'>>=
+
+data_alose_poses<-data_alose[[1]]
+data_alose_poses@data<-subset(data_alose_poses@data,!(bjo_identifiant %in% c(25623,25624,25625,25622,25626))) # on vire une alose qui a fait un A/R sur DC 105 en décembre
+
+plot(data_alose_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
+p_seasonal_ala <- envir_stacomi$g_seasonal
+png(file=str_c(imgwd,"p_seasonal_ala.png"),width=10,height=8,unit="in",res=200)
+print(p_seasonal_ala)
+dev.off()
+@
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{p_seasonal_ala}
+\caption{Rythmes migratoires des aloses au barrage de Poses - Amfreville-sous-les-Monts. En violet pâle, moyenne interannuelle des montaisons hebdomadaires; en violet foncé, effectifs hebdomadaires des montaisons de l'année.}
+\label{p_seasonal_ala}
+\end{figure}
 
 \begin{singlespace}
 %\twocolumn
@@ -1048,9 +1135,9 @@ Rapport Sweave \LaTeX \\
 ------------------------\\
 packages R : \vspace{1mm}
 StacomiR \citep{legrand_stacomir_2019}, hubeau\\
-\LaTeX \ :Hmisc, xtable\\
+\LaTeX \ :Hmisc, kableExtra, xtable\\
 graphiques : ggplot2, patchwork\\
-traitements : stringr, lubridate, reshape2, dplyr, plyr, questionr\\
+traitements : stringr, lubridate, reshape2, dplyr, plyr, tidyr, questionr\\
 ------------------------\\
 Dernière compilation : le \today \\
  \Sexpr{sanitize(print(version["version.string"]))}\\
