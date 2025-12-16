@@ -131,6 +131,11 @@ gras <- function(x) {str_c('{\\textbf{',x,'}}')}
 options("xtable.include.rownames"=FALSE)
 options(knitr.table.format = "latex")
 
+# couleur station 
+col_Poses<-"#006A8E"
+col_Pontoise<-"#B1283A"
+col_Carandeau<-"#088158"
+
 # A function factory for getting integer y-axis values.
 integer_breaks <- function(n = 5, ...) {
     fxn <- function(x) {
@@ -660,9 +665,9 @@ année \Sexpr{annee}}
 <<chunk recap migration, echo=FALSE, eval=TRUE,results='hide'>>=
 
 mig_annee_poses_rg<-subset(bilesp_poses_vc_rg,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
-                           "Lampetra fluviatilis","Petromyzon marinus","Chelon ramada"))
+                           "Petromyzon marinus","Chelon ramada"))
 mig_annee_poses_rd<-subset(bilesp_poses_vc_rd,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
-                           "Lampetra fluviatilis","Petromyzon marinus","Chelon ramada"))
+                           "Petromyzon marinus","Chelon ramada"))
 
 mig_ang_poses_piege_rg<-subset(data_ang[[1]]@data,bjo_labelquantite=="Effectif_total" & bjo_annee==annee)
 mig_ang_poses_piege_rg<-summarise(group_by(mig_ang_poses_piege_rg,bjo_tax_code,bjo_std_code),effectifs_poses_rg=round(sum(bjo_valeur)))
@@ -680,29 +685,34 @@ mig_annee_poses_rd<-summarise(group_by(mig_annee_poses_rd,lot_tax_code,lot_std_c
 mig_annee_poses_rg<-rbind(mig_annee_poses_rg,mig_ang_poses_piege_rg)
 mig_annee_poses_rd<-rbind(mig_annee_poses_rd,mig_ang_poses_piege_rd)
 
+lpf_poses_rg<-subset(data_lpf@data,bjo_dis_identifiant == "101" &
+                       between(bjo_jour,as.Date(str_c(annee-1,"-09-30")),as.Date(str_c(annee,"-12-31"))) & bjo_labelquantite=="Effectif_total") 
+lpf_poses_rd<-subset(data_lpf@data,bjo_dis_identifiant %in% c(103,105) &
+                       between(bjo_jour,as.Date(str_c(annee-1,"-09-30")),as.Date(str_c(annee,"-12-31"))) & bjo_labelquantite=="Effectif_total") 
+
 mig_annee_poses_rg<-mig_annee_poses_rg %>% mutate(Espèces = case_when(
                             lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
                             lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
                             lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
-                            lot_tax_code == "2011" & lot_std_code =="5" ~ "Lamproie fluviatile",
                             lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
                             lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
                             lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
                             lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
                             lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
                            )) %>% ungroup() %>% select(4,3)
+mig_annee_poses_rg<-rbind(mig_annee_poses_rg, tibble(`Espèces`= c("Lamproie fluviatile"),effectifs_poses_rg= sum(lpf_poses_rg$bjo_valeur)))
 
 mig_annee_poses_rd<-mig_annee_poses_rd %>% mutate(Espèces = case_when(
                             lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
                             lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
                             lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
-                            lot_tax_code == "2011" & lot_std_code =="5" ~ "Lamproie fluviatile",
                             lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
                             lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
                             lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
                             lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
                             lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
                            )) %>% ungroup() %>% select(4,3)
+mig_annee_poses_rd<-rbind(mig_annee_poses_rd, tibble(`Espèces`= c("Lamproie fluviatile"),effectifs_poses_rd= sum(lpf_poses_rd$bjo_valeur)))
 
 mig_annee_pontoise<-subset(bilesp_pontoise,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
                            "Lampetra fluviatilis","Petromyzon marinus","Chelon ramada"))
@@ -1107,20 +1117,77 @@ Pendant la période de migration, le piège est relevé tous les jours, hors wee
 
 data_alose_poses<-data_alose[[1]]
 data_alose_poses@data<-subset(data_alose_poses@data,!(bjo_identifiant %in% c(25623,25624,25625,25622,25626))) # on vire une alose qui a fait un A/R sur DC 105 en décembre
+data_alose_poses_annee<-subset(data_alose_poses@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+data_alose_pontoise<- data_alose[[3]]
+data_alose_pontoise_annee <- subset(data_alose_pontoise@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+data_alose_carandeau <- data_alose[[2]]
+data_alose_carandeau_annee <- subset(data_alose_carandeau@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+
+data_alose_annuelle<-rbind(data_alose_poses_annee,data_alose_pontoise_annee,data_alose_carandeau_annee)
+data_alose_annuelle <- data_alose_annuelle %>% mutate(station = case_when(
+                            bjo_dis_identifiant %in% c(101,103,105)  ~ "Poses",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise"))
+
+data_alose_annuelle <- data_alose_annuelle %>% 
+                        group_by(bjo_jour,station) %>% 
+                        summarise(bjo_valeur=sum(bjo_valeur))
+data_alose_annuelle <- data_alose_annuelle %>%
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))
+
+plot_annuel_ala<-ggplot(data_alose_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=station),stat = "identity")+
+                  facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
+                  scale_fill_manual(values = c(col_Poses,col_Pontoise,col_Carandeau),
+                                    labels = c("Poses", "Pontoise","Carandeau"))+
+                  theme_bw()+
+                  theme(text = element_text(size = 20))
+
+png(file=str_c(imgwd,"plot_annuel_ala.png"),width=10,height=5,unit="in",res=200)
+print(plot_annuel_ala)
+dev.off()
 
 plot(data_alose_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
 p_seasonal_ala <- envir_stacomi$g_seasonal
+p_seasonal_ala <- p_seasonal_ala + theme(text = element_text(size = 15)) + xlab("")
 png(file=str_c(imgwd,"p_seasonal_ala.png"),width=10,height=8,unit="in",res=200)
 print(p_seasonal_ala)
 dev.off()
 @
 
+Les deux espèces d'aloses, la grande et la feinte, sont présentes sur le bassin de la Seine. Bien que relictuelle, la présence d'\textit{A. fallax} a été confirmée lors d'inventaires réalisés en Basse Seine en 1996 \citep{rochard_premier_1996}, 2002 et 2003 (données non publiées). La précision des informations relevées par vidéo-comptage ne permet pas en revanche, de les distinguer clairement (Figure \ref{ALA}) mais des opérations de captures ponctuels sur le barrage en 2020 et 2021 n'ont montré que la présence de la grande Alose. La migration génésique des aloses feintes se cantonne généralement dans les parties aval des fleuves, les individus observés à Pontoise et à Carandeau sont donc des Grandes aloses.
+
+\begin{figure}[htpb]
+    \centering
+      \begin{subfigure}[b]{0.3\textwidth}
+          \includegraphics[width=\textwidth]{ALA_POSES}
+      \end{subfigure}
+      \begin{subfigure}[b]{0.3\textwidth}
+          \includegraphics[width=\textwidth]{ALA_PONTOISE}
+      \end{subfigure}
+  \caption{Aloses observées en vidéocompage en rive droite du barrage de Poses - Amfreville-sous-les-Monts (à gauche) et au barrage de Pontoise (à droite).}
+  \label{ALA}
+\end{figure}
+
+En \Sexpr{annee}, les aloses ont été \Sexpr{gras(sum(data_alose_poses_annee$bjo_valeur))} à franchir l'estuaire de la Seine à Poses. Une fraction de cette cohorte a atteint les deux stations de contrôle amont puisque \Sexpr{gras(sum(data_alose_pontoise_annee$bjo_valeur))} individus ont été observés à Pontoise et \Sexpr{gras(sum(data_alose_carandeau_annee$bjo_valeur))} à Carandeau. Les aloses ont une bonne capacité à emprunter les écluses de navigation. Ce phénomène est amplifié quand les ouvrages de franchissement sont peu adaptés à l'espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. 
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_annuel_ala}
+\caption{Effectifs journaliers des aloses recensés sur les STACOMI du bassin Seine.}
+\label{p_annuel_ala}
+\end{figure}
+
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{p_seasonal_ala}
-\caption{Rythmes migratoires des aloses au barrage de Poses - Amfreville-sous-les-Monts. En violet pâle, moyenne interannuelle des montaisons hebdomadaires; en violet foncé, effectifs hebdomadaires des montaisons de l'année.}
+\caption{Rythmes migratoires des aloses au barrage de Poses - Amfreville-sous-les-Monts.}
 \label{p_seasonal_ala}
 \end{figure}
+
+\clearpage
 
 \begin{singlespace}
 %\twocolumn
