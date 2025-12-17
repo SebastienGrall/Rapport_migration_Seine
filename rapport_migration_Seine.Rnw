@@ -1113,7 +1113,7 @@ Pendant la période de migration, le piège est relevé tous les jours, hors wee
 
 \subsection{Alose (\textit{Alosa alosa})}
 
-<<chunk alose, echo=FALSE, eval=TRUE,results='hide'>>=
+<<chunk alose, echo=FALSE, eval=TRUE,results='hide' >>=
 
 data_alose_poses<-data_alose[[1]]
 data_alose_poses@data<-subset(data_alose_poses@data,!(bjo_identifiant %in% c(25623,25624,25625,25622,25626))) # on vire une alose qui a fait un A/R sur DC 105 en décembre
@@ -1125,6 +1125,7 @@ data_alose_pontoise_annee <- subset(data_alose_pontoise@data,bjo_annee==annee & 
 data_alose_carandeau <- data_alose[[2]]
 data_alose_carandeau_annee <- subset(data_alose_carandeau@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
 
+#### plot annuelle ALA ####
 
 data_alose_annuelle<-rbind(data_alose_poses_annee,data_alose_pontoise_annee,data_alose_carandeau_annee)
 data_alose_annuelle <- data_alose_annuelle %>% mutate(station = case_when(
@@ -1143,11 +1144,54 @@ plot_annuel_ala<-ggplot(data_alose_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeu
                   scale_fill_manual(values = c(col_Poses,col_Pontoise,col_Carandeau),
                                     labels = c("Poses", "Pontoise","Carandeau"))+
                   theme_bw()+
-                  theme(text = element_text(size = 20))
+                  theme(text = element_text(size = 15))
 
 png(file=str_c(imgwd,"plot_annuel_ala.png"),width=10,height=5,unit="in",res=200)
 print(plot_annuel_ala)
 dev.off()
+
+#### plot ridgeline ALA ####
+
+data_alose_pluri<-rbind(data_alose_poses@data,data_alose_pontoise@data,data_alose_carandeau@data)
+data_alose_pluri<-subset(data_alose_pluri,bjo_labelquantite=="Effectif_total")
+data_alose_pluri <- data_alose_pluri %>% mutate(station = case_when(
+                            bjo_dis_identifiant %in% c(101,103,105)  ~ "Poses",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise"))
+data_alose_pluri <- summarise(group_by(data_alose_pluri,bjo_jour,station),effectif=sum(bjo_valeur)) %>%
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau"))) %>%
+  as.data.frame()
+data_alose_pluri$effectif <- abs(data_alose_pluri$effectif)
+data_alose_pluri<-subset(data_alose_pluri,bjo_jour >="2018-01-01")
+
+data_long <- data_alose_pluri %>%  
+  mutate(effectif = abs(effectif)) %>%
+  uncount(effectif) %>%
+  mutate(
+    # extraire année ou identifiant de saison
+    Saison = format(bjo_jour, "%Y")
+  )
+data_long$bjo_jour_2024 <- as.Date(
+  paste0("2024-", format(data_long$bjo_jour, "%m-%d"))
+)
+
+plot_ridgeline_ala<-ggplot(data_long,
+       aes(x = bjo_jour_2024, y = Saison, fill = station)) +
+  ggridges::geom_density_ridges(
+    color = "black",
+    alpha = 0.5,
+    scale = 2
+  ) +
+  scale_fill_manual(values = c(col_Poses,col_Pontoise,col_Carandeau),
+                                    labels = c("Poses", "Pontoise","Carandeau")) +
+  theme_bw() +
+  labs(x = "", y = "annee")+
+  theme(text = element_text(size = 15))
+png(file=str_c(imgwd,"plot_ridgeline_ala.png"),width=10,height=5,unit="in",res=200)
+print(plot_ridgeline_ala)
+dev.off()
+
+#### plot seasonal ALA ####
 
 plot(data_alose_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
 p_seasonal_ala <- envir_stacomi$g_seasonal
@@ -1155,6 +1199,14 @@ p_seasonal_ala <- p_seasonal_ala + theme(text = element_text(size = 15)) + xlab(
 png(file=str_c(imgwd,"p_seasonal_ala.png"),width=10,height=8,unit="in",res=200)
 print(p_seasonal_ala)
 dev.off()
+
+#### plot taille ALA ####
+
+data_taille_alose<-subset(data_taille_video, tax_nom_latin == "Alosa")
+data_taille_alose <- data_taille_alose %>% mutate(station = case_when(
+                            ope_dic_identifiant %in% c(101,103,105)  ~ "Poses",
+                            ope_dic_identifiant %in% == 108  ~ "Pontoise"))
+
 @
 
 Les deux espèces d'aloses, la grande et la feinte, sont présentes sur le bassin de la Seine. Bien que relictuelle, la présence d'\textit{A. fallax} a été confirmée lors d'inventaires réalisés en Basse Seine en 1996 \citep{rochard_premier_1996}, 2002 et 2003 (données non publiées). La précision des informations relevées par vidéo-comptage ne permet pas en revanche, de les distinguer clairement (Figure \ref{ALA}) mais des opérations de captures ponctuels sur le barrage en 2020 et 2021 n'ont montré que la présence de la grande Alose. La migration génésique des aloses feintes se cantonne généralement dans les parties aval des fleuves, les individus observés à Pontoise et à Carandeau sont donc des Grandes aloses.
@@ -1171,7 +1223,7 @@ Les deux espèces d'aloses, la grande et la feinte, sont présentes sur le bassi
   \label{ALA}
 \end{figure}
 
-En \Sexpr{annee}, les aloses ont été \Sexpr{gras(sum(data_alose_poses_annee$bjo_valeur))} à franchir l'estuaire de la Seine à Poses. Une fraction de cette cohorte a atteint les deux stations de contrôle amont puisque \Sexpr{gras(sum(data_alose_pontoise_annee$bjo_valeur))} individus ont été observés à Pontoise et \Sexpr{gras(sum(data_alose_carandeau_annee$bjo_valeur))} à Carandeau. Les aloses ont une bonne capacité à emprunter les écluses de navigation. Ce phénomène est amplifié quand les ouvrages de franchissement sont peu adaptés à l'espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. 
+En \Sexpr{annee}, les aloses ont été \Sexpr{gras(sum(data_alose_poses_annee$bjo_valeur))} à franchir l'estuaire de la Seine à Poses. Une fraction de cette cohorte a atteint les deux stations de contrôle amont puisque \Sexpr{gras(sum(data_alose_pontoise_annee$bjo_valeur))} individus ont été observés à Pontoise et \Sexpr{gras(sum(data_alose_carandeau_annee$bjo_valeur))} à Carandeau. Les aloses ont une bonne capacité à emprunter les écluses de navigation. Ce phénomène est amplifié quand les ouvrages de franchissement sont peu adaptés à l'espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. Cela signifie que le nombre d'aloses contrôlés par vidéo-comptage sous-estime le nombre réel d'aloses franchissant l'ouvrage, cela ce confirme notamment par des premières détections d'individus plus précoces sur des stations en amont. C'est notamment le cas en 2023 où les premières aloses ont été observées à Pontoise avant la première détection au vidéo-comptage de Poses (Figure \ref{plot_ridgeline_ala}).  
 
 \begin{figure}[htpb]
 \centering
@@ -1179,6 +1231,15 @@ En \Sexpr{annee}, les aloses ont été \Sexpr{gras(sum(data_alose_poses_annee$bj
 \caption{Effectifs journaliers des aloses recensés sur les STACOMI du bassin Seine.}
 \label{p_annuel_ala}
 \end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_ridgeline_ala}
+\caption{Phénologie de la migration des aloses sur les STACOMI du bassin Seine.}
+\label{plot_ridgeline_ala}
+\end{figure}
+
+La phénologie de la migration au niveau de la fin de l'estuaire de Seine est présentée sur la figure \ref{p_seasonal_ala}. Les premiers individus se présentent entre la fin du mois de mars et le début du mois d'avril. L'essentiel de la migration se déroule au cours des mois d'avril à juin avec quelques passages durant la période estivale.
 
 \begin{figure}[htpb]
 \centering
