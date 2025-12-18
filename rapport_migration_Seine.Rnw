@@ -8,7 +8,7 @@ options(encoding = "UTF-8")
 @
 
 
-\documentclass[11pt,titlepage,twoside]{article}
+\documentclass[11pt,twoside]{article}
 \usepackage[a4paper, inner=2cm, outer=2cm, top=2cm, bottom=3cm]{geometry}
 
 \usepackage[utf8]{inputenc} 
@@ -79,6 +79,10 @@ pdfsubject={stacomi},
 
 \makeatletter
     \def\@@and{et}
+\makeatother
+
+\makeatletter
+\pretocmd\abstract{\hrule\vspace{1em}}{}{}
 \makeatother
 
 \usepackage{fancyhdr}
@@ -654,6 +658,7 @@ année \Sexpr{annee}}
 \newpage
 \thispagestyle{empty}
 \strut
+
 \newpage
 
 \pagenumbering{roman} \setcounter{page}{1}
@@ -1205,7 +1210,7 @@ dev.off()
 data_taille_alose<-subset(data_taille_video, tax_nom_latin == "Alosa")
 data_taille_alose <- data_taille_alose %>% mutate(station = case_when(
                             ope_dic_identifiant %in% c(101,103,105)  ~ "Poses",
-                            ope_dic_identifiant %in% == 108  ~ "Pontoise"))
+                            ope_dic_identifiant == 108  ~ "Pontoise"))
 
 @
 

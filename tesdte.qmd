@@ -1,0 +1,181 @@
+---
+title: "Rapport Seine"
+format:
+  pdf:
+    include-in-header:
+      text: |
+        \usepackage{setspace}
+        \usepackage{xcolor}
+        \usepackage{graphicx}
+        \usepackage[a4paper, inner=2cm, outer=2cm, top=2cm, bottom=3cm]{geometry}          \usepackage[utf8]{inputenc} 
+        \usepackage[T1]{fontenc}
+        \usepackage[sort&compress]{natbib}
+        \usepackage[french]{babel}
+
+        \addto\captionsfrench{\def\tablename{Tableau}}
+        \addto\captionsfrench{\renewcommand*{\contentsname}{Sommaire:}}
+        \addto\captionsfrench{%
+          \renewcommand{\listfigurename}{Liste des figures:}%
+          \renewcommand{\listtablename}{Liste des tableaux:}%
+          \renewcommand{\abstractname}{Résumé}%
+        }
+        \usepackage{caption}
+        \usepackage[labelsep=endash]{caption}
+        \usepackage{graphicx}
+        \usepackage{colortbl}
+        \usepackage{booktabs}
+        \usepackage{longtable}
+        \usepackage{array}
+        \usepackage{multirow}
+        \usepackage{wrapfig}
+        \usepackage{float}
+        \usepackage{pdflscape}
+        \usepackage{tabu}
+        \usepackage{threeparttable}
+        \usepackage{threeparttablex}
+        \usepackage[normalem]{ulem}
+        \usepackage{makecell}
+        \usepackage[table]{xcolor}
+        \usepackage{ae,aeguill}
+        \usepackage{subcaption}
+
+            \newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+          \newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+          \newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
+          \usepackage{authblk}
+        \renewcommand\Authand{ et }
+        \renewcommand\Authands{ et }
+
+        \usepackage{textcomp}
+        \usepackage{hyperref}
+          \pdfstringdefDisableCommands{%
+          \def\\{}%
+            }
+          \hypersetup{ 
+          colorlinks=true, 
+          linkcolor=blue, 
+          citecolor=blue, 
+          filecolor=blue, 
+          urlcolor=blue, 
+          pdftitle= {Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine\\ Année 2025 }, pdfauthor={Sébastien Grall},
+          pdfsubject={stacomi},
+           pdfkeywords={stacomi} {migrateurs} {Seine} {poissons}
+          }
+          
+          \renewcommand{\sectionmark}[1]{\markboth{}{\emph{\thesection~#1}}}
+          \renewcommand{\subsectionmark}[1]{\markboth{}{\emph{\thesubsection~#1}}}
+          \renewcommand{\subsubsectionmark}[1]{\markboth{}{\emph{\thesubsection~#1}}}
+
+          \makeatletter
+              \def\@@and{et}
+          \makeatother
+          
+          \makeatletter
+          \pretocmd\abstract{\hrule\vspace{1em}}{}{}
+          \makeatother
+
+          \usepackage{fancyhdr}
+          \pagestyle{fancy}
+          \fancyhf{}
+          \rhead{\rightmark}
+          \lfoot{\footnotesize{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine, année \Sexpr{2025}}} %Insere un pied de page avec le texte a gauche.
+          \rfoot{\thepage}
+          \setlength{\headheight}{15pt}
+
+          \usepackage{pdfpages}
+          \usepackage{setspace}
+          \onehalfspacing
+
+            % Définition des couleurs
+                \definecolor{bleuTitre}{RGB}{0,70,140} % Bleu profond
+                \definecolor{grisBloc}{RGB}{240,240,240} % Gris clair
+                \graphicspath{{image/}}
+
+editor: visual
+---
+
+## Quarto
+
+Quarto enables you to weave together content and executable code into a finished document. To learn more about Quarto see <https://quarto.org>.
+
+## Running Code
+
+When you click the **Render** button a document will be generated that includes both content and the output of embedded code. You can embed code like this:
+
+```{r}
+1 + 1
+annee=2024
+```
+
+You can add options to executable code like this
+
+```{r}
+#| echo: false
+2 * 2
+```
+
+The `echo: false` option disables the printing of code (only output is displayed).
+
+\begin{titlepage}
+
+   \centering
+
+    % --- Bandeau supérieur avec logos ---
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[height=4cm]{logos/logo_seinormigr.png}\hspace{1cm}
+    \end{minipage}
+    \vspace{1.5cm}
+    
+        \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[height=1.5cm]{logos/logo_fd60.png}\hspace{1cm}
+        \includegraphics[height=1.5cm]{logos/logo_vnf.jpg}\hspace{1cm}
+        \includegraphics[height=1.5cm]{logos/logo_hydrowatt.jpg}\hspace{1cm}
+        \includegraphics[height=1.5cm]{logos/logo_semao.png}
+    \end{minipage}
+    \vspace{1.5cm}
+
+    % --- Bandeau bleu pour le titre ---
+    \colorbox{bleuTitre}{
+        \parbox{\textwidth}{
+            \centering
+            \vspace{0.5cm}
+            {\Huge \textbf{\textcolor{white}{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine}}}\par
+            \vspace{0.3cm}
+            {\LARGE \textbf{\textcolor{white}{Année 2025}}}\par
+            \vspace{0.3cm}
+        }
+    }
+    \vspace{2cm}
+
+    % --- Bloc Association avec fond gris ---
+    \colorbox{grisBloc}{
+        \parbox{0.9\textwidth}{
+            \centering
+            \vspace{0.5cm}
+            {\Large \textbf{Seine-Normandie Migrateurs}}\par
+            \vspace{0.3cm}
+            \textit{Association interrégionale pour la restauration et la gestion des populations de poissons migrateurs}\par
+            \vspace{0.5cm}
+        }
+    }
+    \vspace{1.5cm}
+
+    % --- Coordonnées ---
+    \begin{spacing}{1.2}
+    \textbf{Adresse :} 40 avenue Robert Hooke - 76800 Saint-Étienne-du-Rouvray\par
+    %\textbf{Tél :} 02 35 62 01 55 \quad \textbf{Fax :} 02 35 62 01 72\par
+    \textbf{Email :} seinormigr@gmail.com \quad \textbf{Site :} www.seinormigr.fr
+    \end{spacing}
+
+    \vfill
+    % --- Bandeau inférieur avec logos partenaires ---
+    \begin{minipage}{\textwidth}
+        \centering
+        \includegraphics[height=2cm]{logos/LOGO RF AESN_RVB.png}\hspace{1cm}
+        \includegraphics[height=2cm]{logos/logo_fnpf.png}
+    \end{minipage}
+
+\end{titlepage}

@@ -1,7 +1,7 @@
 
 
 
-\documentclass[11pt,titlepage,twoside]{article}\usepackage[]{graphicx}\usepackage[table]{xcolor}
+\documentclass[11pt,twoside]{article}\usepackage[]{graphicx}\usepackage[table]{xcolor}
 % maxwidth is the original width if it is less than linewidth
 % otherwise use linewidth (to make sure the graphics do not exceed the margin)
 \makeatletter
@@ -52,7 +52,7 @@
 \newenvironment{knitrout}{}{} % an empty environment to be redefined in TeX
 
 \usepackage{alltt}
-\usepackage[a4paper, inner=1.5cm, outer=1.5cm, top=2cm, bottom=3cm]{geometry}
+\usepackage[a4paper, inner=2cm, outer=2cm, top=2cm, bottom=3cm]{geometry}
 
 \usepackage[utf8]{inputenc} 
 \usepackage[T1]{fontenc}
@@ -86,6 +86,16 @@
 \usepackage{ae,aeguill}
 \usepackage{subcaption}
 
+
+% Colonne centrée horizontalement avec largeur fixe
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% Optionnel : colonne alignée à droite
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Colonne alignée à gauche (par défaut)
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
 \usepackage{authblk}
 \renewcommand\Authand{ et }
 \renewcommand\Authands{ et }
@@ -101,7 +111,7 @@ linkcolor=blue,
 citecolor=blue, 
 filecolor=blue, 
 urlcolor=blue, 
-pdftitle= {Suivi des poissons migrateurs sur les stations de contrôle des migrations (STACOMI) du bassin de la Seine\\ Année 2024 }, pdfauthor={Sébastien Grall},
+pdftitle= {Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine\\ Année 2024 }, pdfauthor={Sébastien Grall},
 pdfsubject={stacomi},
  pdfkeywords={stacomi} {migrateurs} {Seine} {poissons}
 }
@@ -114,16 +124,21 @@ pdfsubject={stacomi},
     \def\@@and{et}
 \makeatother
 
+\makeatletter
+\pretocmd\abstract{\hrule\vspace{1em}}{}{}
+\makeatother
+
 \usepackage{fancyhdr}
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\rightmark}
-\lfoot{\footnotesize{Suivi des poissons migrateurs sur les stations de contrôle des migrations (STACOMI) du bassin de la Seine, année 2024}} %Insere un pied de page avec le texte a gauche.
+\lfoot{\footnotesize{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine, année 2024}} %Insere un pied de page avec le texte a gauche.
 \rfoot{\thepage}
 \setlength{\headheight}{15pt}
 
 \usepackage{pdfpages}
 \usepackage{setspace}
+\onehalfspacing
 
 % Définition des couleurs
 \definecolor{bleuTitre}{RGB}{0,70,140} % Bleu profond
@@ -134,10 +149,34 @@ pdfsubject={stacomi},
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 
 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 %% Makes a path to your graphics' folder.
 \graphicspath{{image/}}
 
-\title{Suivi des poissons migrateurs sur les stations de contrôle des migrations du bassin de la Seine,
+\title{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine,
 année 2024}
 
 \author[1]{Sébastien Grall}
@@ -146,7 +185,7 @@ année 2024}
 \author[2]{Mathilde Castro}
 \author[2]{Mathias Lambin}
 \affil[1]{Seine-Normandie Migrateurs, 40 avenue Robert Hooke 76800 Saint-Étienne-du-Rouvray}
-\affil[2]{Fédération Départementale de l’Oise pour la Pêche et la protection des Milieux Aquatiques, 28 rue Jules Méline 60200 Compiègne}
+\affil[2]{Fédération Départementale de l’Oise pour la Pêche et la protection des Milieux Aquatiques, 18 rue Henri Barbusse 60150 Thourotte}
 \IfFileExists{upquote.sty}{\usepackage{upquote}}{}
 \begin{document}
 
@@ -177,7 +216,7 @@ année 2024}
         \parbox{\textwidth}{
             \centering
             \vspace{0.5cm}
-            {\Huge \textbf{\textcolor{white}{Suivi des poissons migrateurs sur les stations de contrôle des migrations du bassin de la Seine}}}\par
+            {\Huge \textbf{\textcolor{white}{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine}}}\par
             \vspace{0.3cm}
             {\LARGE \textbf{\textcolor{white}{Année 2024}}}\par
             \vspace{0.3cm}
@@ -193,9 +232,6 @@ année 2024}
             {\Large \textbf{Seine-Normandie Migrateurs}}\par
             \vspace{0.3cm}
             \textit{Association interrégionale pour la restauration et la gestion des populations de poissons migrateurs}\par
-            Association Loi 1901 déclarée le 2 janvier 2007 à la Préfecture de la Seine-Maritime\par
-            Agréée sur la région Normandie en qualité d’association de protection de l’environnement\par
-            par arrêté préfectoral du 20 décembre 2022
             \vspace{0.5cm}
         }
     }
@@ -222,6 +258,7 @@ année 2024}
 \newpage
 \thispagestyle{empty}
 \strut
+
 \newpage
 
 \pagenumbering{roman} \setcounter{page}{1}
@@ -230,11 +267,19 @@ année 2024}
 
 \begin{abstract}
 
-Le résumé
+
+
+
+Les poissons migrateurs entrant dans l'estuaire de la Seine sont contrôlés au niveau du barrage de Poses, marquant la fin de l'estuaire et qui est équipé de dispositifs de comptage sur les deux rives. Les poissons qui s'engagent sur l'axe Oise peuvent ensuite être retrouvés au niveau du barrage de Pontoise, équipé d'un système de vidéo-comptage depuis 2023. Il existe un dernier point de contrôle pour les poissons empruntant ensuite l'Aisne au niveau du barrage de Carandeau. Les effectifs comptabilisés en 2024 au niveau de ces stations sont présentés dans le tableau \ref{tab:recap}.
+
+
+\input{table/recap.tex}
+
 
 \end{abstract}
 
 \newpage
+\begin{singlespace}
 
 \tableofcontents
 
@@ -247,6 +292,7 @@ Le résumé
 \hypersetup{pageanchor=false}
 
 \clearpage
+\end{singlespace}
 
 \pagenumbering{arabic} \setcounter{page}{1} 
 
@@ -304,14 +350,14 @@ Longue de 776 km, la Seine prend sa source à Saint-Germain-Source-Seine en Côt
 \label{reseau_stacomi}
 \end{figure}
 
-En fond d'estuaire, le débit moyen du fleuve fluctue, ces dernières années, autour de 480m$^3$/s. En raison de la chenalisation et des ouvrages de gestion des crues, les variations hydrologiques de la Seine restent de nos jours relativement modérées, avec une élévation des niveaux d'eau récurrente au cours de la période hivernale
-(Figure \ref{debit_seine_histo}).
+En fond d'estuaire, le débit moyen du fleuve fluctue, ces dernières années, autour de 480m$^3$/s. En raison de la chenalisation et des ouvrages de gestion des crues, les variations hydrologiques de la Seine et des principaux affluents restent de nos jours relativement modérées, avec une élévation des niveaux d'eau récurrente au cours de la période hivernale
+(Figure \ref{debit_seine_oise_aisne}).
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=0.8\textwidth]{debit_seine_histo.png}
-\caption{Régime hydrologique de la Seine à Vernon, la moyenne interannuelle des dix années précédentes (2013 à 2023) est représentée en bleu, les débits journaliers de l'année sont présentés en noir}
-\label{debit_seine_histo}
+\includegraphics[width=0.8\textwidth]{debit_seine_oise_aisne.png}
+\caption{Régime hydrologique de la Seine, de l'Oise et de l'Aisne, le débit moyen mensuel est représentée en bleu, les débits journaliers de l'année sont présentés en noir}
+\label{debit_seine_oise_aisne}
 \end{figure}
 
 Le réseau hydrographique de la Seine parcourt en tête de bassin quelques massifs cristallins et métamorphiques dans les Ardennes et le Morvan; mais s'étend principalement dans la cuvette sédimentaire qu'est le bassin parisien traversant des terrains à dominante calcaire, argileuse ou marneuse. Ce réseau présente les deux extrêmes en matière de densité de cours d'eau, avec des zones fortement densifiées sur les massifs anciens comme dans la Nièvre (58), et des zones crayeuses au drainage peu dense, mais avec un écoulement soutenu et régulier comme en Haute-Normandie.
@@ -395,7 +441,7 @@ Ce dispositif se compose d'une passe à poissons et d'une passe à anguilles per
     \begin{subfigure}[b]{0.448\textwidth}
         \includegraphics[width=\textwidth]{schema_passe_rg_poses}
     \end{subfigure}
-       \caption{A gauche, schéma de la passe à poissons en rive droite du barrage de Poses - Amfreville-sous-les-Monts; à droite, schéma de la passe à poissons en rive gauche du barrage de Poses - Amfreville-sous-les-Monts}
+       \caption{Schémas de la passe à poissons en rive droite (à gauche) et de la passe à poissons en rive gauche (à droite) du barrage de Poses - Amfreville-sous-les-Monts}
        \label{schema_passes}
 \end{figure}
 
@@ -410,14 +456,32 @@ L’ouvrage situé sur l’Oise, entre les communes de Pontoise et de Saint-Ouen
 La passe à poissons a été aménagée en rive gauche sur le bras droit de la rivière en opposition avec les écluses
 de navigation. Composée d’une série de huit bassins à fentes verticales permettant la remontée d’une majorité
 d’espèces de poissons, une vitre d’observation est en place et a permis l'installation d'un système de vidéo-
-comptage en avril 2023. Il permet d' enregistrer les remontées sur cet affluent majeur de la Seine et statuer en partie sur le
-devenir des individus contrôlés en sortie d’estuaire à Poses- Amfreville-sous-les-Monts.
+comptage en avril 2023 (Figure \ref{barrage et vc pontoise}). Il permet d' enregistrer les remontées sur cet affluent majeur de la Seine et statuer en partie sur le devenir des individus contrôlés en sortie d’estuaire à Poses-Amfreville-sous-les-Monts.
+
+\begin{figure}[hptb]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{barrage_pontoise}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.448\textwidth}
+        \includegraphics[width=\textwidth]{chambre_vc_pontoise}
+    \end{subfigure}
+       \caption{Barrage de Pontoise et sa chambre de vidéo-comptage}
+       \label{barrage et vc pontoise}
+\end{figure}
 
 \subsection{Site de Carandeau}
 
 \subsubsection{Barrage}
 
-Le barrage de Carandeau est située sur l'Aisne au niveau de la commune de Choisy-au-Bac dans le département de l’Oise, à seulement 2 km de sa confluence avec l’Oise et à 390 km de la mer. Cet ouvrage a fait l'objet d'une modernisation dans le cadre d'un partenariat signé en 2013 entre Voies navigables de France (VNF) et la société BAMEO permettant l'automatisation de la gestion du barrage et la restauration de la continuité écologique par l'ajout d'un dispositif de franchissement piscicole.
+Le barrage de Carandeau est située sur l'Aisne au niveau de la commune de Choisy-au-Bac dans le département de l’Oise, à seulement 2 km de sa confluence avec l’Oise et à 390 km de la mer. Cet ouvrage a fait l'objet d'une modernisation dans le cadre d'un partenariat signé en 2013 entre Voies navigables de France (VNF) et la société BAMEO permettant l'automatisation de la gestion du barrage et la restauration de la continuité écologique par l'ajout d'un dispositif de franchissement piscicole (Figure \ref{barrage carandeau}).
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.6\textwidth]{carandeau_3}
+\caption{Dispositif de franchissement en rive droite du barrage de Carandeau}
+\label{barrage carandeau}
+\end{figure}
 
 \subsubsection{Dispositif de franchissement}
 
@@ -425,53 +489,53 @@ La passe à poissons est située sur la rive droite et est constituée de 8 bass
 
 \subsection{Contrôle des migrations}
 
-Le suivi des migrations est réalisé conjointement par l'association Seinormigr et par le syndicat mixte de la Base de Plein Air et de Loisirs de Léry-Poses.
-L'association Seinormigr contrôle les migrations à partir de trois dispositifs de contrôle, deux systèmes de piégeage spécifique pour les anguilles de chaque côté du fleuve ainsi qu'un système de vidéo-comptage en rive droite. Le syndicat mixte de Léry-Poses en Normandie gère le système de vidéo-comptage en rive gauche de la Seine.
-Cette année, l'association a pris en charge au cours de l'année le suivi du système vidéo en rive gauche et l'intégralité de son dépouillement qui n'était plus assuré par le syndicat suite à un problème de personnel.
-Différents paramètres environnementaux (débit, température, coefficient de marée...) sont relevés afin d'établir des corrélations avec les cinétiques migratoires des poissons.
+Sur le barrage de Poses, les premières années de suivi de la passe à poissons en rive gauche ont été réalisées par le syndicat mixte de la Base de Plein Air et de Loisirs de Léry-Poses. En 2014, suite à l’installation de la rampe à anguilles et de son piège, l’association Seine-Normandie Migrateurs a pris en charge son exploitation, puis celle des systèmes de comptage situés en rive droite du barrage lors de leur mise en service en 2018. Depuis 2021, Seinormigr assure également la gestion et le suivi des comptages de la passe à poissons en rive gauche de Poses.
+
+En 2023, l’association a fait installer un système de comptage sur le barrage de Pontoise, dont elle assure la gestion.
+Le contrôle des migrations au niveau de la passe à poissons de l’ouvrage de Carandeau est, quant à lui, assuré par la Fédération de l’Oise pour la pêche et la protection du milieu aquatique.
 
 \subsubsection{Dispositif de vidéo-comptage}
 
-Afin de permettre le suivi des migrations piscicoles au niveau des passes à bassins, des dispositifs de contrôle sous forme d'un vidéo-comptage et d'un enregistrement informatique à déclenchement automatique sont en service depuis l'année 2008 en rive gauche et depuis l'automne 2017 en rive droite (Figure \ref{chambre_vc_poses}). Ce type de comptage numérique est une technique de comptage en continu sans manipulation des poissons qui permet un dénombrement en s'affranchissant des inconvénients majeurs du piégeage. Il consiste à faire passer les poissons dans une zone où ils sont suffisamment visibles pour être identifiables et dénombrables à chacun de leur passage.
+Le suivi des migrations piscicoles au niveau des passes à bassins se fait à l'aide d'un système de vidéo-comptage constitué d'une ou deux caméras couplés à un enregistrement informatique à déclenchement automatique. (Figure \ref{chambre_vc_poses}). Ce système permet un comptage en continu sans manipulation des poissons en les faisant passer dans une zone où ils sont suffisamment visibles pour être identifiables et dénombrables à chacun de leur passage.
 
-\begin{figure}
+\begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{chambre_vc_poses}
 \caption{Chambres de vidéo-comptage de la station de contrôle des migrations du barrage de Poses - Amfreville-sous-les-Monts. A gauche, chambre de la rive gauche; à droite, chambre de la rive droite}
 \label{chambre_vc_poses}
 \end{figure}
 
-Les avantages du comptage numérique sont multiples : absence de manipulation des poissons, possibilité de comptages des espèces difficiles à piéger (aloses), charge en personnel moins lourde que pour le piégeage, précision extrême sur la détermination des rythmes migratoires et sur le comportement de l'ensemble des espèces. Les inconvénients sont l'impossibilité de comptage par forte turbidité de l'eau et la difficulté de détermination de certaines espèces (petits cyprinidés). Pour les systèmes automatisés, on se heurte également à l'efficacité partielle de détection de certaines espèces et à la sensibilité du système aux corps dérivants (herbiers en particulier) qui provoquent des déclenchements intempestifs de l'enregistrement vidéo. Dans les zones où de nombreuses espèces sont présentes une grande partie de l'année, le travail de dépouillement des données vidéo reste relativement lourd et fastidieux.
+Les avantages du comptage numérique sont multiples : absence de manipulation des poissons, possibilité de comptages des espèces difficiles à piéger (aloses), charge en personnel moins lourde que pour le piégeage, précision extrême sur la détermination des rythmes migratoires et sur le comportement de l'ensemble des espèces. Les inconvénients sont l'impossibilité de comptage par forte turbidité de l'eau et la difficulté de détermination de certaines espèces (petits cyprinidés). Pour les systèmes automatisés, on se heurte également à l'efficacité partielle de détection de certaines espèces et à la sensibilité du système aux corps dérivants (feuilles et herbiers en particulier) qui provoquent des déclenchements intempestifs de l'enregistrement vidéo. Dans les zones où de nombreuses espèces sont présentes une grande partie de l'année, le travail de dépouillement des données vidéo reste relativement lourd et fastidieux.
 
-\begin{figure}
+\begin{figure}[htpb]
 \centering
 \includegraphics[width=0.8\textwidth]{vc_rd_poses}
 \caption{Schéma du système de vidéo-comptage de la station de contrôle des migrations en rive droite du barrage de Poses - Amfreville-sous-les-Monts}
 \label{vc_rd_poses}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htpb]
 \centering
 \includegraphics[width=0.8\textwidth]{vc_rg_poses}
 \caption{Schéma du système de vidéo-comptage de la station de contrôle des migrations en rive gauche du barrage de Poses - Amfreville-sous-les-Monts}
 \label{vc_rg_poses}
 \end{figure}
 
-Le dispositif de vidéo-comptage utilisé à la station de contrôle des migrations est basé sur le système SYSIPAP (CATTOEN, INP-ENSHEEIT) (Figure \ref{vc_rd_poses} et Figure \ref{vc_rg_poses}). Le poisson est amené à s'engager dans un couloir de vision muni de part et d'autre de deux parois vitrées, derrière lesquelles se trouvent en vis-à-vis un rétroéclairage et une caméra filmant ainsi en continu la colonne d'eau où le poisson se présentera. La passe à bassins en rive gauche est munie d'une vitre d'observation tandis que la passe de la rive droite est munie d'un double couloir de visualisation permettant de maintenir des vitesses de courant compatibles au franchissement piscicole. Il y a donc deux systèmes de comptage indépendants en rive droite. Lorsqu'un objet transite par un des couloirs de vision, celui-ci est alors détecté par un analyseur d'images qui, selon le seuil de détection qui lui a été imposé, déclenche l'enregistrement, lequel se poursuit tant qu'un objet est toujours visible et/ou détectable. Chaque séquence vidéo (10 Mo) est alors stockée dans un serveur de stockage de données informatiques prévu à cet effet. Le rôle du système de rétroéclairage disposé derrière la vitre opposée est ainsi d'accentuer le contraste afin de faciliter la détection et la reconnaissance de l'objet. Néanmoins un certain nombre de réglages doivent être appliqués, afin d'étalonner le dispositif en fonction des caractéristiques du site et des espèces de poissons présentes dans le milieu.
+Les dispositifs de vidéo-comptage utilisés aux stations de contrôle des migrations de Poses et de Carandeau sont basés sur le système SYSIPAP (CATTOEN, INP-ENSHEEIT) (Figure \ref{vc_rd_poses} et Figure \ref{vc_rg_poses}). Le poisson est amené à s'engager dans un couloir de vision muni de part et d'autre de deux parois vitrées, derrière lesquelles se trouvent en vis-à-vis un rétroéclairage et une caméra filmant ainsi en continu la colonne d'eau où le poisson se présentera. La passe à bassins en rive gauche de Poses est munie d'une vitre d'observation tandis que la passe de la rive droite de Poses et celle de Carandeau sont munies d'un double couloir de visualisation permettant de maintenir des vitesses de courant compatibles au franchissement piscicole. Il y a donc deux systèmes de comptage indépendants sur ces sites. Lorsqu'un objet transite par un des couloirs de vision, celui-ci est alors détecté par un analyseur d'images qui, selon le seuil de détection qui lui a été imposé, déclenche l'enregistrement, lequel se poursuit tant qu'un objet est toujours visible et/ou détectable. Chaque séquence vidéo est alors stockée dans un serveur de stockage de données informatiques prévu à cet effet. Le rôle du système de rétroéclairage disposé derrière la vitre opposée est ainsi d'accentuer le contraste afin de faciliter la détection et la reconnaissance de l'objet. Néanmoins un certain nombre de réglages doivent être appliqués, afin d'étalonner le dispositif en fonction des caractéristiques du site et des espèces de poissons présentes dans le milieu. Sur le barrage de Pontoise, le comptage se fait à l'aide du système Ibaï Begi dont le principe de fonctionnement reste identique mais qui permet de fournir des images en haute définition et en couleurs ainsi qu'un système de traitements des vidéos par Intelligence Artificielle. Ce traitement permet de filtrer une partie des séquences générées par des objets dérivants.
 
-La fiabilité de détection du poisson devant la vitre dépend de divers paramètres de milieu (éclairage, turbidité de l'eau pour laquelle un minimum de 0,70 m au disque de Secchi est requis) et des espèces de poissons considérées (en fonction de leur taille, de leur couleur, de leur vitesse et de leur profondeur de nage). En moyenne, dans de bonnes conditions de visibilité, la fiabilité de détection est excellente (90\% à 100\%) pour les salmonidés, les aloses et les cyprinidés de taille supérieure à 25 cm, bonne (70\% à 90\%) pour les lamproies, barbeaux et cyprinidés de taille comprise entre 10 cm et 25 cm, et moyenne (50\% à 70\%) pour l'anguille et les poissons de taille inférieure à 10 cm \citep{travade_les_1992}.
+La fiabilité de détection du poisson devant la vitre dépend de divers paramètres de milieu (éclairage, turbidité de l'eau), des espèces de poissons considérées (en fonction de leur taille, de leur couleur, de leur vitesse et de leur profondeur de nage) et de la configuration du site (présence de remous hydrauliques, bullage ou angle mort au niveau de la vitre d'observation). En moyenne, dans de bonnes conditions de visibilité, la fiabilité de détection est excellente (90\% à 100\%) pour les salmonidés, les aloses et les cyprinidés de taille supérieure à 25 cm, bonne (70\% à 90\%) pour les lamproies, barbeaux et cyprinidés de taille comprise entre 10 cm et 25 cm, et moyenne (50\% à 70\%) pour l'anguille et les poissons de taille inférieure à 10 cm \citep{travade_les_1992}.
 
 Une surveillance régulière est nécessaire pour contrôler les réglages des dispositifs, nettoyer les vitres de visualisation et les zones de passage des poissons.
 
 \subsubsection{Dépouillement des données de vidéo-comptage}
 
-Suite à l'enregistrement des séquences vidéo, celles-ci sont récupérées par un opérateur en vue de leur dépouillement sous le logiciel WPOIS. Cette phase de dépouillement consiste en l'analyse de ces vidéos afin d'identifier et de comptabiliser les poissons traversant la passe.
+Suite à l'enregistrement des séquences vidéo, celles-ci sont visualiser par un opérateur afin d'identifier et de comptabiliser les poissons traversant la passe.
 
-Les durées de dépouillement sont très variables. En réalité ces valeurs sont fonctions des conditions de milieu (visibilité, déclenchements parasites par des corps dérivants) et surtout des espèces comptabilisées (facilité de distinction des espèces, vitesse de passage, passages isolés ou en bancs, allers et retours, stabulation devant la vitre). A l'expérience des comptages \textit{in situ}, il ressort qu'en moyenne les durées de dépouillement sont de l'ordre de 4\% à 10\% du temps réel de surveillance (soit 1 h à 2,5 h par 24 h de suivi) pour les faibles passages (inférieurs à 400 poissons/jour) et de l'ordre de 15\% à 20\% du temps réel (soit 3,5 h à 5 h par 24 h de suivi) pour les passages nombreux (3 000 à 5 000 poissons/jour) \citep{travade_les_1992}.
+Les durées de dépouillement sont très variables. En réalité ces valeurs sont fonctions des conditions de milieu (visibilité, déclenchements parasites par des corps dérivants) et surtout des espèces comptabilisées (facilité de distinction des espèces, vitesse de passage, passages isolés ou en bancs, allers et retours, stabulation devant la vitre, mesure des poissons). A l'expérience des comptages \textit{in situ}, il ressort qu'en moyenne les durées de dépouillement sont de l'ordre de 4\% à 10\% du temps réel de surveillance (soit 1 h à 2,5 h par 24 h de suivi) pour les faibles passages (inférieurs à 400 poissons/jour) et de l'ordre de 15\% à 20\% du temps réel (soit 3,5 h à 5 h par 24 h de suivi) pour les passages nombreux (3 000 à 5 000 poissons/jour) \citep{travade_les_1992}.
 
 Tous les poissons franchissant les passes sont dénombrés et identifiés lors du vidéo-comptage. L'identification se fait à l'espèce ou à la famille, notamment dans le cas de passages importants de cyprinidés.
 
-A l'issue de cette phase de dépouillement, l'ensemble des données est compilé dans un fichier unique puis importé dans le logiciel stacomiR, afin d'en assurer le traitement et l'analyse (\url{http://stacomir.r-forge.r-project.org/}).
+A l'issue de cette phase de dépouillement, l'ensemble des données est compilé puis importé dans le logiciel \href{http://stacomir.r-forge.r-project.org/}{stacomiR}, afin d'en assurer le traitement et l'analyse, les données sont visualisables à travers une application \href{https://shiny.seinormigr.fr/Stacomi_App/}{Shiny}.
 
 \subsubsection{Dispositif de piégeage des anguilles}
 
@@ -493,7 +557,7 @@ Les systèmes de piégeage sont installés sur la partie amont des dispositifs d
 
 \subsubsection{Protocole de suivi}
 
-Pendant la période de migration, le piège est relevé tous les jours, hors week-end et jours fériés excepté lors des pics de migrations. Lors de la relève du piège, la biométrie des anguilles est réalisée (Figure \ref{protocole_bio_ang}). Les individus sont préalablement anesthésiés avec une solution d'eugénol avant d'être mesurés (précision 1 mm) et pesés (précision 0,1 g). Le protocole de biométrie appliqué diffère selon la quantité d'anguilles capturées :
+Pendant la période de migration, le piège est relevé tous les jours, hors week-end et jours fériés excepté lors des pics de migrations. Lors de la relève du piège, la biométrie des anguilles est réalisée (Figure \ref{protocole_bio_ang}). Les individus sont préalablement anesthésiés avec une solution d'iso-eugénol avant d'être mesurés (précision 1 mm) et pesés (précision 0,1 g). Le protocole de biométrie appliqué diffère selon la quantité d'anguilles capturées :
 
 - Moins de 60 anguilles : biométrie individuelle
 
@@ -517,8 +581,54 @@ Pendant la période de migration, le piège est relevé tous les jours, hors wee
 
 \clearpage
 
+\section{Suivi des migrations 2024}
+
+\subsection{Alose (\textit{Alosa alosa})}
 
 
+
+Les deux espèces d'aloses, la grande et la feinte, sont présentes sur le bassin de la Seine. Bien que relictuelle, la présence d'\textit{A. fallax} a été confirmée lors d'inventaires réalisés en Basse Seine en 1996 \citep{rochard_premier_1996}, 2002 et 2003 (données non publiées). La précision des informations relevées par vidéo-comptage ne permet pas en revanche, de les distinguer clairement (Figure \ref{ALA}) mais des opérations de captures ponctuels sur le barrage en 2020 et 2021 n'ont montré que la présence de la grande Alose. La migration génésique des aloses feintes se cantonne généralement dans les parties aval des fleuves, les individus observés à Pontoise et à Carandeau sont donc des Grandes aloses.
+
+\begin{figure}[htpb]
+    \centering
+      \begin{subfigure}[b]{0.3\textwidth}
+          \includegraphics[width=\textwidth]{ALA_POSES}
+      \end{subfigure}
+      \begin{subfigure}[b]{0.3\textwidth}
+          \includegraphics[width=\textwidth]{ALA_PONTOISE}
+      \end{subfigure}
+  \caption{Aloses observées en vidéocompage en rive droite du barrage de Poses - Amfreville-sous-les-Monts (à gauche) et au barrage de Pontoise (à droite).}
+  \label{ALA}
+\end{figure}
+
+En 2024, les aloses ont été {\textbf{441}} à franchir l'estuaire de la Seine à Poses. Une fraction de cette cohorte a atteint les deux stations de contrôle amont puisque {\textbf{132}} individus ont été observés à Pontoise et {\textbf{52}} à Carandeau. Les aloses ont une bonne capacité à emprunter les écluses de navigation. Ce phénomène est amplifié quand les ouvrages de franchissement sont peu adaptés à l'espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. Cela signifie que le nombre d'aloses contrôlés par vidéo-comptage sous-estime le nombre réel d'aloses franchissant l'ouvrage, cela ce confirme notamment par des premières détections d'individus plus précoces sur des stations en amont. C'est notamment le cas en 2023 où les premières aloses ont été observées à Pontoise avant la première détection au vidéo-comptage de Poses (Figure \ref{plot_ridgeline_ala}).  
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_annuel_ala}
+\caption{Effectifs journaliers des aloses recensés sur les STACOMI du bassin Seine.}
+\label{p_annuel_ala}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_ridgeline_ala}
+\caption{Phénologie de la migration des aloses sur les STACOMI du bassin Seine.}
+\label{plot_ridgeline_ala}
+\end{figure}
+
+La phénologie de la migration au niveau de la fin de l'estuaire de Seine est présentée sur la figure \ref{p_seasonal_ala}. Les premiers individus se présentent entre la fin du mois de mars et le début du mois d'avril. L'essentiel de la migration se déroule au cours des mois d'avril à juin avec quelques passages durant la période estivale.
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{p_seasonal_ala}
+\caption{Rythmes migratoires des aloses au barrage de Poses - Amfreville-sous-les-Monts.}
+\label{p_seasonal_ala}
+\end{figure}
+
+\clearpage
+
+\begin{singlespace}
 %\twocolumn
 % biblio commune aux différentes années
 \bibliographystyle{apalike}
@@ -530,16 +640,16 @@ Pendant la période de migration, le piège est relevé tous les jours, hors wee
 Rapport Sweave \LaTeX \\
 ------------------------\\
 packages R : \vspace{1mm}
-StacomiR \citep{legrand_stacomir_2019}\\
-\LaTeX \ :Hmisc, xtable\\
-graphiques : ggplot2, cowplot\\
-traitements : stringr, lubridate, reshape2, dplyr, plyr, questionr\\
+StacomiR \citep{legrand_stacomir_2019}, hubeau\\
+\LaTeX \ :Hmisc, kableExtra, xtable\\
+graphiques : ggplot2, patchwork\\
+traitements : stringr, lubridate, reshape2, dplyr, plyr, tidyr, questionr\\
 ------------------------\\
 Dernière compilation : le \today \\
- R version 4.5.1 (2025-06-13 ucrt)\\
+ R version 4.5.2 (2025-10-31 ucrt)\\
  plateforme x86-64-w64-mingw32
 
 \clearpage
-
+\end{singlespace}
 
 \end{document}
