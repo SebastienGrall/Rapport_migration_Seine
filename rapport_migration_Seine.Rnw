@@ -9,7 +9,7 @@ options(encoding = "UTF-8")
 
 
 \documentclass[11pt,titlepage,twoside]{article}
-\usepackage[a4paper, inner=1.5cm, outer=1.5cm, top=2cm, bottom=3cm]{geometry}
+\usepackage[a4paper, inner=2cm, outer=2cm, top=2cm, bottom=3cm]{geometry}
 
 \usepackage[utf8]{inputenc} 
 \usepackage[T1]{fontenc}
@@ -43,6 +43,16 @@ options(encoding = "UTF-8")
 \usepackage{ae,aeguill}
 \usepackage{subcaption}
 
+
+% Colonne centrée horizontalement avec largeur fixe
+\newcolumntype{C}[1]{>{\centering\arraybackslash}p{#1}}
+
+% Optionnel : colonne alignée à droite
+\newcolumntype{R}[1]{>{\raggedleft\arraybackslash}p{#1}}
+
+% Colonne alignée à gauche (par défaut)
+\newcolumntype{L}[1]{>{\raggedright\arraybackslash}p{#1}}
+
 \usepackage{authblk}
 \renewcommand\Authand{ et }
 \renewcommand\Authands{ et }
@@ -58,7 +68,7 @@ linkcolor=blue,
 citecolor=blue, 
 filecolor=blue, 
 urlcolor=blue, 
-pdftitle= {Suivi des poissons migrateurs sur les stations de contrôle des migrations (STACOMI) du bassin de la Seine\\ Année \Sexpr{annee} }, pdfauthor={Sébastien Grall},
+pdftitle= {Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine\\ Année \Sexpr{annee} }, pdfauthor={Sébastien Grall},
 pdfsubject={stacomi},
  pdfkeywords={stacomi} {migrateurs} {Seine} {poissons}
 }
@@ -75,12 +85,13 @@ pdfsubject={stacomi},
 \pagestyle{fancy}
 \fancyhf{}
 \rhead{\rightmark}
-\lfoot{\footnotesize{Suivi des poissons migrateurs sur les stations de contrôle des migrations (STACOMI) du bassin de la Seine, année \Sexpr{annee}}} %Insere un pied de page avec le texte a gauche.
+\lfoot{\footnotesize{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine, année \Sexpr{annee}}} %Insere un pied de page avec le texte a gauche.
 \rfoot{\thepage}
 \setlength{\headheight}{15pt}
 
 \usepackage{pdfpages}
 \usepackage{setspace}
+\onehalfspacing
 
 % Définition des couleurs
 \definecolor{bleuTitre}{RGB}{0,70,140} % Bleu profond
@@ -94,6 +105,7 @@ pdfsubject={stacomi},
 require(plyr)
 require(stringr)
 require(stacomiR)
+require(kableExtra)
 require(xtable)
 require(reshape2)
 require(Hmisc)
@@ -101,9 +113,9 @@ require(questionr)
 require(ggplot2)
 require(dplyr)
 require(tidyr)
-require(cowplot)
 require(lubridate)
 require(hubeau)
+require(patchwork)
 
 
 #repertoire contenant les images
@@ -119,12 +131,10 @@ gras <- function(x) {str_c('{\\textbf{',x,'}}')}
 options("xtable.include.rownames"=FALSE)
 options(knitr.table.format = "latex")
 
-stacomi(database_expected = TRUE, sch= "seinormigr",options(
-  stacomiR.dbname = keyring::key_get("dbname_server"),
-  stacomiR.host = keyring::key_get("host_server"),
-  stacomiR.port = keyring::key_get("port_server"),
-  stacomiR.user = keyring::key_get("user_server"),
-  stacomiR.password = keyring::key_get("pwd_server")))
+# couleur station 
+col_Poses<-"#006A8E"
+col_Pontoise<-"#B1283A"
+col_Carandeau<-"#088158"
 
 # A function factory for getting integer y-axis values.
 integer_breaks <- function(n = 5, ...) {
@@ -136,6 +146,9 @@ integer_breaks <- function(n = 5, ...) {
     return(fxn)
 }
 
+@
+
+<<chunk debit,echo=FALSE,eval=TRUE,results='hide'>>=
 ## Debit histo Seine ##
 
 QmM<-get_hydrometrie_obs_elab(code_entite = "H320000104", grandeur_hydro_elab = "QmM")
@@ -153,7 +166,7 @@ QmM_poly <- QmM %>%
 
 # Liste des breaks EXACTS (pas d'extra)
 breaks_mois <- QmM_poly$mois_centre
-labels_mois <- format(breaks_mois, "%B")  # noms des mois en français
+labels_mois <- format(breaks_mois, "%b")  # noms des mois en français
 
 QmnJ<-get_hydrometrie_obs_elab(code_entite = "H320000104",date_debut_obs_elab = str_c(annee,"-01-01"),
                                date_fin_obs_elab = str_c(annee,"-12-31"),grandeur_hydro_elab = "QmnJ")
@@ -180,7 +193,7 @@ debit_seine_histo<-ggplot() +
     labels = labels_mois,
     expand = c(0,0)
   ) +
-  labs(x = "", y = bquote(bold('débits de la Seine ('* ~ m^3/s*')')),caption = "Source des données : HydroPortail") +
+  labs(x = "", y = bquote(bold('débits ('* ~ m^3/s*')')),title = "Débits de la Seine") +
   theme_bw()+
     theme(
     axis.text = element_text(size = 15),
@@ -189,10 +202,6 @@ debit_seine_histo<-ggplot() +
     legend.title = element_blank(),
     legend.text = element_text(size = 15)
   )
-
-png(file=str_c(imgwd,"debit_seine_histo.png"),width=14,height=6,unit="in",res=200)
-print(debit_seine_histo)
-dev.off()
 
 ## Debit histo Oise ##
 
@@ -211,7 +220,7 @@ QmM_poly <- QmM %>%
 
 # Liste des breaks EXACTS (pas d'extra)
 breaks_mois <- QmM_poly$mois_centre
-labels_mois <- format(breaks_mois, "%B")  # noms des mois en français
+labels_mois <- format(breaks_mois, "%b")  # noms des mois en français
 
 QmnJ<-get_hydrometrie_obs_elab(code_entite = "H208000104",date_debut_obs_elab = str_c(annee,"-01-01"),
                                date_fin_obs_elab = str_c(annee,"-12-31"),grandeur_hydro_elab = "QmnJ")
@@ -238,7 +247,7 @@ debit_oise_histo<-ggplot() +
     labels = labels_mois,
     expand = c(0,0)
   ) +
-  labs(x = "", y = bquote(bold('débits ('* ~ m^3/s*')')),caption = "Source des données : HydroPortail") +
+  labs(x = "", y = bquote(bold('débits ('* ~ m^3/s*')')),title = "Débits de l'Oise") +
   theme_bw()+
     theme(
     axis.text = element_text(size = 15),
@@ -248,9 +257,6 @@ debit_oise_histo<-ggplot() +
     legend.text = element_text(size = 15)
   )
 
-png(file=str_c(imgwd,"debit_oise_histo.png"),width=14,height=6,unit="in",res=200)
-print(debit_oise_histo)
-dev.off()
 
 ### Debit Aisne #### 
 
@@ -269,7 +275,7 @@ QmM_poly <- QmM %>%
 
 # Liste des breaks EXACTS (pas d'extra)
 breaks_mois <- QmM_poly$mois_centre
-labels_mois <- format(breaks_mois, "%B")  # noms des mois en français
+labels_mois <- format(breaks_mois, "%b")  # noms des mois en français
 
 QmnJ<-get_hydrometrie_obs_elab(code_entite = "H1680005",date_debut_obs_elab = str_c(annee,"-01-01"),
                                date_fin_obs_elab = str_c(annee,"-12-31"),grandeur_hydro_elab = "QmnJ")
@@ -296,7 +302,7 @@ debit_aisne_histo<-ggplot() +
     labels = labels_mois,
     expand = c(0,0)
   ) +
-  labs(x = "", y = bquote(bold('débits ('* ~ m^3/s*')')),caption = "Source des données : HydroPortail") +
+  labs(x = "", y = bquote(bold('débits ('* ~ m^3/s*')')),title = "Débits de l'Aisne") +
   theme_bw()+
     theme(
     axis.text = element_text(size = 15),
@@ -306,16 +312,266 @@ debit_aisne_histo<-ggplot() +
     legend.text = element_text(size = 15)
   )
 
-png(file=str_c(imgwd,"debit_aisne_histo.png"),width=14,height=6,unit="in",res=200)
-print(debit_aisne_histo)
+debit_seine_oise_aisne <-  debit_seine_histo/
+  debit_oise_histo/
+  debit_aisne_histo + 
+  plot_annotation(caption = "Source des données : HydroPortail")           
+
+png(file=str_c(imgwd,"debit_seine_oise_aisne.png"),width=10,height=8,unit="in",res=200)
+print(debit_seine_oise_aisne)
 dev.off()
 
+@
+
+<<chunk fonction r_mig_inter et connexion base,echo=FALSE,eval=TRUE,results='hide'>>=
+###### connexion à la base Stacomi, schéma Seinormigr ###########
+
+
+# con<-  pool::dbPool(
+#   drv=RPostgres::Postgres(),
+#   dbname = keyring::key_get("dbname_server"),
+#   host = keyring::key_get("host_server"),
+#   port = keyring::key_get("port_server"),
+#   user = keyring::key_get("user_server"),
+#   password = keyring::key_get("pwd_server")
+# )
+
+if(exists("con")){
+
+stacomi(database_expected = TRUE, sch= "seinormigr",options(
+  stacomiR.dbname = keyring::key_get("dbname_server"),
+  stacomiR.host = keyring::key_get("host_server"),
+  stacomiR.port = keyring::key_get("port_server"),
+  stacomiR.user = keyring::key_get("user_server"),
+  stacomiR.password = keyring::key_get("pwd_server")))
+  
+### Fonction pour faire des r_mig_inter pour chaque espece (hors anguille) et DC ###
+  
+fn_rmiginter<-function(le_dc=c(101),espece=c("Alosa"),stade=c("5"),annee_debut=2008){
+  
+r_mig_interannual<-new("report_mig_interannual")
+r_mig_interannual<-choice_c(r_mig_interannual,
+                            dc=le_dc,
+                            taxa=espece,
+                            stage=stade,
+                            start_year=annee_debut,
+                            end_year=annee,
+                            silent=TRUE)
+r_mig_interannual<-charge(r_mig_interannual,silent=TRUE)
+r_mig_interannual<-connect(r_mig_interannual,check=TRUE,silent=TRUE)	
+r_mig_interannual<-calcule(r_mig_interannual,silent=TRUE)
+
+return(r_mig_interannual)
+}}
+
+@
+
+<<chunk data alose,echo=FALSE,eval=TRUE,results='hide'>>=
+# data alose
+
+if(exists("con")){
+
+r_mig_inter_ala_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Alosa"),stade=c("5"),annee_debut = 2008)
+r_mig_inter_ala_carandeau<-fn_rmiginter(le_dc=c(106,107),espece=c("Alosa"),stade=c("5"),annee_debut = 2018)
+r_mig_inter_ala_pontoise<-fn_rmiginter(le_dc=c(108),espece=c("Alosa"),stade=c("5"),annee_debut = 2023)
+
+data_alose<-c(r_mig_inter_ala_poses,r_mig_inter_ala_carandeau,r_mig_inter_ala_pontoise)
+rm(r_mig_inter_ala_poses,r_mig_inter_ala_carandeau,r_mig_inter_ala_pontoise)
+
+}
+
+@
+
+<<chunk data anguille,echo=FALSE,eval=TRUE,results='hide'>>=
+# data alose
+
+if(exists("con")){
+
+#data anguille
+r_mig_inter_ang_poses_rg_piege<-fn_rmiginter(le_dc=c(102),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2014)
+r_mig_inter_ang_poses_rd_piege<-fn_rmiginter(le_dc=c(104),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2018)
+r_mig_inter_ang_poses_video_agj<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2008)
+r_mig_inter_ang_poses_video_agg<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Anguilla anguilla"),stade=c("AGG"),annee_debut = 2008)
+r_mig_inter_ang_carandeau_video_agj<-fn_rmiginter(le_dc=c(106,107),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2018)
+r_mig_inter_ang_carandeau_video_agg<-fn_rmiginter(le_dc=c(106,107),espece=c("Anguilla anguilla"),stade=c("AGG"),annee_debut = 2018)
+r_mig_inter_ang_pontoise_agj<-fn_rmiginter(le_dc=c(108),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2023)
+r_mig_inter_ang_pontoise_agg<-fn_rmiginter(le_dc=c(108),espece=c("Anguilla anguilla"),stade=c("AGG"),annee_debut = 2023)
+
+data_ang<-c(r_mig_inter_ang_poses_rg_piege,
+                r_mig_inter_ang_poses_rd_piege,
+                r_mig_inter_ang_poses_video_agj,
+                r_mig_inter_ang_poses_video_agg,
+                r_mig_inter_ang_carandeau_video_agj,
+                r_mig_inter_ang_carandeau_video_agg,
+                r_mig_inter_ang_pontoise_agj,
+                r_mig_inter_ang_pontoise_agg)
+rm(r_mig_inter_ang_poses_rg_piege,
+                r_mig_inter_ang_poses_rd_piege,
+                r_mig_inter_ang_poses_video_agj,
+                r_mig_inter_ang_poses_video_agg,
+                r_mig_inter_ang_carandeau_video_agj,
+                r_mig_inter_ang_carandeau_video_agg,
+                r_mig_inter_ang_pontoise_agj,
+                r_mig_inter_ang_pontoise_agg)
+
+}
+
+@
+
+<<chunk data lamproie fluviatile,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+
+#data lamproie fluviatile
+r_mig_inter_lpf_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Lampetra fluviatilis"),stade=c("5"),annee_debut = 2008)
+
+data_lpf<-r_mig_inter_lpf_poses
+rm(r_mig_inter_lpf_poses)
+
+}
+@
+
+<<chunk data lamproie marine,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+#data lamproie marine
+r_mig_inter_lpm_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2008)
+r_mig_inter_lpm_carandeau_P1<-fn_rmiginter(le_dc=c(106),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2018)
+#r_mig_inter_lpm_carandeau_P2<-fn_rmiginter(le_dc=c(107),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2018)
+r_mig_inter_lpm_pontoise<-fn_rmiginter(le_dc=c(108),espece=c("Petromyzon marinus"),stade=c("5"),annee_debut = 2023)
+
+data_lpm<-c(r_mig_inter_lpm_poses,r_mig_inter_lpm_carandeau_P1,r_mig_inter_lpm_pontoise)
+rm(r_mig_inter_lpm_poses,r_mig_inter_lpm_carandeau_P1,r_mig_inter_lpm_pontoise)
+}
+@
+
+<<chunk data mulet porc,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+#data mulet porc
+r_mig_inter_mup_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Chelon ramada"),stade=c("5"),annee_debut = 2008)
+
+data_mup<-c(r_mig_inter_mup_poses)
+rm(r_mig_inter_mup_poses)
+}
+@
+
+<<chunk data saumon,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+#data sat
+r_mig_inter_sat_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Salmo salar"),stade=c("5"),annee_debut = 2008)
+r_mig_inter_sat_carandeau<-fn_rmiginter(le_dc=c(106,107),espece=c("Salmo salar"),stade=c("5"),annee_debut = 2018)
+r_mig_inter_sat_pontoise<-fn_rmiginter(le_dc=c(108),espece=c("Salmo salar"),stade=c("5"),annee_debut = 2023)
+
+data_sat<-c(r_mig_inter_sat_poses,r_mig_inter_sat_carandeau,r_mig_inter_sat_pontoise)
+rm(r_mig_inter_sat_poses,r_mig_inter_sat_carandeau,r_mig_inter_sat_pontoise)
+}
+@
+
+<<chunk data truite de mer,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+#data trm
+r_mig_inter_trm_poses<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Salmo trutta trutta"),stade=c("5"),annee_debut = 2008)
+r_mig_inter_trm_carandeau<-fn_rmiginter(le_dc=c(106,107),espece=c("Salmo trutta trutta"),stade=c("5"),annee_debut = 2018)
+r_mig_inter_trm_pontoise<-fn_rmiginter(le_dc=c(108),espece=c("Salmo trutta trutta"),stade=c("5"),annee_debut = 2023)
+
+data_trm<-c(r_mig_inter_trm_poses,r_mig_inter_trm_carandeau,r_mig_inter_trm_pontoise)
+rm(r_mig_inter_trm_poses,r_mig_inter_trm_carandeau,r_mig_inter_trm_pontoise)
+}
+@
+
+<<chunk data taille,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+### données taille 
+
+r_sample_char<-new("report_sample_char")
+r_sample_char<-choice_c(r_sample_char,
+                        dc=c(101,103,105,108),
+                        taxa=c("Alosa","Anguilla anguilla","Lampetra fluviatilis","Petromyzon marinus",
+                               "Chelon ramada","Salmo salar","Salmo trutta trutta"),
+                        stage=c("5","AGG","4"),
+                        par=c("C001"),
+                        horodatedebut="2008-01-01",
+                        horodatefin=str_c(annee,"-12-31"),
+                        silent=TRUE)
+r_sample_char<-connect(r_sample_char)
+r_sample_char<-calcule(r_sample_char,silent=TRUE)
+report_sample_char=get("report_sample_char",envir_stacomi)
+data_taille_video<-report_sample_char@data
+}
+@
+
+<<chunk data bilan especes,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+# bilan espèces
+
+bilesp<-new("report_species")
+  bilesp<-choice_c(bilesp,
+	  dc=c(101),
+	  split="year", 
+	  start_year=annee,
+	  end_year=annee,
+	  silent=FALSE)	
+  bilesp <- connect(bilesp)
+  bilesp <- calcule(bilesp)
+bilesp_poses_vc_rg<-bilesp@data
+
+bilesp<-new("report_species")
+  bilesp<-choice_c(bilesp,
+	  dc=c(103,105),
+	  split="year", 
+	  start_year=annee,
+	  end_year=annee,
+	  silent=FALSE)	
+  bilesp <- connect(bilesp)
+  bilesp <- calcule(bilesp)
+bilesp_poses_vc_rd<-bilesp@data
+
+bilesp<-new("report_species")
+  bilesp<-choice_c(bilesp,
+	  dc=c(106,107),
+	  split="year", 
+	  start_year=annee,
+	  end_year=annee,
+	  silent=FALSE)	
+  bilesp <- connect(bilesp)
+  bilesp <- calcule(bilesp)
+bilesp_carandeau<-bilesp@data
+
+bilesp<-new("report_species")
+  bilesp<-choice_c(bilesp,
+	  dc=c(108),
+	  split="year", 
+	  start_year=annee,
+	  end_year=annee,
+	  silent=FALSE)	
+  bilesp <- connect(bilesp)
+  bilesp <- calcule(bilesp)
+bilesp_pontoise<-bilesp@data
+}
+@
+
+<<chunk saving or loading data,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+# sauvegarde data
+save(data_alose,data_ang,data_lpf,data_lpm,data_mup,data_sat,data_trm,data_taille_video,
+     bilesp_poses_vc_rg,bilesp_poses_vc_rd,bilesp_carandeau,bilesp_pontoise,
+     file=str_c(datawd,"data_report_",annee,".Rdata"))
+
+}else{
+  load(str_c(datawd,"data_report_",annee,".Rdata"))
+}
 @
 
 %% Makes a path to your graphics' folder.
 \graphicspath{{image/}}
 
-\title{Suivi des poissons migrateurs sur les stations de contrôle des migrations du bassin de la Seine,
+\title{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine,
 année \Sexpr{annee}}
 
 \author[1]{Sébastien Grall}
@@ -324,7 +580,7 @@ année \Sexpr{annee}}
 \author[2]{Mathilde Castro}
 \author[2]{Mathias Lambin}
 \affil[1]{Seine-Normandie Migrateurs, 40 avenue Robert Hooke 76800 Saint-Étienne-du-Rouvray}
-\affil[2]{Fédération Départementale de l’Oise pour la Pêche et la protection des Milieux Aquatiques, 28 rue Jules Méline 60200 Compiègne}
+\affil[2]{Fédération Départementale de l’Oise pour la Pêche et la protection des Milieux Aquatiques, 18 rue Henri Barbusse 60150 Thourotte}
 
 
 \begin{document}
@@ -356,7 +612,7 @@ année \Sexpr{annee}}
         \parbox{\textwidth}{
             \centering
             \vspace{0.5cm}
-            {\Huge \textbf{\textcolor{white}{Suivi des poissons migrateurs sur les stations de contrôle des migrations du bassin de la Seine}}}\par
+            {\Huge \textbf{\textcolor{white}{Suivi des poissons migrateurs sur les STACOMI du bassin de la Seine}}}\par
             \vspace{0.3cm}
             {\LARGE \textbf{\textcolor{white}{Année \Sexpr{annee}}}}\par
             \vspace{0.3cm}
@@ -372,9 +628,6 @@ année \Sexpr{annee}}
             {\Large \textbf{Seine-Normandie Migrateurs}}\par
             \vspace{0.3cm}
             \textit{Association interrégionale pour la restauration et la gestion des populations de poissons migrateurs}\par
-            Association Loi 1901 déclarée le 2 janvier 2007 à la Préfecture de la Seine-Maritime\par
-            Agréée sur la région Normandie en qualité d’association de protection de l’environnement\par
-            par arrêté préfectoral du 20 décembre 2022
             \vspace{0.5cm}
         }
     }
@@ -409,11 +662,152 @@ année \Sexpr{annee}}
 
 \begin{abstract}
 
-Le résumé
+<<chunk recap migration, echo=FALSE, eval=TRUE,results='hide'>>=
+
+mig_annee_poses_rg<-subset(bilesp_poses_vc_rg,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
+                           "Petromyzon marinus","Chelon ramada"))
+mig_annee_poses_rd<-subset(bilesp_poses_vc_rd,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
+                           "Petromyzon marinus","Chelon ramada"))
+
+mig_ang_poses_piege_rg<-subset(data_ang[[1]]@data,bjo_labelquantite=="Effectif_total" & bjo_annee==annee)
+mig_ang_poses_piege_rg<-summarise(group_by(mig_ang_poses_piege_rg,bjo_tax_code,bjo_std_code),effectifs_poses_rg=round(sum(bjo_valeur)))
+mig_ang_poses_piege_rg$bjo_std_code<-"CIV"
+mig_ang_poses_piege_rg <- mig_ang_poses_piege_rg %>% rename(lot_tax_code = bjo_tax_code,lot_std_code = bjo_std_code)
+
+mig_ang_poses_piege_rd<-subset(data_ang[[2]]@data,bjo_labelquantite=="Effectif_total" & bjo_annee==annee)
+mig_ang_poses_piege_rd<-summarise(group_by(mig_ang_poses_piege_rd,bjo_tax_code,bjo_std_code),effectifs_poses_rd=round(sum(bjo_valeur)))
+mig_ang_poses_piege_rd$bjo_std_code<-"CIV"
+mig_ang_poses_piege_rd <- mig_ang_poses_piege_rd %>% rename(lot_tax_code = bjo_tax_code,lot_std_code = bjo_std_code)
+
+mig_annee_poses_rg<-summarise(group_by(mig_annee_poses_rg,lot_tax_code,lot_std_code),effectifs_poses_rg=sum(lot_effectif))
+mig_annee_poses_rd<-summarise(group_by(mig_annee_poses_rd,lot_tax_code,lot_std_code),effectifs_poses_rd=sum(lot_effectif))
+
+mig_annee_poses_rg<-rbind(mig_annee_poses_rg,mig_ang_poses_piege_rg)
+mig_annee_poses_rd<-rbind(mig_annee_poses_rd,mig_ang_poses_piege_rd)
+
+lpf_poses_rg<-subset(data_lpf@data,bjo_dis_identifiant == "101" &
+                       between(bjo_jour,as.Date(str_c(annee-1,"-09-30")),as.Date(str_c(annee,"-12-31"))) & bjo_labelquantite=="Effectif_total") 
+lpf_poses_rd<-subset(data_lpf@data,bjo_dis_identifiant %in% c(103,105) &
+                       between(bjo_jour,as.Date(str_c(annee-1,"-09-30")),as.Date(str_c(annee,"-12-31"))) & bjo_labelquantite=="Effectif_total") 
+
+mig_annee_poses_rg<-mig_annee_poses_rg %>% mutate(Espèces = case_when(
+                            lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
+                            lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
+                            lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
+                            lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
+                            lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
+                            lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
+                            lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
+                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
+                           )) %>% ungroup() %>% select(4,3)
+mig_annee_poses_rg<-rbind(mig_annee_poses_rg, tibble(`Espèces`= c("Lamproie fluviatile"),effectifs_poses_rg= sum(lpf_poses_rg$bjo_valeur)))
+
+mig_annee_poses_rd<-mig_annee_poses_rd %>% mutate(Espèces = case_when(
+                            lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
+                            lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
+                            lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
+                            lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
+                            lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
+                            lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
+                            lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
+                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
+                           )) %>% ungroup() %>% select(4,3)
+mig_annee_poses_rd<-rbind(mig_annee_poses_rd, tibble(`Espèces`= c("Lamproie fluviatile"),effectifs_poses_rd= sum(lpf_poses_rd$bjo_valeur)))
+
+mig_annee_pontoise<-subset(bilesp_pontoise,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
+                           "Lampetra fluviatilis","Petromyzon marinus","Chelon ramada"))
+mig_annee_pontoise<-summarise(group_by(mig_annee_pontoise,lot_tax_code,lot_std_code),effectifs_pontoise=sum(lot_effectif))
+mig_annee_pontoise<-mig_annee_pontoise %>% mutate(Espèces = case_when(
+                            #lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
+                            lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
+                            lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
+                            lot_tax_code == "2011" & lot_std_code =="5" ~ "Lamproie fluviatile",
+                            lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
+                            lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
+                            lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
+                            lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
+                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
+                           ))%>% ungroup() %>% select(4,3)
+
+
+mig_annee_carandeau<-subset(bilesp_carandeau,tax_nom_latin %in% c("Anguilla anguilla","Alosa","Salmo trutta trutta","Salmo salar",
+                           "Lampetra fluviatilis","Petromyzon marinus","Chelon ramada"))
+mig_annee_carandeau<-summarise(group_by(mig_annee_carandeau,lot_tax_code,lot_std_code),effectifs_carandeau=sum(lot_effectif))
+mig_annee_carandeau<- mig_annee_carandeau %>% mutate(Espèces = case_when(
+                            #lot_tax_code == "2038" & lot_std_code =="CIV" ~ "Anguille en montaison (passe piège)",
+                            lot_tax_code == "2038" & lot_std_code =="4" ~ "Anguille jaune (vidéo-comptage)",
+                            lot_tax_code == "2038" & lot_std_code =="AGG" ~ "Anguille argentée",
+                            lot_tax_code == "2011" & lot_std_code =="5" ~ "Lamproie fluviatile",
+                            lot_tax_code == "2014" & lot_std_code =="5" ~ "Lamproie marine",
+                            lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
+                            lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
+                            lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
+                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
+                           )) %>% ungroup() %>% select(4,3)
+
+resume_poses<-full_join(mig_annee_poses_rg,mig_annee_poses_rd,by=c("Espèces")) %>%
+  rowwise(Espèces) %>% 
+  mutate(total_poses = sum(c(effectifs_poses_rg,effectifs_poses_rd),na.rm = T))
+
+resume <-resume_poses %>% full_join(mig_annee_pontoise,by=c("Espèces")) %>% 
+  full_join(mig_annee_carandeau,by=c("Espèces"))
+
+resume<-resume %>% rename("Poses rive gauche" = effectifs_poses_rg, "Poses rive droite" = effectifs_poses_rd, "Total Poses" = total_poses,
+                  "Pontoise" = effectifs_pontoise, "Carandeau" = effectifs_carandeau) %>% as.data.frame()
+rownames(resume)<-resume[,1]
+resume<-select(resume,-1) 
+
+resume<-resume[c("Alose","Anguille en montaison (passe piège)","Anguille jaune (vidéo-comptage)","Anguille argentée","Lamproie fluviatile",
+          "Lamproie marine","Mulet porc","Saumon atlantique","Truite de mer"),]
+
+resume2 <- resume %>%
+  tibble::rownames_to_column(var = "Espèce")%>%
+  mutate(across(where(is.numeric), ~replace_na(.x, 0)))
+
+resume2[2:6]<-format(resume2[2:6],big.mark = " ")
+
+resume2 <- resume2 %>%
+  mutate(
+    Pontoise  = if_else(`Espèce` == "Anguille en montaison (passe piège)", "", Pontoise),
+    Carandeau = if_else(`Espèce` == "Anguille en montaison (passe piège)", "", Carandeau)) 
+
+resume_latex <- resume2 %>%
+  kbl(
+    caption = "Effectifs annuels des poissons migrateurs comptabilisés sur les stations de contrôle des migrations du bassin de la Seine",
+    booktabs = TRUE,
+    format = "latex",
+    escape = FALSE,
+    linesep = "",
+    label = "recap"
+  ) %>%
+  kable_styling(
+    latex_options = c("striped","hold_position", "scale_down"),
+    position = "center",
+    full_width = FALSE
+  ) %>%
+  column_spec(1, width = "6cm") %>%
+  column_spec(2, latex_column_spec = "C{2cm}", bold = F) %>%
+  column_spec(3, latex_column_spec = "C{2cm}", bold = F) %>%
+  column_spec(4, latex_column_spec = "C{2cm}", bold = TRUE) %>%
+  column_spec(5, latex_column_spec = "C{2cm}", bold = TRUE) %>%
+  column_spec(6, latex_column_spec = "C{2cm}", bold = TRUE) %>%
+  add_header_above(c(" " = 1, "Seine" = 3, "Oise" = 1, "Aisne" = 1))
+
+writeLines(resume_latex, str_c(tabwd, "recap.tex"))
+
+@
+
+
+Les poissons migrateurs entrant dans l'estuaire de la Seine sont contrôlés au niveau du barrage de Poses, marquant la fin de l'estuaire et qui est équipé de dispositifs de comptage sur les deux rives. Les poissons qui s'engagent sur l'axe Oise peuvent ensuite être retrouvés au niveau du barrage de Pontoise, équipé d'un système de vidéo-comptage depuis 2023. Il existe un dernier point de contrôle pour les poissons empruntant ensuite l'Aisne au niveau du barrage de Carandeau. Les effectifs comptabilisés en \Sexpr{annee} au niveau de ces stations sont présentés dans le tableau \ref{tab:recap}.
+
+
+\input{table/recap.tex}
+
 
 \end{abstract}
 
 \newpage
+\begin{singlespace}
 
 \tableofcontents
 
@@ -426,6 +820,7 @@ Le résumé
 \hypersetup{pageanchor=false}
 
 \clearpage
+\end{singlespace}
 
 \pagenumbering{arabic} \setcounter{page}{1} 
 
@@ -483,14 +878,14 @@ Longue de 776 km, la Seine prend sa source à Saint-Germain-Source-Seine en Côt
 \label{reseau_stacomi}
 \end{figure}
 
-En fond d'estuaire, le débit moyen du fleuve fluctue, ces dernières années, autour de 480m$^3$/s. En raison de la chenalisation et des ouvrages de gestion des crues, les variations hydrologiques de la Seine restent de nos jours relativement modérées, avec une élévation des niveaux d'eau récurrente au cours de la période hivernale
-(Figure \ref{debit_seine_histo}).
+En fond d'estuaire, le débit moyen du fleuve fluctue, ces dernières années, autour de 480m$^3$/s. En raison de la chenalisation et des ouvrages de gestion des crues, les variations hydrologiques de la Seine et des principaux affluents restent de nos jours relativement modérées, avec une élévation des niveaux d'eau récurrente au cours de la période hivernale
+(Figure \ref{debit_seine_oise_aisne}).
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=0.8\textwidth]{debit_seine_histo.png}
-\caption{Régime hydrologique de la Seine à Vernon, la moyenne interannuelle des dix années précédentes (\Sexpr{annee-11} à \Sexpr{annee-1}) est représentée en bleu, les débits journaliers de l'année sont présentés en noir}
-\label{debit_seine_histo}
+\includegraphics[width=0.8\textwidth]{debit_seine_oise_aisne.png}
+\caption{Régime hydrologique de la Seine, de l'Oise et de l'Aisne, le débit moyen mensuel est représentée en bleu, les débits journaliers de l'année sont présentés en noir}
+\label{debit_seine_oise_aisne}
 \end{figure}
 
 Le réseau hydrographique de la Seine parcourt en tête de bassin quelques massifs cristallins et métamorphiques dans les Ardennes et le Morvan; mais s'étend principalement dans la cuvette sédimentaire qu'est le bassin parisien traversant des terrains à dominante calcaire, argileuse ou marneuse. Ce réseau présente les deux extrêmes en matière de densité de cours d'eau, avec des zones fortement densifiées sur les massifs anciens comme dans la Nièvre (58), et des zones crayeuses au drainage peu dense, mais avec un écoulement soutenu et régulier comme en Haute-Normandie.
@@ -574,7 +969,7 @@ Ce dispositif se compose d'une passe à poissons et d'une passe à anguilles per
     \begin{subfigure}[b]{0.448\textwidth}
         \includegraphics[width=\textwidth]{schema_passe_rg_poses}
     \end{subfigure}
-       \caption{A gauche, schéma de la passe à poissons en rive droite du barrage de Poses - Amfreville-sous-les-Monts; à droite, schéma de la passe à poissons en rive gauche du barrage de Poses - Amfreville-sous-les-Monts}
+       \caption{Schémas de la passe à poissons en rive droite (à gauche) et de la passe à poissons en rive gauche (à droite) du barrage de Poses - Amfreville-sous-les-Monts}
        \label{schema_passes}
 \end{figure}
 
@@ -589,14 +984,32 @@ L’ouvrage situé sur l’Oise, entre les communes de Pontoise et de Saint-Ouen
 La passe à poissons a été aménagée en rive gauche sur le bras droit de la rivière en opposition avec les écluses
 de navigation. Composée d’une série de huit bassins à fentes verticales permettant la remontée d’une majorité
 d’espèces de poissons, une vitre d’observation est en place et a permis l'installation d'un système de vidéo-
-comptage en avril 2023. Il permet d' enregistrer les remontées sur cet affluent majeur de la Seine et statuer en partie sur le
-devenir des individus contrôlés en sortie d’estuaire à Poses- Amfreville-sous-les-Monts.
+comptage en avril 2023 (Figure \ref{barrage et vc pontoise}). Il permet d' enregistrer les remontées sur cet affluent majeur de la Seine et statuer en partie sur le devenir des individus contrôlés en sortie d’estuaire à Poses-Amfreville-sous-les-Monts.
+
+\begin{figure}[hptb]
+    \centering
+    \begin{subfigure}[b]{0.4\textwidth}
+        \includegraphics[width=\textwidth]{barrage_pontoise}
+    \end{subfigure}
+    \begin{subfigure}[b]{0.448\textwidth}
+        \includegraphics[width=\textwidth]{chambre_vc_pontoise}
+    \end{subfigure}
+       \caption{Barrage de Pontoise et sa chambre de vidéo-comptage}
+       \label{barrage et vc pontoise}
+\end{figure}
 
 \subsection{Site de Carandeau}
 
 \subsubsection{Barrage}
 
-Le barrage de Carandeau est située sur l'Aisne au niveau de la commune de Choisy-au-Bac dans le département de l’Oise, à seulement 2 km de sa confluence avec l’Oise et à 390 km de la mer. Cet ouvrage a fait l'objet d'une modernisation dans le cadre d'un partenariat signé en 2013 entre Voies navigables de France (VNF) et la société BAMEO permettant l'automatisation de la gestion du barrage et la restauration de la continuité écologique par l'ajout d'un dispositif de franchissement piscicole.
+Le barrage de Carandeau est située sur l'Aisne au niveau de la commune de Choisy-au-Bac dans le département de l’Oise, à seulement 2 km de sa confluence avec l’Oise et à 390 km de la mer. Cet ouvrage a fait l'objet d'une modernisation dans le cadre d'un partenariat signé en 2013 entre Voies navigables de France (VNF) et la société BAMEO permettant l'automatisation de la gestion du barrage et la restauration de la continuité écologique par l'ajout d'un dispositif de franchissement piscicole (Figure \ref{barrage carandeau}).
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.6\textwidth]{carandeau_3}
+\caption{Dispositif de franchissement en rive droite du barrage de Carandeau}
+\label{barrage carandeau}
+\end{figure}
 
 \subsubsection{Dispositif de franchissement}
 
@@ -604,53 +1017,53 @@ La passe à poissons est située sur la rive droite et est constituée de 8 bass
 
 \subsection{Contrôle des migrations}
 
-Le suivi des migrations est réalisé conjointement par l'association Seinormigr et par le syndicat mixte de la Base de Plein Air et de Loisirs de Léry-Poses.
-L'association Seinormigr contrôle les migrations à partir de trois dispositifs de contrôle, deux systèmes de piégeage spécifique pour les anguilles de chaque côté du fleuve ainsi qu'un système de vidéo-comptage en rive droite. Le syndicat mixte de Léry-Poses en Normandie gère le système de vidéo-comptage en rive gauche de la Seine.
-Cette année, l'association a pris en charge au cours de l'année le suivi du système vidéo en rive gauche et l'intégralité de son dépouillement qui n'était plus assuré par le syndicat suite à un problème de personnel.
-Différents paramètres environnementaux (débit, température, coefficient de marée...) sont relevés afin d'établir des corrélations avec les cinétiques migratoires des poissons.
+Sur le barrage de Poses, les premières années de suivi de la passe à poissons en rive gauche ont été réalisées par le syndicat mixte de la Base de Plein Air et de Loisirs de Léry-Poses. En 2014, suite à l’installation de la rampe à anguilles et de son piège, l’association Seine-Normandie Migrateurs a pris en charge son exploitation, puis celle des systèmes de comptage situés en rive droite du barrage lors de leur mise en service en 2018. Depuis 2021, Seinormigr assure également la gestion et le suivi des comptages de la passe à poissons en rive gauche de Poses.
+
+En 2023, l’association a fait installer un système de comptage sur le barrage de Pontoise, dont elle assure la gestion.
+Le contrôle des migrations au niveau de la passe à poissons de l’ouvrage de Carandeau est, quant à lui, assuré par la Fédération de l’Oise pour la pêche et la protection du milieu aquatique.
 
 \subsubsection{Dispositif de vidéo-comptage}
 
-Afin de permettre le suivi des migrations piscicoles au niveau des passes à bassins, des dispositifs de contrôle sous forme d'un vidéo-comptage et d'un enregistrement informatique à déclenchement automatique sont en service depuis l'année 2008 en rive gauche et depuis l'automne 2017 en rive droite (Figure \ref{chambre_vc_poses}). Ce type de comptage numérique est une technique de comptage en continu sans manipulation des poissons qui permet un dénombrement en s'affranchissant des inconvénients majeurs du piégeage. Il consiste à faire passer les poissons dans une zone où ils sont suffisamment visibles pour être identifiables et dénombrables à chacun de leur passage.
+Le suivi des migrations piscicoles au niveau des passes à bassins se fait à l'aide d'un système de vidéo-comptage constitué d'une ou deux caméras couplés à un enregistrement informatique à déclenchement automatique. (Figure \ref{chambre_vc_poses}). Ce système permet un comptage en continu sans manipulation des poissons en les faisant passer dans une zone où ils sont suffisamment visibles pour être identifiables et dénombrables à chacun de leur passage.
 
-\begin{figure}
+\begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{chambre_vc_poses}
 \caption{Chambres de vidéo-comptage de la station de contrôle des migrations du barrage de Poses - Amfreville-sous-les-Monts. A gauche, chambre de la rive gauche; à droite, chambre de la rive droite}
 \label{chambre_vc_poses}
 \end{figure}
 
-Les avantages du comptage numérique sont multiples : absence de manipulation des poissons, possibilité de comptages des espèces difficiles à piéger (aloses), charge en personnel moins lourde que pour le piégeage, précision extrême sur la détermination des rythmes migratoires et sur le comportement de l'ensemble des espèces. Les inconvénients sont l'impossibilité de comptage par forte turbidité de l'eau et la difficulté de détermination de certaines espèces (petits cyprinidés). Pour les systèmes automatisés, on se heurte également à l'efficacité partielle de détection de certaines espèces et à la sensibilité du système aux corps dérivants (herbiers en particulier) qui provoquent des déclenchements intempestifs de l'enregistrement vidéo. Dans les zones où de nombreuses espèces sont présentes une grande partie de l'année, le travail de dépouillement des données vidéo reste relativement lourd et fastidieux.
+Les avantages du comptage numérique sont multiples : absence de manipulation des poissons, possibilité de comptages des espèces difficiles à piéger (aloses), charge en personnel moins lourde que pour le piégeage, précision extrême sur la détermination des rythmes migratoires et sur le comportement de l'ensemble des espèces. Les inconvénients sont l'impossibilité de comptage par forte turbidité de l'eau et la difficulté de détermination de certaines espèces (petits cyprinidés). Pour les systèmes automatisés, on se heurte également à l'efficacité partielle de détection de certaines espèces et à la sensibilité du système aux corps dérivants (feuilles et herbiers en particulier) qui provoquent des déclenchements intempestifs de l'enregistrement vidéo. Dans les zones où de nombreuses espèces sont présentes une grande partie de l'année, le travail de dépouillement des données vidéo reste relativement lourd et fastidieux.
 
-\begin{figure}
+\begin{figure}[htpb]
 \centering
 \includegraphics[width=0.8\textwidth]{vc_rd_poses}
 \caption{Schéma du système de vidéo-comptage de la station de contrôle des migrations en rive droite du barrage de Poses - Amfreville-sous-les-Monts}
 \label{vc_rd_poses}
 \end{figure}
 
-\begin{figure}
+\begin{figure}[htpb]
 \centering
 \includegraphics[width=0.8\textwidth]{vc_rg_poses}
 \caption{Schéma du système de vidéo-comptage de la station de contrôle des migrations en rive gauche du barrage de Poses - Amfreville-sous-les-Monts}
 \label{vc_rg_poses}
 \end{figure}
 
-Le dispositif de vidéo-comptage utilisé à la station de contrôle des migrations est basé sur le système SYSIPAP (CATTOEN, INP-ENSHEEIT) (Figure \ref{vc_rd_poses} et Figure \ref{vc_rg_poses}). Le poisson est amené à s'engager dans un couloir de vision muni de part et d'autre de deux parois vitrées, derrière lesquelles se trouvent en vis-à-vis un rétroéclairage et une caméra filmant ainsi en continu la colonne d'eau où le poisson se présentera. La passe à bassins en rive gauche est munie d'une vitre d'observation tandis que la passe de la rive droite est munie d'un double couloir de visualisation permettant de maintenir des vitesses de courant compatibles au franchissement piscicole. Il y a donc deux systèmes de comptage indépendants en rive droite. Lorsqu'un objet transite par un des couloirs de vision, celui-ci est alors détecté par un analyseur d'images qui, selon le seuil de détection qui lui a été imposé, déclenche l'enregistrement, lequel se poursuit tant qu'un objet est toujours visible et/ou détectable. Chaque séquence vidéo (10 Mo) est alors stockée dans un serveur de stockage de données informatiques prévu à cet effet. Le rôle du système de rétroéclairage disposé derrière la vitre opposée est ainsi d'accentuer le contraste afin de faciliter la détection et la reconnaissance de l'objet. Néanmoins un certain nombre de réglages doivent être appliqués, afin d'étalonner le dispositif en fonction des caractéristiques du site et des espèces de poissons présentes dans le milieu.
+Les dispositifs de vidéo-comptage utilisés aux stations de contrôle des migrations de Poses et de Carandeau sont basés sur le système SYSIPAP (CATTOEN, INP-ENSHEEIT) (Figure \ref{vc_rd_poses} et Figure \ref{vc_rg_poses}). Le poisson est amené à s'engager dans un couloir de vision muni de part et d'autre de deux parois vitrées, derrière lesquelles se trouvent en vis-à-vis un rétroéclairage et une caméra filmant ainsi en continu la colonne d'eau où le poisson se présentera. La passe à bassins en rive gauche de Poses est munie d'une vitre d'observation tandis que la passe de la rive droite de Poses et celle de Carandeau sont munies d'un double couloir de visualisation permettant de maintenir des vitesses de courant compatibles au franchissement piscicole. Il y a donc deux systèmes de comptage indépendants sur ces sites. Lorsqu'un objet transite par un des couloirs de vision, celui-ci est alors détecté par un analyseur d'images qui, selon le seuil de détection qui lui a été imposé, déclenche l'enregistrement, lequel se poursuit tant qu'un objet est toujours visible et/ou détectable. Chaque séquence vidéo est alors stockée dans un serveur de stockage de données informatiques prévu à cet effet. Le rôle du système de rétroéclairage disposé derrière la vitre opposée est ainsi d'accentuer le contraste afin de faciliter la détection et la reconnaissance de l'objet. Néanmoins un certain nombre de réglages doivent être appliqués, afin d'étalonner le dispositif en fonction des caractéristiques du site et des espèces de poissons présentes dans le milieu. Sur le barrage de Pontoise, le comptage se fait à l'aide du système Ibaï Begi dont le principe de fonctionnement reste identique mais qui permet de fournir des images en haute définition et en couleurs ainsi qu'un système de traitements des vidéos par Intelligence Artificielle. Ce traitement permet de filtrer une partie des séquences générées par des objets dérivants.
 
-La fiabilité de détection du poisson devant la vitre dépend de divers paramètres de milieu (éclairage, turbidité de l'eau pour laquelle un minimum de 0,70 m au disque de Secchi est requis) et des espèces de poissons considérées (en fonction de leur taille, de leur couleur, de leur vitesse et de leur profondeur de nage). En moyenne, dans de bonnes conditions de visibilité, la fiabilité de détection est excellente (90\% à 100\%) pour les salmonidés, les aloses et les cyprinidés de taille supérieure à 25 cm, bonne (70\% à 90\%) pour les lamproies, barbeaux et cyprinidés de taille comprise entre 10 cm et 25 cm, et moyenne (50\% à 70\%) pour l'anguille et les poissons de taille inférieure à 10 cm \citep{travade_les_1992}.
+La fiabilité de détection du poisson devant la vitre dépend de divers paramètres de milieu (éclairage, turbidité de l'eau), des espèces de poissons considérées (en fonction de leur taille, de leur couleur, de leur vitesse et de leur profondeur de nage) et de la configuration du site (présence de remous hydrauliques, bullage ou angle mort au niveau de la vitre d'observation). En moyenne, dans de bonnes conditions de visibilité, la fiabilité de détection est excellente (90\% à 100\%) pour les salmonidés, les aloses et les cyprinidés de taille supérieure à 25 cm, bonne (70\% à 90\%) pour les lamproies, barbeaux et cyprinidés de taille comprise entre 10 cm et 25 cm, et moyenne (50\% à 70\%) pour l'anguille et les poissons de taille inférieure à 10 cm \citep{travade_les_1992}.
 
 Une surveillance régulière est nécessaire pour contrôler les réglages des dispositifs, nettoyer les vitres de visualisation et les zones de passage des poissons.
 
 \subsubsection{Dépouillement des données de vidéo-comptage}
 
-Suite à l'enregistrement des séquences vidéo, celles-ci sont récupérées par un opérateur en vue de leur dépouillement sous le logiciel WPOIS. Cette phase de dépouillement consiste en l'analyse de ces vidéos afin d'identifier et de comptabiliser les poissons traversant la passe.
+Suite à l'enregistrement des séquences vidéo, celles-ci sont visualiser par un opérateur afin d'identifier et de comptabiliser les poissons traversant la passe.
 
-Les durées de dépouillement sont très variables. En réalité ces valeurs sont fonctions des conditions de milieu (visibilité, déclenchements parasites par des corps dérivants) et surtout des espèces comptabilisées (facilité de distinction des espèces, vitesse de passage, passages isolés ou en bancs, allers et retours, stabulation devant la vitre). A l'expérience des comptages \textit{in situ}, il ressort qu'en moyenne les durées de dépouillement sont de l'ordre de 4\% à 10\% du temps réel de surveillance (soit 1 h à 2,5 h par 24 h de suivi) pour les faibles passages (inférieurs à 400 poissons/jour) et de l'ordre de 15\% à 20\% du temps réel (soit 3,5 h à 5 h par 24 h de suivi) pour les passages nombreux (3 000 à 5 000 poissons/jour) \citep{travade_les_1992}.
+Les durées de dépouillement sont très variables. En réalité ces valeurs sont fonctions des conditions de milieu (visibilité, déclenchements parasites par des corps dérivants) et surtout des espèces comptabilisées (facilité de distinction des espèces, vitesse de passage, passages isolés ou en bancs, allers et retours, stabulation devant la vitre, mesure des poissons). A l'expérience des comptages \textit{in situ}, il ressort qu'en moyenne les durées de dépouillement sont de l'ordre de 4\% à 10\% du temps réel de surveillance (soit 1 h à 2,5 h par 24 h de suivi) pour les faibles passages (inférieurs à 400 poissons/jour) et de l'ordre de 15\% à 20\% du temps réel (soit 3,5 h à 5 h par 24 h de suivi) pour les passages nombreux (3 000 à 5 000 poissons/jour) \citep{travade_les_1992}.
 
 Tous les poissons franchissant les passes sont dénombrés et identifiés lors du vidéo-comptage. L'identification se fait à l'espèce ou à la famille, notamment dans le cas de passages importants de cyprinidés.
 
-A l'issue de cette phase de dépouillement, l'ensemble des données est compilé dans un fichier unique puis importé dans le logiciel stacomiR, afin d'en assurer le traitement et l'analyse (\url{http://stacomir.r-forge.r-project.org/}).
+A l'issue de cette phase de dépouillement, l'ensemble des données est compilé puis importé dans le logiciel \href{http://stacomir.r-forge.r-project.org/}{stacomiR}, afin d'en assurer le traitement et l'analyse, les données sont visualisables à travers une application \href{https://shiny.seinormigr.fr/Stacomi_App/}{Shiny}.
 
 \subsubsection{Dispositif de piégeage des anguilles}
 
@@ -672,7 +1085,7 @@ Les systèmes de piégeage sont installés sur la partie amont des dispositifs d
 
 \subsubsection{Protocole de suivi}
 
-Pendant la période de migration, le piège est relevé tous les jours, hors week-end et jours fériés excepté lors des pics de migrations. Lors de la relève du piège, la biométrie des anguilles est réalisée (Figure \ref{protocole_bio_ang}). Les individus sont préalablement anesthésiés avec une solution d'eugénol avant d'être mesurés (précision 1 mm) et pesés (précision 0,1 g). Le protocole de biométrie appliqué diffère selon la quantité d'anguilles capturées :
+Pendant la période de migration, le piège est relevé tous les jours, hors week-end et jours fériés excepté lors des pics de migrations. Lors de la relève du piège, la biométrie des anguilles est réalisée (Figure \ref{protocole_bio_ang}). Les individus sont préalablement anesthésiés avec une solution d'iso-eugénol avant d'être mesurés (précision 1 mm) et pesés (précision 0,1 g). Le protocole de biométrie appliqué diffère selon la quantité d'anguilles capturées :
 
 - Moins de 60 anguilles : biométrie individuelle
 
@@ -696,8 +1109,148 @@ Pendant la période de migration, le piège est relevé tous les jours, hors wee
 
 \clearpage
 
+\section{Suivi des migrations \Sexpr{annee}}
 
+\subsection{Alose (\textit{Alosa alosa})}
 
+<<chunk alose, echo=FALSE, eval=TRUE,results='hide' >>=
+
+data_alose_poses<-data_alose[[1]]
+data_alose_poses@data<-subset(data_alose_poses@data,!(bjo_identifiant %in% c(25623,25624,25625,25622,25626))) # on vire une alose qui a fait un A/R sur DC 105 en décembre
+data_alose_poses_annee<-subset(data_alose_poses@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+data_alose_pontoise<- data_alose[[3]]
+data_alose_pontoise_annee <- subset(data_alose_pontoise@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+data_alose_carandeau <- data_alose[[2]]
+data_alose_carandeau_annee <- subset(data_alose_carandeau@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+#### plot annuelle ALA ####
+
+data_alose_annuelle<-rbind(data_alose_poses_annee,data_alose_pontoise_annee,data_alose_carandeau_annee)
+data_alose_annuelle <- data_alose_annuelle %>% mutate(station = case_when(
+                            bjo_dis_identifiant %in% c(101,103,105)  ~ "Poses",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise"))
+
+data_alose_annuelle <- data_alose_annuelle %>% 
+                        group_by(bjo_jour,station) %>% 
+                        summarise(bjo_valeur=sum(bjo_valeur))
+data_alose_annuelle <- data_alose_annuelle %>%
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))
+
+plot_annuel_ala<-ggplot(data_alose_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=station),stat = "identity")+
+                  facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
+                  scale_fill_manual(values = c(col_Poses,col_Pontoise,col_Carandeau),
+                                    labels = c("Poses", "Pontoise","Carandeau"))+
+                  theme_bw()+
+                  theme(text = element_text(size = 15))
+
+png(file=str_c(imgwd,"plot_annuel_ala.png"),width=10,height=5,unit="in",res=200)
+print(plot_annuel_ala)
+dev.off()
+
+#### plot ridgeline ALA ####
+
+data_alose_pluri<-rbind(data_alose_poses@data,data_alose_pontoise@data,data_alose_carandeau@data)
+data_alose_pluri<-subset(data_alose_pluri,bjo_labelquantite=="Effectif_total")
+data_alose_pluri <- data_alose_pluri %>% mutate(station = case_when(
+                            bjo_dis_identifiant %in% c(101,103,105)  ~ "Poses",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise"))
+data_alose_pluri <- summarise(group_by(data_alose_pluri,bjo_jour,station),effectif=sum(bjo_valeur)) %>%
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau"))) %>%
+  as.data.frame()
+data_alose_pluri$effectif <- abs(data_alose_pluri$effectif)
+data_alose_pluri<-subset(data_alose_pluri,bjo_jour >="2018-01-01")
+
+data_long <- data_alose_pluri %>%  
+  mutate(effectif = abs(effectif)) %>%
+  uncount(effectif) %>%
+  mutate(
+    # extraire année ou identifiant de saison
+    Saison = format(bjo_jour, "%Y")
+  )
+data_long$bjo_jour_2024 <- as.Date(
+  paste0("2024-", format(data_long$bjo_jour, "%m-%d"))
+)
+
+plot_ridgeline_ala<-ggplot(data_long,
+       aes(x = bjo_jour_2024, y = Saison, fill = station)) +
+  ggridges::geom_density_ridges(
+    color = "black",
+    alpha = 0.5,
+    scale = 2
+  ) +
+  scale_fill_manual(values = c(col_Poses,col_Pontoise,col_Carandeau),
+                                    labels = c("Poses", "Pontoise","Carandeau")) +
+  theme_bw() +
+  labs(x = "", y = "annee")+
+  theme(text = element_text(size = 15))
+png(file=str_c(imgwd,"plot_ridgeline_ala.png"),width=10,height=5,unit="in",res=200)
+print(plot_ridgeline_ala)
+dev.off()
+
+#### plot seasonal ALA ####
+
+plot(data_alose_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
+p_seasonal_ala <- envir_stacomi$g_seasonal
+p_seasonal_ala <- p_seasonal_ala + theme(text = element_text(size = 15)) + xlab("")
+png(file=str_c(imgwd,"p_seasonal_ala.png"),width=10,height=8,unit="in",res=200)
+print(p_seasonal_ala)
+dev.off()
+
+#### plot taille ALA ####
+
+data_taille_alose<-subset(data_taille_video, tax_nom_latin == "Alosa")
+data_taille_alose <- data_taille_alose %>% mutate(station = case_when(
+                            ope_dic_identifiant %in% c(101,103,105)  ~ "Poses",
+                            ope_dic_identifiant %in% == 108  ~ "Pontoise"))
+
+@
+
+Les deux espèces d'aloses, la grande et la feinte, sont présentes sur le bassin de la Seine. Bien que relictuelle, la présence d'\textit{A. fallax} a été confirmée lors d'inventaires réalisés en Basse Seine en 1996 \citep{rochard_premier_1996}, 2002 et 2003 (données non publiées). La précision des informations relevées par vidéo-comptage ne permet pas en revanche, de les distinguer clairement (Figure \ref{ALA}) mais des opérations de captures ponctuels sur le barrage en 2020 et 2021 n'ont montré que la présence de la grande Alose. La migration génésique des aloses feintes se cantonne généralement dans les parties aval des fleuves, les individus observés à Pontoise et à Carandeau sont donc des Grandes aloses.
+
+\begin{figure}[htpb]
+    \centering
+      \begin{subfigure}[b]{0.3\textwidth}
+          \includegraphics[width=\textwidth]{ALA_POSES}
+      \end{subfigure}
+      \begin{subfigure}[b]{0.3\textwidth}
+          \includegraphics[width=\textwidth]{ALA_PONTOISE}
+      \end{subfigure}
+  \caption{Aloses observées en vidéocompage en rive droite du barrage de Poses - Amfreville-sous-les-Monts (à gauche) et au barrage de Pontoise (à droite).}
+  \label{ALA}
+\end{figure}
+
+En \Sexpr{annee}, les aloses ont été \Sexpr{gras(sum(data_alose_poses_annee$bjo_valeur))} à franchir l'estuaire de la Seine à Poses. Une fraction de cette cohorte a atteint les deux stations de contrôle amont puisque \Sexpr{gras(sum(data_alose_pontoise_annee$bjo_valeur))} individus ont été observés à Pontoise et \Sexpr{gras(sum(data_alose_carandeau_annee$bjo_valeur))} à Carandeau. Les aloses ont une bonne capacité à emprunter les écluses de navigation. Ce phénomène est amplifié quand les ouvrages de franchissement sont peu adaptés à l'espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. Cela signifie que le nombre d'aloses contrôlés par vidéo-comptage sous-estime le nombre réel d'aloses franchissant l'ouvrage, cela ce confirme notamment par des premières détections d'individus plus précoces sur des stations en amont. C'est notamment le cas en 2023 où les premières aloses ont été observées à Pontoise avant la première détection au vidéo-comptage de Poses (Figure \ref{plot_ridgeline_ala}).  
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_annuel_ala}
+\caption{Effectifs journaliers des aloses recensés sur les STACOMI du bassin Seine.}
+\label{p_annuel_ala}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_ridgeline_ala}
+\caption{Phénologie de la migration des aloses sur les STACOMI du bassin Seine.}
+\label{plot_ridgeline_ala}
+\end{figure}
+
+La phénologie de la migration au niveau de la fin de l'estuaire de Seine est présentée sur la figure \ref{p_seasonal_ala}. Les premiers individus se présentent entre la fin du mois de mars et le début du mois d'avril. L'essentiel de la migration se déroule au cours des mois d'avril à juin avec quelques passages durant la période estivale.
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{p_seasonal_ala}
+\caption{Rythmes migratoires des aloses au barrage de Poses - Amfreville-sous-les-Monts.}
+\label{p_seasonal_ala}
+\end{figure}
+
+\clearpage
+
+\begin{singlespace}
 %\twocolumn
 % biblio commune aux différentes années
 \bibliographystyle{apalike}
@@ -709,16 +1262,16 @@ Pendant la période de migration, le piège est relevé tous les jours, hors wee
 Rapport Sweave \LaTeX \\
 ------------------------\\
 packages R : \vspace{1mm}
-StacomiR \citep{legrand_stacomir_2019}\\
-\LaTeX \ :Hmisc, xtable\\
-graphiques : ggplot2, cowplot\\
-traitements : stringr, lubridate, reshape2, dplyr, plyr, questionr\\
+StacomiR \citep{legrand_stacomir_2019}, hubeau\\
+\LaTeX \ :Hmisc, kableExtra, xtable\\
+graphiques : ggplot2, patchwork\\
+traitements : stringr, lubridate, reshape2, dplyr, plyr, tidyr, questionr\\
 ------------------------\\
 Dernière compilation : le \today \\
  \Sexpr{sanitize(print(version["version.string"]))}\\
  plateforme \Sexpr{gsub("_","-",version["platform"])}
 
 \clearpage
-
+\end{singlespace}
 
 \end{document}
