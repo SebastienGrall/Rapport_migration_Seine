@@ -331,23 +331,23 @@ dev.off()
 ###### connexion à la base Stacomi, schéma Seinormigr ###########
 
 
-# con<-  pool::dbPool(
-#   drv=RPostgres::Postgres(),
-#   dbname = keyring::key_get("dbname_server"),
-#   host = keyring::key_get("host_server"),
-#   port = keyring::key_get("port_server"),
-#   user = keyring::key_get("user_server"),
-#   password = keyring::key_get("pwd_server")
-# )
+con<-  pool::dbPool(
+  drv=RPostgres::Postgres(),
+  dbname = keyring::key_get("dbname_server"),
+  host = keyring::key_get("host_server"),
+  port = keyring::key_get("port_server"),
+  user = keyring::key_get("user_server"),
+  password = keyring::key_get("pwd_server")
+)
 
 if(exists("con")){
 
-stacomi(database_expected = TRUE, sch= "seinormigr",options(
-  stacomiR.dbname = keyring::key_get("dbname_server"),
-  stacomiR.host = keyring::key_get("host_server"),
-  stacomiR.port = keyring::key_get("port_server"),
-  stacomiR.user = keyring::key_get("user_server"),
-  stacomiR.password = keyring::key_get("pwd_server")))
+# stacomi(database_expected = TRUE, sch= "seinormigr",options(
+#   stacomiR.dbname = keyring::key_get("dbname_server"),
+#   stacomiR.host = keyring::key_get("host_server"),
+#   stacomiR.port = keyring::key_get("port_server"),
+#   stacomiR.user = keyring::key_get("user_server"),
+#   stacomiR.password = keyring::key_get("pwd_server")))
   
 ### Fonction pour faire des r_mig_inter pour chaque espece (hors anguille) et DC ###
   
@@ -1211,6 +1211,9 @@ data_taille_alose<-subset(data_taille_video, tax_nom_latin == "Alosa")
 data_taille_alose <- data_taille_alose %>% mutate(station = case_when(
                             ope_dic_identifiant %in% c(101,103,105)  ~ "Poses",
                             ope_dic_identifiant == 108  ~ "Pontoise"))
+
+ggplot(data_taille_alose)+geom_boxplot(aes(y=car_valeur_quantitatif,x=mois))+
+  facet_grid(rows=vars(station),col=vars(annee))
 
 @
 
