@@ -330,24 +330,24 @@ dev.off()
 <<chunk fonction r_mig_inter et connexion base,echo=FALSE,eval=TRUE,results='hide'>>=
 ###### connexion à la base Stacomi, schéma Seinormigr ###########
 
-
-con<-  pool::dbPool(
-  drv=RPostgres::Postgres(),
-  dbname = keyring::key_get("dbname_server"),
-  host = keyring::key_get("host_server"),
-  port = keyring::key_get("port_server"),
-  user = keyring::key_get("user_server"),
-  password = keyring::key_get("pwd_server")
-)
+# 
+# con<-  pool::dbPool(
+#   drv=RPostgres::Postgres(),
+#   dbname = keyring::key_get("dbname_server"),
+#   host = keyring::key_get("host_server"),
+#   port = keyring::key_get("port_server"),
+#   user = keyring::key_get("user_server"),
+#   password = keyring::key_get("pwd_server")
+# )
 
 if(exists("con")){
 
-# stacomi(database_expected = TRUE, sch= "seinormigr",options(
-#   stacomiR.dbname = keyring::key_get("dbname_server"),
-#   stacomiR.host = keyring::key_get("host_server"),
-#   stacomiR.port = keyring::key_get("port_server"),
-#   stacomiR.user = keyring::key_get("user_server"),
-#   stacomiR.password = keyring::key_get("pwd_server")))
+stacomi(database_expected = TRUE, sch= "seinormigr",options(
+  stacomiR.dbname = keyring::key_get("dbname_server"),
+  stacomiR.host = keyring::key_get("host_server"),
+  stacomiR.port = keyring::key_get("port_server"),
+  stacomiR.user = keyring::key_get("user_server"),
+  stacomiR.password = keyring::key_get("pwd_server")))
   
 ### Fonction pour faire des r_mig_inter pour chaque espece (hors anguille) et DC ###
   
@@ -1198,7 +1198,7 @@ dev.off()
 
 #### plot seasonal ALA ####
 
-plot(data_alose_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
+#plot(data_alose_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
 p_seasonal_ala <- envir_stacomi$g_seasonal
 p_seasonal_ala <- p_seasonal_ala + theme(text = element_text(size = 15)) + xlab("")
 png(file=str_c(imgwd,"p_seasonal_ala.png"),width=10,height=8,unit="in",res=200)
