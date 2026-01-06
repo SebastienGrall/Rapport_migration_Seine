@@ -1,10 +1,13 @@
 <<global_options,include=FALSE>>=
+
 library(knitr)
 opts_chunk$set(
 concordance=TRUE,fig.width=12,fig.height=6,include=FALSE,cache = F
 )
 annee=2024
+selected_annee<-annee ## pour faire les subset, R n'aime pas les annee=annee quand l'intitule de la colonne du DF est annee
 options(encoding = "UTF-8")
+
 @
 
 
@@ -330,24 +333,24 @@ dev.off()
 <<chunk fonction r_mig_inter et connexion base,echo=FALSE,eval=TRUE,results='hide'>>=
 ###### connexion à la base Stacomi, schéma Seinormigr ###########
 
-
-con<-  pool::dbPool(
-  drv=RPostgres::Postgres(),
-  dbname = keyring::key_get("dbname_server"),
-  host = keyring::key_get("host_server"),
-  port = keyring::key_get("port_server"),
-  user = keyring::key_get("user_server"),
-  password = keyring::key_get("pwd_server")
-)
+# 
+# con<-  pool::dbPool(
+#   drv=RPostgres::Postgres(),
+#   dbname = keyring::key_get("dbname_server"),
+#   host = keyring::key_get("host_server"),
+#   port = keyring::key_get("port_server"),
+#   user = keyring::key_get("user_server"),
+#   password = keyring::key_get("pwd_server")
+# )
 
 if(exists("con")){
 
-# stacomi(database_expected = TRUE, sch= "seinormigr",options(
-#   stacomiR.dbname = keyring::key_get("dbname_server"),
-#   stacomiR.host = keyring::key_get("host_server"),
-#   stacomiR.port = keyring::key_get("port_server"),
-#   stacomiR.user = keyring::key_get("user_server"),
-#   stacomiR.password = keyring::key_get("pwd_server")))
+stacomi(database_expected = TRUE, sch= "seinormigr",options(
+  stacomiR.dbname = keyring::key_get("dbname_server"),
+  stacomiR.host = keyring::key_get("host_server"),
+  stacomiR.port = keyring::key_get("port_server"),
+  stacomiR.user = keyring::key_get("user_server"),
+  stacomiR.password = keyring::key_get("pwd_server")))
   
 ### Fonction pour faire des r_mig_inter pour chaque espece (hors anguille) et DC ###
   
@@ -1118,7 +1121,7 @@ Pendant la période de migration, le piège est relevé tous les jours, hors wee
 
 \subsection{Alose (\textit{Alosa alosa})}
 
-<<chunk alose, echo=FALSE, eval=TRUE,results='hide' >>=
+<<chunk alose, echo=FALSE, eval=TRUE,results='hide'>>=
 
 data_alose_poses<-data_alose[[1]]
 data_alose_poses@data<-subset(data_alose_poses@data,!(bjo_identifiant %in% c(25623,25624,25625,25622,25626))) # on vire une alose qui a fait un A/R sur DC 105 en décembre
@@ -1149,7 +1152,7 @@ plot_annuel_ala<-ggplot(data_alose_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeu
                   scale_fill_manual(values = c(col_Poses,col_Pontoise,col_Carandeau),
                                     labels = c("Poses", "Pontoise","Carandeau"))+
                   theme_bw()+
-                  theme(text = element_text(size = 15))
+                  theme(text = element_text(size = 15))+guides(fill="none")
 
 png(file=str_c(imgwd,"plot_annuel_ala.png"),width=10,height=5,unit="in",res=200)
 print(plot_annuel_ala)
@@ -1176,12 +1179,12 @@ data_long <- data_alose_pluri %>%
     # extraire année ou identifiant de saison
     Saison = format(bjo_jour, "%Y")
   )
-data_long$bjo_jour_2024 <- as.Date(
-  paste0("2024-", format(data_long$bjo_jour, "%m-%d"))
+data_long$bjo_jour_annee <- as.Date(
+  paste0(annee,"-", format(data_long$bjo_jour, "%m-%d"))
 )
 
 plot_ridgeline_ala<-ggplot(data_long,
-       aes(x = bjo_jour_2024, y = Saison, fill = station)) +
+       aes(x = bjo_jour_annee, y = Saison, fill = station)) +
   ggridges::geom_density_ridges(
     color = "black",
     alpha = 0.5,
@@ -1191,7 +1194,7 @@ plot_ridgeline_ala<-ggplot(data_long,
                                     labels = c("Poses", "Pontoise","Carandeau")) +
   theme_bw() +
   labs(x = "", y = "annee")+
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 15))#,legend.position = "bottom")
 png(file=str_c(imgwd,"plot_ridgeline_ala.png"),width=10,height=5,unit="in",res=200)
 print(plot_ridgeline_ala)
 dev.off()
@@ -1208,13 +1211,67 @@ dev.off()
 #### plot taille ALA ####
 
 data_taille_alose<-subset(data_taille_video, tax_nom_latin == "Alosa")
-data_taille_alose <- data_taille_alose %>% mutate(station = case_when(
+data_taille_alose <- data_taille_alose %>% 
+                          mutate(station = case_when(
                             ope_dic_identifiant %in% c(101,103,105)  ~ "Poses",
-                            ope_dic_identifiant == 108  ~ "Pontoise"))
+                            ope_dic_identifiant == 108  ~ "Pontoise")) %>%
+                          mutate(classe_taille=cut(car_valeur_quantitatif,
+                                                   breaks=c(0,300,350,400,450,500,550,600,650,700,750,800,2000)
+                                                     ))%>%
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))
 
-ggplot(data_taille_alose)+geom_boxplot(aes(y=car_valeur_quantitatif,x=mois))+
-  facet_grid(rows=vars(station),col=vars(annee))
+mois_fr <- c("janvier", "février", "mars", "avril", "mai", "juin",
+             "juillet", "août", "septembre", "octobre", "novembre", "décembre")
 
+data_taille_alose$mois <- factor(
+  data_taille_alose$mois,
+  levels = sprintf("%02d", 1:12),
+  labels = mois_fr
+)
+
+plot_box_violin_plot_ala <-
+  ggplot()+
+  geom_boxplot(data=subset(data_taille_alose,annee!=selected_annee), aes(y=car_valeur_quantitatif,x=mois))+
+  geom_violin(data=subset(data_taille_alose,annee==selected_annee), aes(y=car_valeur_quantitatif,x=mois,fill=station),alpha=0.5)+
+  facet_grid(rows=vars(station))+
+  scale_fill_manual(values = c(col_Poses,col_Pontoise,col_Carandeau),
+                            labels = c("Poses", "Pontoise","Carandeau"))+
+  theme_bw() +
+  labs(x = "mois", y = "taille (mm)")+
+  theme(text = element_text(size = 15))+guides(fill="none")
+
+freq_taille_histo <- data_taille_alose %>% 
+                      filter(annee != selected_annee) %>%
+                      group_by(station,classe_taille) %>%
+  summarise(effectif = n(), .groups = "drop")
+
+freq_taille_histo <- freq_taille_histo %>%
+  group_by(station) %>%
+  mutate(frequence = effectif / sum(effectif)*100) %>%
+  ungroup() %>% mutate(annee=2000)
+
+freq_taille_annee <- data_taille_alose %>% 
+                      filter(annee == selected_annee) %>%
+                      group_by(station,classe_taille) %>%
+  summarise(effectif = n(), .groups = "drop")
+
+freq_taille_annee <- freq_taille_annee %>%
+  group_by(station) %>%
+  mutate(frequence = effectif / sum(effectif)*100) %>%
+  ungroup() %>% mutate(annee = selected_annee)
+
+freq_taille_ala<-rbind(freq_taille_histo,freq_taille_annee)
+
+ggplot()+
+  geom_bar(data=subset(freq_taille_ala,annee!=selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",alpha=0.5)+
+  geom_bar(data=subset(freq_taille_ala,annee==selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",width=0.5)+
+  facet_grid(rows=vars(station))+
+  scale_fill_manual(values = c(col_Poses,col_Pontoise,col_Carandeau),
+                            labels = c("Poses", "Pontoise","Carandeau"))+
+  theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
+  scale_x_discrete(labels=c("<300","300-350","350-400","400-450","450-500","500-550","550-600",
+                            "600-650","650-700","700-750","750-800",">800"))+
+  theme(text = element_text(size = 15))+guides(fill="none")
 @
 
 Les deux espèces d'aloses, la grande et la feinte, sont présentes sur le bassin de la Seine. Bien que relictuelle, la présence d'\textit{A. fallax} a été confirmée lors d'inventaires réalisés en Basse Seine en 1996 \citep{rochard_premier_1996}, 2002 et 2003 (données non publiées). La précision des informations relevées par vidéo-comptage ne permet pas en revanche, de les distinguer clairement (Figure \ref{ALA}) mais des opérations de captures ponctuels sur le barrage en 2020 et 2021 n'ont montré que la présence de la grande Alose. La migration génésique des aloses feintes se cantonne généralement dans les parties aval des fleuves, les individus observés à Pontoise et à Carandeau sont donc des Grandes aloses.
@@ -1231,7 +1288,7 @@ Les deux espèces d'aloses, la grande et la feinte, sont présentes sur le bassi
   \label{ALA}
 \end{figure}
 
-En \Sexpr{annee}, les aloses ont été \Sexpr{gras(sum(data_alose_poses_annee$bjo_valeur))} à franchir l'estuaire de la Seine à Poses. Une fraction de cette cohorte a atteint les deux stations de contrôle amont puisque \Sexpr{gras(sum(data_alose_pontoise_annee$bjo_valeur))} individus ont été observés à Pontoise et \Sexpr{gras(sum(data_alose_carandeau_annee$bjo_valeur))} à Carandeau. Les aloses ont une bonne capacité à emprunter les écluses de navigation. Ce phénomène est amplifié quand les ouvrages de franchissement sont peu adaptés à l'espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. Cela signifie que le nombre d'aloses contrôlés par vidéo-comptage sous-estime le nombre réel d'aloses franchissant l'ouvrage, cela ce confirme notamment par des premières détections d'individus plus précoces sur des stations en amont. C'est notamment le cas en 2023 où les premières aloses ont été observées à Pontoise avant la première détection au vidéo-comptage de Poses (Figure \ref{plot_ridgeline_ala}).  
+En \Sexpr{annee}, les aloses ont été \Sexpr{gras(sum(data_alose_poses_annee$bjo_valeur))} à franchir l'estuaire de la Seine à Poses. Une fraction de cette cohorte a atteint les deux stations de contrôle amont puisque \Sexpr{gras(sum(data_alose_pontoise_annee$bjo_valeur))} individus ont été observés à Pontoise et \Sexpr{gras(sum(data_alose_carandeau_annee$bjo_valeur))} à Carandeau (Figure \ref{p_annuel_ala}). Les aloses ont une bonne capacité à emprunter les écluses de navigation. Ce phénomène est amplifié quand les ouvrages de franchissement sont peu adaptés à l'espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. Cela signifie que le nombre d'aloses contrôlés par vidéo-comptage sous-estime le nombre réel d'aloses franchissant l'ouvrage, cela ce confirme notamment par des premières détections d'individus plus précoces sur des stations en amont. C'est notamment le cas en 2023 où les premières aloses ont été observées à Pontoise avant la première détection au vidéo-comptage de Poses (Figure \ref{plot_ridgeline_ala}).  
 
 \begin{figure}[htpb]
 \centering
