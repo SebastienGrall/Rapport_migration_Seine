@@ -153,6 +153,20 @@ integer_breaks <- function(n = 5, ...) {
     return(fxn)
 }
 
+fn_horaires<-function(espece=c("Alosa")){
+  horaires_esp_poses_vc_rg<-subset(bilesp_poses_vc_rg,tax_nom_latin==espece)
+  if(nrow(horaires_esp_poses_vc_rg)>0){horaires_esp_poses_vc_rg$station<-"Poses"}
+  horaires_esp_poses_vc_rd<-subset(bilesp_poses_vc_rd,tax_nom_latin==espece)
+  if(nrow(horaires_esp_poses_vc_rd)>0){horaires_esp_poses_vc_rd$station<-"Poses"}
+  horaires_esp_pontoise<-subset(bilesp_pontoise,tax_nom_latin==espece)
+  if(nrow(horaires_esp_pontoise)>0){horaires_esp_pontoise$station<-"Pontoise"}
+  horaires_esp_carandeau<-subset(bilesp_carandeau,tax_nom_latin==espece)
+  if(nrow(horaires_esp_carandeau)>0){horaires_esp_carandeau$station<-"Carandeau"}
+  
+  horaires_esp<-rbind(horaires_esp_poses_vc_rg,horaires_esp_poses_vc_rd,horaires_esp_pontoise,horaires_esp_carandeau)
+  return(horaires_esp)
+}
+
 @
 
 <<chunk debit,echo=FALSE,eval=TRUE,results='hide'>>=
@@ -333,7 +347,6 @@ dev.off()
 <<chunk fonction r_mig_inter et connexion base,echo=FALSE,eval=TRUE,results='hide'>>=
 ###### connexion à la base Stacomi, schéma Seinormigr ###########
 
-# 
 # con<-  pool::dbPool(
 #   drv=RPostgres::Postgres(),
 #   dbname = keyring::key_get("dbname_server"),
@@ -1154,7 +1167,7 @@ plot_annuel_ala<-ggplot(data_alose_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeu
                   theme_bw()+
                   theme(text = element_text(size = 15))+guides(fill="none")
 
-png(file=str_c(imgwd,"plot_annuel_ala.png"),width=10,height=5,unit="in",res=200)
+png(file=str_c(imgwd,"plot_annuel_ala.png"),width=8,height=4,unit="in",res=200)
 print(plot_annuel_ala)
 dev.off()
 
@@ -1195,7 +1208,7 @@ plot_ridgeline_ala<-ggplot(data_long,
   theme_bw() +
   labs(x = "", y = "annee")+
   theme(text = element_text(size = 15))#,legend.position = "bottom")
-png(file=str_c(imgwd,"plot_ridgeline_ala.png"),width=10,height=5,unit="in",res=200)
+png(file=str_c(imgwd,"plot_ridgeline_ala.png"),width=8,height=4,unit="in",res=200)
 print(plot_ridgeline_ala)
 dev.off()
 
@@ -1204,7 +1217,7 @@ dev.off()
 plot(data_alose_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
 p_seasonal_ala <- envir_stacomi$g_seasonal
 p_seasonal_ala <- p_seasonal_ala + theme(text = element_text(size = 15)) + xlab("")
-png(file=str_c(imgwd,"p_seasonal_ala.png"),width=10,height=8,unit="in",res=200)
+png(file=str_c(imgwd,"p_seasonal_ala.png"),width=8,height=5,unit="in",res=200)
 print(p_seasonal_ala)
 dev.off()
 
@@ -1240,7 +1253,7 @@ plot_box_violin_plot_ala <-
   labs(x = "mois", y = "taille (mm)")+
   theme(text = element_text(size = 15))+guides(fill="none")
 
-png(file=str_c(imgwd,"plot_box_violin_plot_ala.png"),width=10,height=8,unit="in",res=200)
+png(file=str_c(imgwd,"plot_box_violin_plot_ala.png"),width=5,height=4,unit="in",res=200)
 print(plot_box_violin_plot_ala)
 dev.off()
 
@@ -1275,11 +1288,44 @@ plot_histo_taille_ala<-ggplot()+
   theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
   scale_x_discrete(labels=c("<300","300-350","350-400","400-450","450-500","500-550","550-600",
                             "600-650","650-700","700-750","750-800",">800"))+
-  theme(text = element_text(size = 15))+guides(fill="none")
+  theme(text = element_text(size = 15),axis.text.x = element_text(angle=45,vjust=0.5))+guides(fill="none")
 
-png(file=str_c(imgwd,"plot_histo_taille_ala.png"),width=10,height=8,unit="in",res=200)
+png(file=str_c(imgwd,"plot_histo_taille_ala.png"),width=5,height=4,unit="in",res=200)
 print(plot_histo_taille_ala)
 dev.off()
+
+##### horaires passages
+
+horaires_ala<-fn_horaires(espece = "Alosa")
+
+
+mig <- horaires_ala
+mig <- mig %>% mutate(time=strftime(ope_date_debut, format="%H:%M:%S",tz="UTC"),
+		date=as.Date(ope_date_debut))
+mig <-	fun_date_extraction(
+		data=mig,
+		nom_coldt="ope_date_debut", annee = FALSE, mois = TRUE,
+		quinzaine = FALSE, semaine = FALSE, semaine_std = FALSE,
+		jour_an = FALSE, jour_mois = TRUE, heure = TRUE)
+hhh <- mig %>% group_by(heure) %>% summarize(N=sum(abs(lot_effectif)))
+touteslesheures<-c("00","01","02","03","04","05", "06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23")
+missing<-touteslesheures[!touteslesheures%in%levels(hhh$heure)]
+if(length(missing)>0){hourtoadd<-data.frame(heure=missing,N=0)
+  hhh<-rbind(hhh,hourtoadd)}
+hhh$heure<-as.character(hhh$heure)
+hhh<-arrange(hhh,heure) %>% as.data.frame()
+
+p_horaires_ala <- ggplot(hhh, aes(x = heure)) + 
+		geom_histogram(aes(y=N), width = 0.6, colour = NA,stat="identity") +
+		coord_polar(start=3*pi/4) + 	ylab("Nombre")+
+  scale_y_continuous(breaks = integer_breaks()) +
+		theme_bw()+ 
+       theme(axis.text=element_text(size=15),axis.title = element_text(size = 15))+
+    theme(plot.margin = margin(.5, .5, .5, .5, "cm"))
+  png(file=str_c(imgwd,"p_horaires_ala.png"),width=15,height=15,unit="cm",res=200)		
+	print(p_horaires_ala)
+dev.off()
+
 @
 
 Les deux espèces d'aloses, la grande et la feinte, sont présentes sur le bassin de la Seine. Bien que relictuelle, la présence d'\textit{A. fallax} a été confirmée lors d'inventaires réalisés en Basse Seine en 1996 \citep{rochard_premier_1996}, 2002 et 2003 (données non publiées). La précision des informations relevées par vidéo-comptage ne permet pas en revanche, de les distinguer clairement (Figure \ref{ALA}) mais des opérations de captures ponctuels sur le barrage en 2020 et 2021 n'ont montré que la présence de la grande Alose. La migration génésique des aloses feintes se cantonne généralement dans les parties aval des fleuves, les individus observés à Pontoise et à Carandeau sont donc des Grandes aloses.
@@ -1316,9 +1362,23 @@ La phénologie de la migration au niveau de la fin de l'estuaire de Seine est pr
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=\textwidth]{p_seasonal_ala}
+\includegraphics[width=0.8\textwidth]{p_seasonal_ala}
 \caption{Rythmes migratoires des aloses au barrage de Poses - Amfreville-sous-les-Monts.}
 \label{p_seasonal_ala}
+\end{figure}
+
+la taille blabla
+
+\begin{figure}[htpb]
+    \centering
+      \begin{subfigure}[b]{0.48\textwidth}
+          \includegraphics[width=\textwidth]{plot_histo_taille_ala}
+      \end{subfigure}
+      \begin{subfigure}[b]{0.48\textwidth}
+          \includegraphics[width=\textwidth]{plot_box_violin_plot_ala}
+      \end{subfigure}
+  \caption{Taille des Aloses observées en vidéocompage au barrage de Poses - Amfreville-sous-les-Monts et au barrage de Pontoise.}
+  \label{Taille_ALA}
 \end{figure}
 
 \clearpage

@@ -1,0 +1,948 @@
+This is pdfTeX, Version 3.141592653-2.6-1.40.27 (MiKTeX 25.4) (preloaded format=pdflatex 2026.1.5)  6 JAN 2026 11:15
+entering extended mode
+ restricted \write18 enabled.
+ %&-line parsing enabled.
+**C:/Users/seino/Documents/Projets_Git/Rapport_migration_Seine/rapport_migratio
+n_Seine.tex
+
+(C:/Users/seino/Documents/Projets_Git/Rapport_migration_Seine/rapport_migration
+_Seine.tex
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-11-06>
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/base\article.cls
+Document Class: article 2025/01/22 v1.4n Standard LaTeX document class
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/base\size11.clo
+File: size11.clo 2025/01/22 v1.4n Standard LaTeX file (size option)
+)
+\c@part=\count275
+\c@section=\count276
+\c@subsection=\count277
+\c@subsubsection=\count278
+\c@paragraph=\count279
+\c@subparagraph=\count280
+\c@figure=\count281
+\c@table=\count282
+\abovecaptionskip=\skip49
+\belowcaptionskip=\skip50
+\bibindent=\dimen148
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphicx.sty
+Package: graphicx 2024/12/31 v1.2e Enhanced LaTeX Graphics (DPC,SPQR)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/graphics\keyval.sty
+Package: keyval 2022/05/29 v1.15 key=value parser (DPC)
+\KV@toks@=\toks17
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/graphics\graphics.sty
+Package: graphics 2024/08/06 v1.4g Standard LaTeX Graphics (DPC,SPQR)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/graphics\trig.sty
+Package: trig 2023/12/02 v1.11 sin cos tan (DPC)
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\graphics.c
+fg
+File: graphics.cfg 2016/06/04 v1.11 sample graphics configuration
+)
+Package graphics Info: Driver file: pdftex.def on input line 106.
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/graphics-def\pdftex.def
+File: pdftex.def 2025/09/29 v1.2d Graphics/color driver for pdftex
+))
+\Gin@req@height=\dimen149
+\Gin@req@width=\dimen150
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/xcolor\xcolor.sty
+Package: xcolor 2024/09/29 v3.02 LaTeX color extensions (UK)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/graphics-cfg\color.cfg
+File: color.cfg 2016/01/02 v1.6 sample color configuration
+)
+Package xcolor Info: Driver file: pdftex.def on input line 274.
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/graphics\mathcolor.ltx)
+Package xcolor Info: Model `cmy' substituted by `cmy0' on input line 1349.
+Package xcolor Info: Model `hsb' substituted by `rgb' on input line 1353.
+Package xcolor Info: Model `RGB' extended on input line 1365.
+Package xcolor Info: Model `HTML' substituted by `rgb' on input line 1367.
+Package xcolor Info: Model `Hsb' substituted by `hsb' on input line 1368.
+Package xcolor Info: Model `tHsb' substituted by `hsb' on input line 1369.
+Package xcolor Info: Model `HSB' substituted by `hsb' on input line 1370.
+Package xcolor Info: Model `Gray' substituted by `gray' on input line 1371.
+Package xcolor Info: Model `wave' substituted by `hsb' on input line 1372.
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/colortbl\colortbl.sty
+Package: colortbl 2024/10/29 v1.0k Color table columns (DPC)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/tools\array.sty
+Package: array 2025/09/25 v2.6n Tabular extension package (FMi)
+\col@sep=\dimen151
+\ar@mcellbox=\box53
+\extrarowheight=\dimen152
+\NC@list=\toks18
+\extratabsurround=\skip51
+\backup@length=\skip52
+\ar@cellbox=\box54
+)
+\everycr=\toks19
+\minrowclearance=\skip53
+\rownum=\count283
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/framed\framed.sty
+Package: framed 2011/10/22 v 0.96: framed or shaded text with page breaks
+\OuterFrameSep=\skip54
+\fb@frw=\dimen153
+\fb@frh=\dimen154
+\FrameRule=\dimen155
+\FrameSep=\dimen156
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/base\alltt.sty
+Package: alltt 2024/07/07 v2.0g defines alltt environment
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.sty
+Package: geometry 2020/01/02 v5.9 Page Geometry
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/iftex\ifvtex.sty
+Package: ifvtex 2019/10/25 v1.7 ifvtex legacy package. Use iftex instead.
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/iftex\iftex.sty
+Package: iftex 2024/12/12 v1.0g TeX engine tests
+))
+\Gm@cnth=\count284
+\Gm@cntv=\count285
+\c@Gm@tempcnt=\count286
+\Gm@bindingoffset=\dimen157
+\Gm@wd@mp=\dimen158
+\Gm@odd@mp=\dimen159
+\Gm@even@mp=\dimen160
+\Gm@layoutwidth=\dimen161
+\Gm@layoutheight=\dimen162
+\Gm@layouthoffset=\dimen163
+\Gm@layoutvoffset=\dimen164
+\Gm@dimlist=\toks20
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/geometry\geometry.cfg))
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/base\inputenc.sty
+Package: inputenc 2024/02/08 v1.3d Input encoding file
+\inpenc@prehook=\toks21
+\inpenc@posthook=\toks22
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/natbib\natbib.sty
+Package: natbib 2010/09/13 8.31b (PWD, AO)
+\bibhang=\skip55
+\bibsep=\skip56
+LaTeX Info: Redefining \cite on input line 694.
+\c@NAT@ctr=\count287
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/babel\babel.sty
+Package: babel 2025/11/09 v25.15 The multilingual framework for LuaLaTeX, pdfLa
+TeX and XeLaTeX
+\babel@savecnt=\count288
+LaTeX Encoding Info:    Redeclaring text command \ij (encoding OT1) on input li
+ne 2050.
+LaTeX Encoding Info:    Redeclaring text command \IJ (encoding OT1) on input li
+ne 2052.
+LaTeX Encoding Info:    Redeclaring text command \ij (encoding T1) on input lin
+e 2054.
+LaTeX Encoding Info:    Redeclaring text command \IJ (encoding T1) on input lin
+e 2055.
+LaTeX Encoding Info:    Ignoring declaration for text command \ij (encoding ?) 
+on input line 2056.
+LaTeX Encoding Info:    Ignoring declaration for text command \IJ (encoding ?) 
+on input line 2058.
+LaTeX Encoding Info:    Ignoring declaration for text command \SS (encoding ?) 
+on input line 2083.
+\U@D=\dimen165
+\l@unhyphenated=\language79
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/babel\txtbabel.def)
+\bbl@readstream=\read2
+\bbl@dirlevel=\count289
+Package babel Info: Configuration files are deprecated, as
+(babel)             they can break document portability.
+(babel)             Reported on input line 4175.
+*************************************
+* Local config file bblopts.cfg used
+*
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/arabi\bblopts.cfg
+File: bblopts.cfg 2005/09/08 v0.1 add Arabic and Farsi to "declared" options of
+ babel
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/babel/locale/fr\babel
+-french.tex)
+Package babel Info: Importing font and identification data for french
+(babel)             from babel-fr.ini. Reported on input line 4298.
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/babel-french\french.l
+df
+Language: french 2025-08-15 v4.0e French support from the babel system
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/babel-french\french3.
+ldf
+Language: french 2025-08-15 v3.7e French support from the babel system
+\FB@stdchar=\count290
+Package babel Info: Making : an active character on input line 273.
+Package babel Info: Making ; an active character on input line 274.
+Package babel Info: Making ! an active character on input line 275.
+Package babel Info: Making ? an active character on input line 276.
+\FBguill@level=\count291
+\FBold@everypar=\toks23
+\FB@Mht=\dimen166
+\mc@charclass=\count292
+\mc@charfam=\count293
+\mc@charslot=\count294
+\std@mcc=\count295
+\dec@mcc=\count296
+\FB@pardim=\dimen167
+\listindentFB=\dimen168
+\descindentFB=\dimen169
+\labelindentFB=\dimen170
+\labelwidthFB=\dimen171
+\leftmarginFB=\dimen172
+\parindentFFN=\dimen173
+\FBfnindent=\dimen174
+))) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/carlisle\scalefnt.s
+ty) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption.sty
+Package: caption 2023/08/05 v3.6o Customizing captions (AR)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/caption\caption3.sty
+Package: caption3 2023/07/31 v2.4d caption3 kernel (AR)
+\caption@tempdima=\dimen175
+\captionmargin=\dimen176
+\caption@leftmargin=\dimen177
+\caption@rightmargin=\dimen178
+\caption@width=\dimen179
+\caption@indent=\dimen180
+\caption@parindent=\dimen181
+\caption@hangindent=\dimen182
+Package caption Info: Standard document class detected.
+Package caption Info: french babel package is loaded.
+)
+\c@caption@flags=\count297
+\c@continuedfloat=\count298
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/booktabs\booktabs.sty
+Package: booktabs 2020/01/12 v1.61803398 Publication quality tables
+\heavyrulewidth=\dimen183
+\lightrulewidth=\dimen184
+\cmidrulewidth=\dimen185
+\belowrulesep=\dimen186
+\belowbottomsep=\dimen187
+\aboverulesep=\dimen188
+\abovetopsep=\dimen189
+\cmidrulesep=\dimen190
+\cmidrulekern=\dimen191
+\defaultaddspace=\dimen192
+\@cmidla=\count299
+\@cmidlb=\count300
+\@aboverulesep=\dimen193
+\@belowrulesep=\dimen194
+\@thisruleclass=\count301
+\@lastruleclass=\count302
+\@thisrulewidth=\dimen195
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/tools\longtable.sty
+Package: longtable 2025-10-13 v4.24 Multi-page Table package (DPC)
+\LTleft=\skip57
+\LTright=\skip58
+\LTpre=\skip59
+\LTpost=\skip60
+\LTchunksize=\count303
+\LTcapwidth=\dimen196
+\LT@head=\box55
+\LT@firsthead=\box56
+\LT@foot=\box57
+\LT@lastfoot=\box58
+\LT@gbox=\box59
+\LT@cols=\count304
+\LT@rows=\count305
+\c@LT@tables=\count306
+\c@LT@chunks=\count307
+\LT@p@ftn=\toks24
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/multirow\multirow.sty
+Package: multirow 2024/11/12 v2.9 Span multiple rows of a table
+\multirow@colwidth=\skip61
+\multirow@cntb=\count308
+\multirow@dima=\skip62
+\bigstrutjot=\dimen197
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/wrapfig\wrapfig.sty
+\wrapoverhang=\dimen198
+\WF@size=\dimen199
+\c@WF@wrappedlines=\count309
+\WF@box=\box60
+\WF@everypar=\toks25
+Package: wrapfig 2003/01/31  v 3.6
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/float\float.sty
+Package: float 2001/11/08 v1.3d Float enhancements (AL)
+\c@float@type=\count310
+\float@exts=\toks26
+\float@box=\box61
+\@float@everytoks=\toks27
+\@floatcapt=\box62
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/pdflscape\pdflscape.sty
+Package: pdflscape 2022-10-27 v0.13 Display of landscape pages in PDF
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/pdflscape\pdflscape-nom
+etadata.sty
+Package: pdflscape-nometadata 2022-10-28 v0.13 Display of landscape pages in PD
+F (HO)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/graphics\lscape.sty
+Package: lscape 2020/05/28 v3.02 Landscape Pages (DPC)
+)
+Package pdflscape Info: Auto-detected driver: pdftex on input line 81.
+)) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/tabu\tabu.sty
+Package: tabu 2019/01/11 v2.9 - flexible LaTeX tabulars (FC+tabu-fixed)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/varwidth\varwidth.sty
+Package: varwidth 2009/03/30 ver 0.92;  Variable-width minipages
+\@vwid@box=\box63
+\sift@deathcycles=\count311
+\@vwid@loff=\dimen256
+\@vwid@roff=\dimen257
+)
+==> First Aid for varwidth.sty applied!
+\c@taburow=\count312
+\tabu@nbcols=\count313
+\tabu@cnt=\count314
+\tabu@Xcol=\count315
+\tabu@alloc=\count316
+\tabu@nested=\count317
+\tabu@target=\dimen258
+\tabu@spreadtarget=\dimen259
+\tabu@naturalX=\dimen260
+\tabucolX=\dimen261
+\tabu@Xsum=\dimen262
+\extrarowdepth=\dimen263
+\abovetabulinesep=\dimen264
+\belowtabulinesep=\dimen265
+\tabustrutrule=\dimen266
+\tabu@thebody=\toks28
+\tabu@footnotes=\toks29
+\tabu@box=\box64
+\tabu@arstrutbox=\box65
+\tabu@hleads=\box66
+\tabu@vleads=\box67
+\tabu@cellskip=\skip63
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/threeparttable\threepar
+ttable.sty
+Package: threeparttable 2003/06/13  v 3.0
+\@tempboxb=\box68
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/threeparttablex\threepa
+rttablex.sty
+Package: threeparttablex 2013/07/23 v0.3 by daleif
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/environ\environ.sty
+Package: environ 2014/05/04 v0.3 A new way to define environments
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/trimspaces\trimspaces.s
+ty
+Package: trimspaces 2009/09/17 v1.1 Trim spaces around a token list
+)
+\@envbody=\toks30
+)
+\TPTL@width=\skip64
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/ulem\ulem.sty
+\UL@box=\box69
+\UL@hyphenbox=\box70
+\UL@skip=\skip65
+\UL@hook=\toks31
+\UL@height=\dimen267
+\UL@pe=\count318
+\UL@pixel=\dimen268
+\ULC@box=\box71
+Package: ulem 2019/11/18
+\ULdepth=\dimen269
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/makecell\makecell.sty
+Package: makecell 2009/08/03 V0.1e Managing of Tab Column Heads and Cells
+\rotheadsize=\dimen270
+\c@nlinenum=\count319
+\TeXr@lab=\toks32
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/ae\ae.sty
+Package: ae 2001/02/12 1.3 Almost European Computer Modern
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/base\fontenc.sty
+Package: fontenc 2025/07/18 v2.1d Standard LaTeX package
+)) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/aeguill\aeguill.sty
+Package: aeguill 2003/08/02 1.02 AE fonts with french guillemets (D. Roegel)
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/caption\subcaption.st
+y
+Package: subcaption 2023/07/28 v1.6b Sub-captions (AR)
+Package caption Info: New subtype `subfigure' on input line 238.
+\c@subfigure=\count320
+Package caption Info: New subtype `subtable' on input line 238.
+\c@subtable=\count321
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/preprint\authblk.sty
+Package: authblk 2001/02/27 1.3 (PWD)
+\affilsep=\skip66
+\@affilsep=\skip67
+\c@Maxaffil=\count322
+\c@authors=\count323
+\c@affil=\count324
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/base\textcomp.sty
+Package: textcomp 2024/04/24 v2.1b Standard LaTeX package
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hyperref.sty
+Package: hyperref 2025-07-12 v7.01o Hypertext links for LaTeX
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/kvsetkeys\kvsetkeys.sty
+Package: kvsetkeys 2022-10-05 v1.19 Key value parser (HO)
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/kvdefinekeys\kvdefine
+keys.sty
+Package: kvdefinekeys 2019-12-19 v1.6 Define keys (HO)
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/pdfescape\pdfescape.s
+ty
+Package: pdfescape 2019/12/09 v1.15 Implements pdfTeX's escape features (HO)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/ltxcmds\ltxcmds.sty
+Package: ltxcmds 2023-12-04 v1.26 LaTeX kernel commands for general use (HO)
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/pdftexcmds\pdftexcmds
+.sty
+Package: pdftexcmds 2020-06-27 v0.33 Utility functions of pdfTeX for LuaTeX (HO
+)
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/infwarerr\infwarerr.s
+ty
+Package: infwarerr 2019/12/03 v1.5 Providing info/warning/error messages (HO)
+)
+Package pdftexcmds Info: \pdf@primitive is available.
+Package pdftexcmds Info: \pdf@ifprimitive is available.
+Package pdftexcmds Info: \pdfdraftmode found.
+)) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/hycolor\hycolor.sty
+Package: hycolor 2020-01-27 v1.10 Color options for hyperref/bookmark (HO)
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\nameref.sty
+Package: nameref 2025-06-21 v2.57 Cross-referencing by name of section
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/refcount\refcount.sty
+Package: refcount 2019/12/15 v3.6 Data extraction from label references (HO)
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/gettitlestring\gettit
+lestring.sty
+Package: gettitlestring 2019/12/15 v1.6 Cleanup title references (HO)
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/kvoptions\kvoptions.sty
+Package: kvoptions 2022-06-15 v3.15 Key value format for package options (HO)
+))
+\c@section@level=\count325
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/etoolbox\etoolbox.sty
+Package: etoolbox 2025/10/02 v2.5m e-TeX tools for LaTeX (JAW)
+\etb@tempcnta=\count326
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/stringenc\stringenc.s
+ty
+Package: stringenc 2019/11/29 v1.12 Convert strings between diff. encodings (HO
+)
+)
+\@linkdim=\dimen271
+\Hy@linkcounter=\count327
+\Hy@pagecounter=\count328
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\pd1enc.def
+File: pd1enc.def 2025-07-12 v7.01o Hyperref: PDFDocEncoding definition (HO)
+Now handling font encoding PD1 ...
+... no UTF-8 mapping file for font encoding PD1
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/intcalc\intcalc.sty
+Package: intcalc 2019/12/15 v1.3 Expandable calculations with integers (HO)
+)
+\Hy@SavedSpaceFactor=\count329
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\puenc.def
+File: puenc.def 2025-07-12 v7.01o Hyperref: PDF Unicode definition (HO)
+Now handling font encoding PU ...
+... no UTF-8 mapping file for font encoding PU
+)
+Package hyperref Info: Hyper figures OFF on input line 4195.
+Package hyperref Info: Link nesting OFF on input line 4200.
+Package hyperref Info: Hyper index ON on input line 4203.
+Package hyperref Info: Plain pages OFF on input line 4210.
+Package hyperref Info: Backreferencing OFF on input line 4215.
+Package hyperref Info: Implicit mode ON; LaTeX internals redefined.
+Package hyperref Info: Bookmarks ON on input line 4462.
+\c@Hy@tempcnt=\count330
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/url\url.sty
+\Urlmuskip=\muskip17
+Package: url 2013/09/16  ver 3.4  Verb mode for urls, etc.
+)
+LaTeX Info: Redefining \url on input line 4801.
+\XeTeXLinkMargin=\dimen272
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/bitset\bitset.sty
+Package: bitset 2019/12/09 v1.3 Handle bit-vector datatype (HO)
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/bigintcalc\bigintcalc
+.sty
+Package: bigintcalc 2019/12/15 v1.5 Expandable calculations on big integers (HO
+)
+))
+\Fld@menulength=\count331
+\Field@Width=\dimen273
+\Fld@charsize=\dimen274
+Package hyperref Info: Hyper figures OFF on input line 6078.
+Package hyperref Info: Link nesting OFF on input line 6083.
+Package hyperref Info: Hyper index ON on input line 6086.
+Package hyperref Info: backreferencing OFF on input line 6093.
+Package hyperref Info: Link coloring OFF on input line 6098.
+Package hyperref Info: Link coloring with OCG OFF on input line 6103.
+Package hyperref Info: PDF/A mode OFF on input line 6108.
+\Hy@abspage=\count332
+\c@Item=\count333
+\c@Hfootnote=\count334
+)
+Package hyperref Info: Driver (autodetected): hpdftex.
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/hyperref\hpdftex.def
+File: hpdftex.def 2025-07-12 v7.01o Hyperref driver for pdfTeX
+\Fld@listcount=\count335
+\c@bookmark@seq@number=\count336
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/rerunfilecheck\rerunfil
+echeck.sty
+Package: rerunfilecheck 2025-06-21 v1.11 Rerun checks for auxiliary files (HO)
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/generic/uniquecounter\uniquec
+ounter.sty
+Package: uniquecounter 2019/12/15 v1.4 Provide unlimited unique counter (HO)
+)
+Package uniquecounter Info: New unique counter `rerunfilecheck' on input line 2
+84.
+)
+\Hy@SectionHShift=\skip68
+)
+Package hyperref Info: Option `colorlinks' set `true' on input line 117.
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/fancyhdr\fancyhdr.sty
+Package: fancyhdr 2025/02/07 v5.2 Extensive control of page headers and footers
+
+\f@nch@headwidth=\skip69
+\f@nch@offset@elh=\skip70
+\f@nch@offset@erh=\skip71
+\f@nch@offset@olh=\skip72
+\f@nch@offset@orh=\skip73
+\f@nch@offset@elf=\skip74
+\f@nch@offset@erf=\skip75
+\f@nch@offset@olf=\skip76
+\f@nch@offset@orf=\skip77
+\f@nch@height=\skip78
+\f@nch@footalignment=\skip79
+\f@nch@widthL=\skip80
+\f@nch@widthC=\skip81
+\f@nch@widthR=\skip82
+\@temptokenb=\toks33
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/pdfpages\pdfpages.sty
+Package: pdfpages 2025/07/23 v0.6g Insert pages of external PDF documents (AM)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/base\ifthen.sty
+Package: ifthen 2024/03/16 v1.1e Standard LaTeX ifthen package (DPC)
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/tools\calc.sty
+Package: calc 2025/03/01 v4.3b Infix arithmetic (KKT,FJ)
+\calc@Acount=\count337
+\calc@Bcount=\count338
+\calc@Adimen=\dimen275
+\calc@Bdimen=\dimen276
+\calc@Askip=\skip83
+\calc@Bskip=\skip84
+LaTeX Info: Redefining \setlength on input line 86.
+LaTeX Info: Redefining \addtolength on input line 87.
+\calc@Ccount=\count339
+\calc@Cskip=\skip85
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/eso-pic\eso-pic.sty
+Package: eso-pic 2023/05/03 v3.0c eso-pic (RN)
+\ESO@tempdima=\dimen277
+\ESO@tempdimb=\dimen278
+)
+\AM@pagewidth=\dimen279
+\AM@pageheight=\dimen280
+\AM@fboxrule=\dimen281
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/pdfpages\pppdftex.def
+File: pppdftex.def 2025/07/23 v0.6g Pdfpages driver for pdfTeX (AM)
+)
+\pdfpages@includegraphics@status=\count340
+\AM@pagebox=\box72
+\AM@global@opts=\toks34
+\AM@pagecnt=\count341
+\AM@toc@title=\toks35
+\AM@lof@heading=\toks36
+\c@AM@survey=\count342
+\AM@templatesizebox=\box73
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/setspace\setspace.sty
+Package: setspace 2022/12/04 v6.7b set line spacing
+) (C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/upquote\upquote.sty
+Package: upquote 2012/04/19 v1.3 upright-quote and grave-accent glyphs in verba
+tim
+)
+LaTeX Font Info:    Trying to load font information for T1+aer on input line 19
+0.
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/ae\t1aer.fd
+File: t1aer.fd 1997/11/16 Font definitions for T1/aer.
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/l3backend\l3backend-pdf
+tex.def
+File: l3backend-pdftex.def 2025-10-09 L3 backend support: PDF output (pdfTeX)
+\l__color_backend_stack_int=\count343
+) (rapport_migration_Seine.aux
+Package babel Info: 'french' activates 'french' shorthands.
+(babel)             Reported on input line 11.
+
+LaTeX Warning: Label `ALA' multiply defined.
+
+)
+\openout1 = `rapport_migration_Seine.aux'.
+
+LaTeX Font Info:    Checking defaults for OML/cmm/m/it on input line 190.
+LaTeX Font Info:    ... okay on input line 190.
+LaTeX Font Info:    Checking defaults for OMS/cmsy/m/n on input line 190.
+LaTeX Font Info:    ... okay on input line 190.
+LaTeX Font Info:    Checking defaults for OT1/cmr/m/n on input line 190.
+LaTeX Font Info:    ... okay on input line 190.
+LaTeX Font Info:    Checking defaults for T1/cmr/m/n on input line 190.
+LaTeX Font Info:    ... okay on input line 190.
+LaTeX Font Info:    Checking defaults for TS1/cmr/m/n on input line 190.
+LaTeX Font Info:    ... okay on input line 190.
+LaTeX Font Info:    Checking defaults for OMX/cmex/m/n on input line 190.
+LaTeX Font Info:    ... okay on input line 190.
+LaTeX Font Info:    Checking defaults for U/cmr/m/n on input line 190.
+LaTeX Font Info:    ... okay on input line 190.
+LaTeX Font Info:    Checking defaults for PD1/pdf/m/n on input line 190.
+LaTeX Font Info:    ... okay on input line 190.
+LaTeX Font Info:    Checking defaults for PU/pdf/m/n on input line 190.
+LaTeX Font Info:    ... okay on input line 190.
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/context/base/mkii\supp-pdf.mk
+ii
+[Loading MPS to PDF converter (version 2006.09.02).]
+\scratchcounter=\count344
+\scratchdimen=\dimen282
+\scratchbox=\box74
+\nofMPsegments=\count345
+\nofMParguments=\count346
+\everyMPshowfont=\toks37
+\MPscratchCnt=\count347
+\MPscratchDim=\dimen283
+\MPnumerator=\count348
+\makeMPintoPDFobject=\count349
+\everyMPtoPDFconversion=\toks38
+)
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/epstopdf-pkg\epstopdf-b
+ase.sty
+Package: epstopdf-base 2020-01-24 v2.11 Base part for package epstopdf
+Package epstopdf-base Info: Redefining graphics rule for `.eps' on input line 4
+85.
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/00miktex\epstopdf-sys.c
+fg
+File: epstopdf-sys.cfg 2021/03/18 v2.0 Configuration of epstopdf for MiKTeX
+))
+*geometry* driver: auto-detecting
+*geometry* detected driver: pdftex
+*geometry* verbose mode - [ preamble ] result:
+* driver: pdftex
+* paper: a4paper
+* layout: <same size as paper>
+* layoutoffset:(h,v)=(0.0pt,0.0pt)
+* modes: twoside 
+* h-part:(L,W,R)=(56.9055pt, 483.69687pt, 56.9055pt)
+* v-part:(T,H,B)=(56.9055pt, 702.78308pt, 85.35826pt)
+* \paperwidth=597.50787pt
+* \paperheight=845.04684pt
+* \textwidth=483.69687pt
+* \textheight=702.78308pt
+* \oddsidemargin=-15.36449pt
+* \evensidemargin=-15.36449pt
+* \topmargin=-52.36449pt
+* \headheight=15.0pt
+* \headsep=25.0pt
+* \topskip=11.0pt
+* \footskip=30.0pt
+* \marginparwidth=113.0pt
+* \marginparsep=10.0pt
+* \columnsep=10.0pt
+* \skip\footins=10.0pt plus 4.0pt minus 2.0pt
+* \hoffset=0.0pt
+* \voffset=0.0pt
+* \mag=1000
+* \@twocolumnfalse
+* \@twosidetrue
+* \@mparswitchtrue
+* \@reversemarginfalse
+* (1in=72.27pt=25.4mm, 1cm=28.453pt)
+
+LaTeX Info: Redefining \degres on input line 190.
+Package caption Info: Begin \AtBeginDocument code.
+Package caption Info: float package is loaded.
+Package caption Info: hyperref package is loaded.
+Package caption Info: longtable package is loaded.
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/caption\ltcaption.sty
+Package: ltcaption 2021/01/08 v1.4c longtable captions (AR)
+)
+Package caption Info: threeparttable package is loaded.
+Package caption Info: wrapfig package is loaded.
+Package caption Info: End \AtBeginDocument code.
+Package hyperref Info: Link coloring ON on input line 190.
+(rapport_migration_Seine.out) (rapport_migration_Seine.out)
+\@outlinefile=\write3
+\openout3 = `rapport_migration_Seine.out'.
+
+Package hyperref Info: Option `pageanchor' set `false' on input line 192.
+<image/logos/logo_seinormigr.png, id=87, 407.96416pt x 388.45125pt>
+File: image/logos/logo_seinormigr.png Graphic file (type png)
+<use image/logos/logo_seinormigr.png>
+Package pdftex.def Info: image/logos/logo_seinormigr.png  used on input line 20
+1.
+(pdftex.def)             Requested size: 119.52667pt x 113.81102pt.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <10.95> on input line 202.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <8> on input line 202.
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <6> on input line 202.
+<image/logos/logo_fd60.png, id=89, 164.2938pt x 181.1568pt>
+File: image/logos/logo_fd60.png Graphic file (type png)
+<use image/logos/logo_fd60.png>
+Package pdftex.def Info: image/logos/logo_fd60.png  used on input line 207.
+(pdftex.def)             Requested size: 38.7043pt x 42.67912pt.
+<image/logos/logo_vnf.jpg, id=90, 76.8471pt x 51.3117pt>
+File: image/logos/logo_vnf.jpg Graphic file (type jpg)
+<use image/logos/logo_vnf.jpg>
+Package pdftex.def Info: image/logos/logo_vnf.jpg  used on input line 208.
+(pdftex.def)             Requested size: 63.92143pt x 42.67912pt.
+<image/logos/logo_hydrowatt.jpg, id=91, 156.585pt x 67.452pt>
+File: image/logos/logo_hydrowatt.jpg Graphic file (type jpg)
+<use image/logos/logo_hydrowatt.jpg>
+Package pdftex.def Info: image/logos/logo_hydrowatt.jpg  used on input line 209
+.
+(pdftex.def)             Requested size: 99.07913pt x 42.67912pt.
+<image/logos/logo_semao.png, id=92, 162.6075pt x 67.0003pt>
+File: image/logos/logo_semao.png Graphic file (type png)
+<use image/logos/logo_semao.png>
+Package pdftex.def Info: image/logos/logo_semao.png  used on input line 210.
+(pdftex.def)             Requested size: 103.57965pt x 42.67912pt.
+
+Overfull \hbox (13.2926pt too wide) in paragraph at lines 224--226
+ [][][][][][][] 
+ []
+
+<image/logos/LOGO RF AESN_RVB.png, id=93, 389.0535pt x 117.3183pt>
+File: image/logos/LOGO RF AESN_RVB.png Graphic file (type png)
+<use image/logos/LOGO RF AESN_RVB.png>
+Package pdftex.def Info: image/logos/LOGO RF AESN_RVB.png  used on input line 2
+51.
+(pdftex.def)             Requested size: 188.70853pt x 56.9055pt.
+<image/logos/logo_fnpf.png, id=94, 394.5942pt x 435.0654pt>
+File: image/logos/logo_fnpf.png Graphic file (type png)
+<use image/logos/logo_fnpf.png>
+Package pdftex.def Info: image/logos/logo_fnpf.png  used on input line 252.
+(pdftex.def)             Requested size: 51.61214pt x 56.9055pt.
+[1
+
+{C:/Users/seino/AppData/Local/MiKTeX/fonts/map/pdftex/pdftex.map} <./image/logo
+s/logo_seinormigr.png> <./image/logos/logo_fd60.png (PNG copy)> <./image/logos/
+logo_vnf.jpg> <./image/logos/logo_hydrowatt.jpg> <./image/logos/logo_semao.png>
+ <./image/logos/LOGO RF AESN_RVB.png> <./image/logos/logo_fnpf.png>] [2]
+LaTeX Font Info:    External font `cmex10' loaded for size
+(Font)              <12> on input line 267.
+(table/recap.tex) [1] (rapport_migration_Seine.toc)
+\tf@toc=\write4
+\openout4 = `rapport_migration_Seine.toc'.
+
+Package babel Info: 'french' activates 'french' shorthands.
+(babel)             Reported on input line 286.
+[2] (rapport_migration_Seine.lof
+LaTeX Font Info:    Trying to load font information for T1+lmr on input line 6.
+
+(C:\Users\seino\AppData\Local\Programs\MiKTeX\tex/latex/lm\t1lmr.fd
+File: t1lmr.fd 2015/05/01 v1.6.1 Font defs for Latin Modern
+))
+\tf@lof=\write5
+\openout5 = `rapport_migration_Seine.lof'.
+
+(rapport_migration_Seine.lot)
+\tf@lot=\write6
+\openout6 = `rapport_migration_Seine.lot'.
+
+Package hyperref Info: Option `pageanchor' set `false' on input line 292.
+[3
+
+{C:/Users/seino/AppData/Local/Programs/MiKTeX/fonts/enc/dvips/lm/lm-ec.enc}] [1
+
+] [2]
+<image/reseau_stacomi.png, id=303, 844.8363pt x 597.432pt>
+File: image/reseau_stacomi.png Graphic file (type png)
+<use image/reseau_stacomi.png>
+Package pdftex.def Info: image/reseau_stacomi.png  used on input line 348.
+(pdftex.def)             Requested size: 483.69687pt x 342.05304pt.
+<image/debit_seine_oise_aisne.png, id=305, 722.7pt x 578.16pt>
+File: image/debit_seine_oise_aisne.png Graphic file (type png)
+<use image/debit_seine_oise_aisne.png>
+Package pdftex.def Info: image/debit_seine_oise_aisne.png  used on input line 3
+58.
+(pdftex.def)             Requested size: 386.95897pt x 309.56396pt.
+[3
+
+ <./image/reseau_stacomi.png>] [4 <./image/debit_seine_oise_aisne.png>]
+<image/LPM_tete.jpg, id=321, 1510.14188pt x 864.22874pt>
+File: image/LPM_tete.jpg Graphic file (type jpg)
+<use image/LPM_tete.jpg>
+Package pdftex.def Info: image/LPM_tete.jpg  used on input line 384.
+(pdftex.def)             Requested size: 217.66211pt x 124.56488pt.
+<image/LPM_frayere.jpg, id=322, 2013.5225pt x 1152.305pt>
+File: image/LPM_frayere.jpg Graphic file (type jpg)
+<use image/LPM_frayere.jpg>
+Package pdftex.def Info: image/LPM_frayere.jpg  used on input line 387.
+(pdftex.def)             Requested size: 217.66211pt x 124.55609pt.
+[5 <./image/LPM_tete.jpg> <./image/LPM_frayere.jpg>]
+<image/vue_aerienne_poses.jpg, id=332, 743.02594pt x 462.22687pt>
+File: image/vue_aerienne_poses.jpg Graphic file (type jpg)
+<use image/vue_aerienne_poses.jpg>
+Package pdftex.def Info: image/vue_aerienne_poses.jpg  used on input line 407.
+(pdftex.def)             Requested size: 386.95897pt x 240.7261pt.
+[6
+
+ <./image/vue_aerienne_poses.jpg>]
+<image/DF_rg_poses.jpg, id=338, 1487.5575pt x 702.625pt>
+File: image/DF_rg_poses.jpg Graphic file (type jpg)
+<use image/DF_rg_poses.jpg>
+Package pdftex.def Info: image/DF_rg_poses.jpg  used on input line 420.
+(pdftex.def)             Requested size: 386.95897pt x 182.77467pt.
+<image/DF_rd_poses.jpg, id=339, 729.47531pt x 281.55188pt>
+File: image/DF_rd_poses.jpg Graphic file (type jpg)
+<use image/DF_rd_poses.jpg>
+Package pdftex.def Info: image/DF_rd_poses.jpg  used on input line 427.
+(pdftex.def)             Requested size: 386.95897pt x 149.35066pt.
+<image/schema_passe_rd_poses.png, id=342, 549.4929pt x 845.0772pt>
+File: image/schema_passe_rd_poses.png Graphic file (type png)
+<use image/schema_passe_rd_poses.png>
+Package pdftex.def Info: image/schema_passe_rd_poses.png  used on input line 43
+9.
+(pdftex.def)             Requested size: 193.47578pt x 297.54803pt.
+<image/schema_passe_rg_poses.png, id=343, 1081.03876pt x 1484.54625pt>
+File: image/schema_passe_rg_poses.png Graphic file (type png)
+<use image/schema_passe_rg_poses.png>
+Package pdftex.def Info: image/schema_passe_rg_poses.png  used on input line 44
+2.
+(pdftex.def)             Requested size: 216.69525pt x 297.56091pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[7 <./image/DF_rg_poses.jpg> <./image/DF_rd_poses.jpg>]
+<image/barrage_pontoise.jpg, id=348, 1606.0pt x 1204.5pt>
+File: image/barrage_pontoise.jpg Graphic file (type jpg)
+<use image/barrage_pontoise.jpg>
+Package pdftex.def Info: image/barrage_pontoise.jpg  used on input line 464.
+(pdftex.def)             Requested size: 193.47578pt x 145.10352pt.
+<image/chambre_vc_pontoise.jpg, id=349, 387.24675pt x 257.16075pt>
+File: image/chambre_vc_pontoise.jpg Graphic file (type jpg)
+<use image/chambre_vc_pontoise.jpg>
+Package pdftex.def Info: image/chambre_vc_pontoise.jpg  used on input line 467.
+
+(pdftex.def)             Requested size: 216.69525pt x 143.90308pt.
+
+Underfull \vbox (badness 10000) has occurred while \output is active []
+
+[8 <./image/schema_passe_rd_poses.png (PNG copy)> <./image/schema_passe_rg_pose
+s.png>]
+<image/carandeau_3.jpeg, id=356, 803.0pt x 481.8pt>
+File: image/carandeau_3.jpeg Graphic file (type jpg)
+<use image/carandeau_3.jpeg>
+Package pdftex.def Info: image/carandeau_3.jpeg  used on input line 481.
+(pdftex.def)             Requested size: 290.22107pt x 174.13892pt.
+[9 <./image/barrage_pontoise.jpg> <./image/chambre_vc_pontoise.jpg> <./image/ca
+randeau_3.jpeg>]
+<image/chambre_vc_poses.jpg, id=361, 2579.6375pt x 1003.75pt>
+File: image/chambre_vc_poses.jpg Graphic file (type jpg)
+<use image/chambre_vc_poses.jpg>
+Package pdftex.def Info: image/chambre_vc_poses.jpg  used on input line 503.
+(pdftex.def)             Requested size: 483.69687pt x 188.20267pt.
+[10 <./image/chambre_vc_poses.jpg>]
+<image/vc_rd_poses.png, id=365, 652.68843pt x 449.42906pt>
+File: image/vc_rd_poses.png Graphic file (type png)
+<use image/vc_rd_poses.png>
+Package pdftex.def Info: image/vc_rd_poses.png  used on input line 512.
+(pdftex.def)             Requested size: 386.95897pt x 266.4638pt.
+<image/vc_rg_poses.png, id=366, 325.215pt x 255.9015pt>
+File: image/vc_rg_poses.png Graphic file (type png)
+<use image/vc_rg_poses.png>
+Package pdftex.def Info: image/vc_rg_poses.png  used on input line 519.
+(pdftex.def)             Requested size: 386.95897pt x 304.50705pt.
+[11 <./image/vc_rd_poses.png>] [12 <./image/vc_rg_poses.png>]
+<image/passe_ang_rd_poses.jpg, id=393, 520.344pt x 390.258pt>
+File: image/passe_ang_rd_poses.jpg Graphic file (type jpg)
+<use image/passe_ang_rd_poses.jpg>
+Package pdftex.def Info: image/passe_ang_rd_poses.jpg  used on input line 546.
+(pdftex.def)             Requested size: 386.95897pt x 290.23341pt.
+<image/passe_ang_rg_poses.jpg, id=394, 312.367pt x 234.476pt>
+File: image/passe_ang_rg_poses.jpg Graphic file (type jpg)
+<use image/passe_ang_rg_poses.jpg>
+Package pdftex.def Info: image/passe_ang_rg_poses.jpg  used on input line 553.
+(pdftex.def)             Requested size: 386.95897pt x 290.48604pt.
+[13 <./image/passe_ang_rd_poses.jpg>]
+<image/tamis_ang.jpg, id=404, 295.9785pt x 222.066pt>
+File: image/tamis_ang.jpg Graphic file (type jpg)
+<use image/tamis_ang.jpg>
+Package pdftex.def Info: image/tamis_ang.jpg  used on input line 573.
+(pdftex.def)             Requested size: 193.47578pt x 145.16457pt.
+<image/biometrie_ang.jpg, id=405, 295.9785pt x 221.7375pt>
+File: image/biometrie_ang.jpg Graphic file (type jpg)
+<use image/biometrie_ang.jpg>
+Package pdftex.def Info: image/biometrie_ang.jpg  used on input line 576.
+(pdftex.def)             Requested size: 193.47578pt x 144.94983pt.
+[14 <./image/passe_ang_rg_poses.jpg> <./image/tamis_ang.jpg> <./image/biometrie
+_ang.jpg>]
+LaTeX Font Info:    Font shape `T1/aer/b/it' in size <12> not available
+(Font)              Font shape `T1/aer/bx/it' tried instead on input line 586.
+<image/ALA_POSES.jpg, id=413, 189.70876pt x 190.46156pt>
+File: image/ALA_POSES.jpg Graphic file (type jpg)
+<use image/ALA_POSES.jpg>
+Package pdftex.def Info: image/ALA_POSES.jpg  used on input line 595.
+(pdftex.def)             Requested size: 145.11053pt x 145.68806pt.
+<image/ALA_PONTOISE.png, id=414, 580.41844pt x 584.1825pt>
+File: image/ALA_PONTOISE.png Graphic file (type png)
+<use image/ALA_PONTOISE.png>
+Package pdftex.def Info: image/ALA_PONTOISE.png  used on input line 598.
+(pdftex.def)             Requested size: 145.11053pt x 146.05417pt.
+<image/plot_annuel_ala.png, id=419, 578.16pt x 289.08pt>
+File: image/plot_annuel_ala.png Graphic file (type png)
+<use image/plot_annuel_ala.png>
+Package pdftex.def Info: image/plot_annuel_ala.png  used on input line 608.
+(pdftex.def)             Requested size: 483.69687pt x 241.8463pt.
+<image/plot_ridgeline_ala.png, id=420, 578.16pt x 289.08pt>
+File: image/plot_ridgeline_ala.png Graphic file (type png)
+<use image/plot_ridgeline_ala.png>
+Package pdftex.def Info: image/plot_ridgeline_ala.png  used on input line 615.
+(pdftex.def)             Requested size: 483.69687pt x 241.8463pt.
+<image/p_seasonal_ala.png, id=422, 578.16pt x 361.35pt>
+File: image/p_seasonal_ala.png Graphic file (type png)
+<use image/p_seasonal_ala.png>
+Package pdftex.def Info: image/p_seasonal_ala.png  used on input line 624.
+(pdftex.def)             Requested size: 386.95897pt x 241.84961pt.
+<image/plot_histo_taille_ala.png, id=423, 361.35pt x 289.08pt>
+File: image/plot_histo_taille_ala.png Graphic file (type png)
+<use image/plot_histo_taille_ala.png>
+Package pdftex.def Info: image/plot_histo_taille_ala.png  used on input line 63
+4.
+(pdftex.def)             Requested size: 232.17242pt x 185.73837pt.
+<image/plot_box_violin_plot_ala.png, id=424, 361.35pt x 289.08pt>
+File: image/plot_box_violin_plot_ala.png Graphic file (type png)
+<use image/plot_box_violin_plot_ala.png>
+Package pdftex.def Info: image/plot_box_violin_plot_ala.png  used on input line
+ 637.
+(pdftex.def)             Requested size: 232.17242pt x 185.73837pt.
+[15
+
+ <./image/ALA_POSES.jpg> <./image/ALA_PONTOISE.png>] [16 <./image/plot_annuel_a
+la.png> <./image/plot_ridgeline_ala.png>] [17 <./image/p_seasonal_ala.png (PNG 
+copy)> <./image/plot_histo_taille_ala.png> <./image/plot_box_violin_plot_ala.pn
+g>] (rapport_migration_Seine.bbl [18
+
+] [19]) [20] (rapport_migration_Seine.aux)
+ ***********
+LaTeX2e <2025-11-01>
+L3 programming layer <2025-11-06>
+ ***********
+
+LaTeX Warning: There were multiply-defined labels.
+
+Package rerunfilecheck Info: File `rapport_migration_Seine.out' has not changed
+.
+(rerunfilecheck)             Checksum: A2DC0B2DA3D0A697DA6719E23B7A0357;3915.
+ ) 
+Here is how much of TeX's memory you used:
+ 17312 strings out of 467871
+ 293017 string characters out of 5418377
+ 726612 words of memory out of 5000000
+ 45774 multiletter control sequences out of 15000+600000
+ 680033 words of font info for 126 fonts, out of 8000000 for 9000
+ 1141 hyphenation exceptions out of 8191
+ 75i,12n,83p,2106b,695s stack positions out of 10000i,1000n,20000p,200000b,200000s
+<C:/Users/seino/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/
+cmb10.pfb><C:/Users/seino/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsf
+onts/cm/cmbxti10.pfb><C:/Users/seino/AppData/Local/Programs/MiKTeX/fonts/type1/
+public/amsfonts/cm/cmcsc10.pfb><C:/Users/seino/AppData/Local/Programs/MiKTeX/fo
+nts/type1/public/amsfonts/cm/cmr10.pfb><C:/Users/seino/AppData/Local/Programs/M
+iKTeX/fonts/type1/public/amsfonts/cm/cmr12.pfb><C:/Users/seino/AppData/Local/Pr
+ograms/MiKTeX/fonts/type1/public/amsfonts/cm/cmr17.pfb><C:/Users/seino/AppData/
+Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr7.pfb><C:/Users/seino/A
+ppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr8.pfb><C:/Users/
+seino/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmr9.pfb><C:
+/Users/seino/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/cm/cmsy8
+.pfb><C:/Users/seino/AppData/Local/Programs/MiKTeX/fonts/type1/public/amsfonts/
+cm/cmti10.pfb><C:/Users/seino/AppData/Local/Programs/MiKTeX/fonts/type1/public/
+lm/lmr10.pfb>
+Output written on rapport_migration_Seine.pdf (25 pages, 9444129 bytes).
+PDF statistics:
+ 527 PDF objects out of 1000 (max. 8388607)
+ 83 named destinations out of 1000 (max. 500000)
+ 334 words of extra memory for PDF output out of 10000 (max. 10000000)
+
