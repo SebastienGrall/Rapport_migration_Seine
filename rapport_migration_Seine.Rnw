@@ -368,7 +368,7 @@ stacomi(database_expected = TRUE, sch= "seinormigr",options(
   stacomiR.user = keyring::key_get("user_server"),
   stacomiR.password = keyring::key_get("pwd_server")))
   
-### Fonction pour faire des r_mig_inter pour chaque espece (hors anguille) et DC ###
+### Fonction pour faire des r_mig_inter pour chaque espece et DC ###
   
 fn_rmiginter<-function(le_dc=c(101),espece=c("Alosa"),stade=c("5"),annee_debut=2008){
   
@@ -1231,11 +1231,11 @@ data_alose_historique <- data_alose_historique %>%
 
 plot_historique_ala<- ggplot() +
     geom_bar(
-        data = data_plot,
+        data = data_alose_historique,
         aes(x = bjo_annee, y = effectif, fill = rive),
         stat = "identity"
     ) +
-    facet_grid(rows = vars(station)) +
+    facet_grid(rows = vars(station),scales="free") +
     scale_fill_manual(
         values = c(
             "Poses rive gauche" = col_Poses_RG,
@@ -1249,14 +1249,17 @@ plot_historique_ala<- ggplot() +
         labels = c("Gauche", "Droite")
     ) +
     theme_bw() + xlab("") +
-    theme(text = element_text(size = 15))
+    theme(text = element_text(size = 15))#,legend.position = "bottom")
+png(file=str_c(imgwd,"plot_historique_ala.png"),width=8,height=5,unit="in",res=200)
+print(plot_historique_ala)
+dev.off()
 
 #### plot seasonal ALA ####
 
 plot(data_alose_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
 p_seasonal_ala <- envir_stacomi$g_seasonal
 p_seasonal_ala <- p_seasonal_ala + theme(text = element_text(size = 15)) + xlab("")
-png(file=str_c(imgwd,"p_seasonal_ala.png"),width=8,height=5,unit="in",res=200)
+png(file=str_c(imgwd,"p_seasonal_ala.png"),width=8,height=4,unit="in",res=200)
 print(p_seasonal_ala)
 dev.off()
 
@@ -1435,6 +1438,13 @@ La phénologie de la migration au niveau de la fin de l'estuaire de Seine est pr
 \label{p_seasonal_ala}
 \end{figure}
 
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_historique_ala}
+\caption{Evolution interannuelle des effectifs d'alose en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle.}
+\label{plot_historique_ala}
+\end{figure}
+
 la taille blabla \citep{bagliniere_les_2000}
 
 \begin{figure}[htpb]
@@ -1451,7 +1461,7 @@ la taille blabla \citep{bagliniere_les_2000}
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=0.8\textwidth]{p_horaires_ala}
+\includegraphics[width=\textwidth]{p_horaires_ala}
 \caption{Horaires de migration des aloses en \Sexpr{annee}}
 \label{p_horaires_ala}
 \end{figure}
