@@ -1229,6 +1229,21 @@ data_alose_historique <- data_alose_historique %>%
                         mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau"))) %>%
   as.data.frame()
 
+data_alose_historique2<- data_alose_historique %>% 
+                        group_by(bjo_annee,station) %>% 
+                        summarise(effectif=sum(effectif))
+
+ratio_par_annee <- data_alose_historique2 %>%
+  ungroup() %>%                      # important : on enlève le grouping actuel
+  group_by(bjo_annee) %>%
+  summarise(
+    eff_poses = sum(effectif[station == "Poses"], na.rm = TRUE), 
+    eff_pontoise = sum(effectif[station == "Pontoise"], na.rm = TRUE),
+    eff_carandeau = sum(effectif[station == "Carandeau"], na.rm = TRUE),
+    ratio_pontoise = eff_pontoise / eff_poses*100,
+    ratio_carandeau = eff_carandeau / eff_poses*100, 
+  )
+
 plot_historique_ala<- ggplot() +
     geom_bar(
         data = data_alose_historique,
@@ -1429,7 +1444,15 @@ En \Sexpr{annee}, les aloses ont été \Sexpr{gras(sum(data_alose_poses_annee$bj
 \label{plot_ridgeline_ala}
 \end{figure}
 
-La phénologie de la migration au niveau de la fin de l'estuaire de Seine est présentée sur la figure \ref{p_seasonal_ala}. Les premiers individus se présentent entre la fin du mois de mars et le début du mois d'avril. L'essentiel de la migration se déroule au cours des mois d'avril à juin avec quelques passages durant la période estivale.
+Historiquement les effectifs d'aloses en montaison ont une variabilité importante avec une médiane de \Sexpr{round(median(subset(data_alose_historique,station =="Poses")$effectif))}  individus (min : \Sexpr{min(subset(data_alose_historique2,station =="Poses")$effectif)}, max : \Sexpr{max(subset(data_alose_historique2,station =="Poses")$effectif)}) contrôlés à Poses (Figure \ref{plot_historique_ala}). Les années 2019 et 2020 ont été exceptionnelles avec des effectifs qui ont approché, voir dépassé les 4 000 individus (dysfonctionnement du système vidéo en rive gauche pendant la période de migration). Cette augmentation n'est pour l'instant pas expliquée mais pourrait être à relier aux changements climatiques actuelles. Dès 2007, \citeauthor{rochard_identification_2007} ont montré que la Seine constituerait un environnement favorable pour l'alose dans un contexte de réchauffement climatique.
+Depuis l'ouverture de la passe à poissons en rive droite de Poses, les résultats montrent une préférence des aloses pour cette passe, qui s'explique par sa conception récente mieux adaptée à l'espèce, et ce malgré l'absence de débit d'attrait. En effet les hauteurs inter-bassins de la passe à poissons en rive gauche ainsi les zones de turbulence créées par les remous de l'usine hydroélectrique leur sont défavorables \citep{bagliniere_les_2000}.
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_historique_ala}
+\caption{Evolution interannuelle des effectifs d'alose en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle.}
+\label{plot_historique_ala}
+\end{figure}
 
 \begin{figure}[htpb]
 \centering
@@ -1438,12 +1461,7 @@ La phénologie de la migration au niveau de la fin de l'estuaire de Seine est pr
 \label{p_seasonal_ala}
 \end{figure}
 
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=\textwidth]{plot_historique_ala}
-\caption{Evolution interannuelle des effectifs d'alose en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle.}
-\label{plot_historique_ala}
-\end{figure}
+La phénologie de la migration au niveau de la fin de l'estuaire de Seine est présentée sur la figure \ref{p_seasonal_ala}. Les premiers individus se présentent entre la fin du mois de mars et le début du mois d'avril. L'essentiel de la migration se déroule au cours des mois d'avril à juin avec quelques passages durant la période estivale.
 
 la taille blabla \citep{bagliniere_les_2000}
 
