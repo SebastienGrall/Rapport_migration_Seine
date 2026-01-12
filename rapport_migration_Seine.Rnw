@@ -146,6 +146,9 @@ col_Poses_RD  <- darken(col_Poses, 0.15)
 col_Pontoise<-"#B1283A"
 col_Carandeau<-"#088158"
 
+mois_fr <- c("janvier", "février", "mars", "avril", "mai", "juin",
+             "juillet", "août", "septembre", "octobre", "novembre", "décembre")
+
 # A function factory for getting integer y-axis values.
 integer_breaks <- function(n = 5, ...) {
     fxn <- function(x) {
@@ -524,6 +527,20 @@ r_sample_char<-connect(r_sample_char)
 r_sample_char<-calcule(r_sample_char,silent=TRUE)
 report_sample_char=get("report_sample_char",envir_stacomi)
 data_taille_video<-report_sample_char@data
+
+r_sample_char<-new("report_sample_char")
+r_sample_char<-choice_c(r_sample_char,
+                        dc=c(102,104),
+                        taxa=c("Anguilla anguilla"),
+                        stage=c(4),
+                        par=c("1786"),
+                        horodatedebut="2014-01-01",
+                        horodatefin=str_c(annee,"-12-31"),
+                        silent=TRUE)
+r_sample_char<-connect(r_sample_char)
+r_sample_char<-calcule(r_sample_char,silent=TRUE)
+report_sample_char=get("report_sample_char",envir_stacomi)
+data_taille_ang_piege<-report_sample_char@data
 }
 @
 
@@ -583,7 +600,7 @@ bilesp_pontoise<-bilesp@data
 if(exists("con")){
 # sauvegarde data
 save(data_alose,data_ang,data_lpf,data_lpm,data_mup,data_sat,data_trm,data_taille_video,
-     bilesp_poses_vc_rg,bilesp_poses_vc_rd,bilesp_carandeau,bilesp_pontoise,
+     data_taille_ang_piege,bilesp_poses_vc_rg,bilesp_poses_vc_rd,bilesp_carandeau,bilesp_pontoise,
      file=str_c(datawd,"data_report_",annee,".Rdata"))
 
 }else{
@@ -1293,9 +1310,6 @@ data_taille_alose <- data_taille_alose %>%
                                                      ))%>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))
 
-mois_fr <- c("janvier", "février", "mars", "avril", "mai", "juin",
-             "juillet", "août", "septembre", "octobre", "novembre", "décembre")
-
 data_taille_alose$mois <- factor(
   data_taille_alose$mois,
   levels = sprintf("%02d", 1:12),
@@ -1354,7 +1368,7 @@ png(file=str_c(imgwd,"plot_histo_taille_ala.png"),width=5,height=4,unit="in",res
 print(plot_histo_taille_ala)
 dev.off()
 
-##### horaires passages
+##### plot horaires passages ALA ####
 
 horaires_ala<-fn_horaires(espece = "Alosa")
 
@@ -1494,8 +1508,207 @@ La structure de taille des aloses est présentée sur la figure \ref{Taille_ALA}
 
 <<chunk ang,echo=FALSE, eval=TRUE,results='hide'>>=
 
+#### Anguille passe piège ####
+#### plot ang mont annee cum sum ####
+
+data_ang_mont_poses_RG <- data_ang[[1]]
+data_ang_mont_poses_RG <- data_ang_mont_poses_RG@data
+data_ang_mont_poses_RG <- data_ang_mont_poses_RG %>% filter(bjo_labelquantite == "Effectif_total")
+data_ang_mont_poses_RG_annee <- data_ang_mont_poses_RG %>% filter(bjo_annee == annee)
+data_ang_mont_poses_RG_annee$Cumsum<-cumsum(data_ang_mont_poses_RG_annee$bjo_valeur)
+data_ang_mont_poses_RG_annee<-fun_date_extraction(
+    data=data_ang_mont_poses_RG_annee,
+    nom_coldt="bjo_jour", annee = FALSE, mois = TRUE,
+    quinzaine = FALSE, semaine = FALSE, semaine_std = FALSE,
+    jour_an = FALSE, jour_mois = FALSE, heure = FALSE)
+scaleFactor <- max(data_ang_mont_poses_RG_annee$Cumsum) / max(data_ang_mont_poses_RG_annee$bjo_valeur)
+
+p_ang_mont_poses_RG <- ggplot()+
+  geom_bar(data=data_ang_mont_poses_RG_annee,aes(x=bjo_jour,y=bjo_valeur*scaleFactor),position="stack", stat="identity",fill=col_Poses_RG)+
+  geom_line(data=data_ang_mont_poses_RG_annee, aes(x=bjo_jour,y=Cumsum,colour=mois),linewidth=1.5) + xlab("") +
+  scale_x_datetime(date_labels = "%d/%m", date_breaks = "2 weeks",
+                   limits = c(as.POSIXct(str_c(annee,"-04-01")),as.POSIXct(str_c(annee,"-11-01"))),expand=c(0,0))+
+  scale_colour_manual(values=c("01"="#092360",
+                               "02"="#1369A2",
+                               "03"="#0099A9",
+                               "04"="#009780",
+                               "05"="#67B784",
+                               "06"="#CBDF7C",
+                               "07"="#FFE200",
+                               "08"="#DB9815",
+                               "09"="#E57B25",
+                               "10"="#F0522D",
+                               "11"="#912E0F",
+                               "12"="#33004B"
+  ))+
+  scale_y_continuous(name="Migration cumulée", sec.axis=sec_axis(~./scaleFactor,name="Effectifs journaliers",labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = ".")),labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))+xlab("")+ theme_bw()+
+  theme(axis.title.y.left=element_text(color="blue"),
+                            axis.text.y.left=element_text(color="blue"),
+                            axis.title.y.right=element_text(color="black"),
+                            axis.text.y.right=element_text(color="black"))+
+  theme(text = element_text(size = 15),
+        axis.text.x  = element_text(angle=45,hjust=0.2,vjust=0))
+
+png(file=str_c(imgwd,"p_ang_mont_poses_RG.png"),width=10,height=5,unit="in",res=200)
+print(p_ang_mont_poses_RG)
+dev.off()
+
+data_ang_mont_poses_RD <- data_ang[[2]]
+data_ang_mont_poses_RD <- data_ang_mont_poses_RD@data
+data_ang_mont_poses_RD <- data_ang_mont_poses_RD %>% filter(bjo_labelquantite == "Effectif_total")
+data_ang_mont_poses_RD_annee <- data_ang_mont_poses_RD %>% filter(bjo_annee == annee)
+data_ang_mont_poses_RD_annee$Cumsum<-cumsum(data_ang_mont_poses_RD_annee$bjo_valeur)
+data_ang_mont_poses_RD_annee<-fun_date_extraction(
+    data=data_ang_mont_poses_RD_annee,
+    nom_coldt="bjo_jour", annee = FALSE, mois = TRUE,
+    quinzaine = FALSE, semaine = FALSE, semaine_std = FALSE,
+    jour_an = FALSE, jour_mois = FALSE, heure = FALSE)
+scaleFactor <- max(data_ang_mont_poses_RD_annee$Cumsum) / max(data_ang_mont_poses_RD_annee$bjo_valeur)
+
+p_ang_mont_poses_RD <- ggplot()+
+  geom_bar(data=data_ang_mont_poses_RD_annee,aes(x=bjo_jour,y=bjo_valeur*scaleFactor),position="stack", stat="identity",fill=col_Poses_RD)+
+  geom_line(data=data_ang_mont_poses_RD_annee, aes(x=bjo_jour,y=Cumsum,colour=mois),linewidth=1.5) + xlab("") +
+  scale_x_datetime(date_labels = "%d/%m", date_breaks = "2 weeks",
+                   limits = c(as.POSIXct(str_c(annee,"-04-01")),as.POSIXct(str_c(annee,"-11-01"))),expand=c(0,0))+
+  scale_colour_manual(values=c("01"="#092360",
+                               "02"="#1369A2",
+                               "03"="#0099A9",
+                               "04"="#009780",
+                               "05"="#67B784",
+                               "06"="#CBDF7C",
+                               "07"="#FFE200",
+                               "08"="#DB9815",
+                               "09"="#E57B25",
+                               "10"="#F0522D",
+                               "11"="#912E0F",
+                               "12"="#33004B"
+  ))+
+  scale_y_continuous(name="Migration cumulée", sec.axis=sec_axis(~./scaleFactor,name="Effectifs journaliers",labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = ".")),labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))+xlab("")+ theme_bw()+
+  theme(axis.title.y.left=element_text(color="blue"),
+                            axis.text.y.left=element_text(color="blue"),
+                            axis.title.y.right=element_text(color="black"),
+                            axis.text.y.right=element_text(color="black"))+
+  theme(text = element_text(size = 15),
+        axis.text.x  = element_text(angle=45,hjust=0.2,vjust=0))
+
+png(file=str_c(imgwd,"p_ang_mont_poses_RD.png"),width=10,height=5,unit="in",res=200)
+print(p_ang_mont_poses_RD)
+dev.off()
+
+#### plot taille ang mont ####
+
+data_taille_ang_piege <- data_taille_ang_piege %>% 
+                          mutate(station = case_when(
+                            ope_dic_identifiant == 102  ~ "Poses rive gauche",
+                            ope_dic_identifiant == 104  ~ "Poses rive droite")) %>%
+                          mutate(classe_taille=cut(car_valeur_quantitatif,
+                                                   breaks=c(0,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,
+                                                            140,145,150,155,160,165,170,175,180,185,190,195,200,600)
+                                                     )) %>%
+                        mutate(station=factor(station,levels=c("Poses rive gauche","Poses rive droite")))
+
+data_taille_ang_piege$mois <- factor(
+  data_taille_ang_piege$mois,
+  levels = sprintf("%02d", 1:12),
+  labels = mois_fr
+)
+
+plot_box_violin_plot_angmont <-
+  ggplot()+
+  geom_violin(data=subset(data_taille_ang_piege,annee==selected_annee), aes(y=car_valeur_quantitatif,x=mois,fill=station),alpha=1)+
+  geom_boxplot(data=subset(data_taille_ang_piege,annee!=selected_annee), aes(y=car_valeur_quantitatif,x=mois,fill=station),alpha=0.5)+
+  facet_grid(rows=vars(station))+
+  scale_fill_manual(values = c(col_Poses_RD,col_Poses_RG),
+                            labels = c("Poses rive droite", "Poses rive gauche"))+
+  theme_bw() +
+  labs(x = "mois", y = "taille (mm)")+
+  theme(text = element_text(size = 15))+guides(fill="none")
+
+png(file=str_c(imgwd,"plot_box_violin_plot_angmont.png"),width=10,height=5,unit="in",res=200)
+print(plot_box_violin_plot_angmont)
+dev.off()
+
+#### plot taille ang mont geom_bar ####
+
+freq_taille_histo <- data_taille_ang_piege %>% 
+                      filter(annee != selected_annee) %>%
+                      group_by(station,classe_taille) %>%
+  summarise(effectif = n(), .groups = "drop")
+
+freq_taille_histo <- freq_taille_histo %>%
+  group_by(station) %>%
+  mutate(frequence = effectif / sum(effectif)*100) %>%
+  ungroup() %>% mutate(annee=2000)
+
+freq_taille_annee <- data_taille_ang_piege %>% 
+                      filter(annee == selected_annee) %>%
+                      group_by(station,classe_taille) %>%
+  summarise(effectif = n(), .groups = "drop")
+
+freq_taille_annee <- freq_taille_annee %>%
+  group_by(station) %>%
+  mutate(frequence = effectif / sum(effectif)*100) %>%
+  ungroup() %>% mutate(annee = selected_annee)
+
+freq_taille_angmont<-rbind(freq_taille_histo,freq_taille_annee)
+
+plot_histo_taille_angmont<-ggplot()+
+  geom_bar(data=subset(freq_taille_angmont,annee!=selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",alpha=0.5)+
+  geom_bar(data=subset(freq_taille_angmont,annee==selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",width=0.5)+
+  facet_grid(rows=vars(station))+
+  scale_fill_manual(values = c(col_Poses_RD,col_Poses_RG),
+                            labels = c("Poses rive droite", "Poses rive gauche"))+
+  theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
+  scale_x_discrete(labels=c("<60","60-65","65-70","70-75","75-80","80-85","85-90","90-95","95-100","100-105","105-110","110-115","115-120","120-125","125-130","130-135","135-140","140-145","145-150","150-155","155-160","160-165","165-170","170-175","175-180","180-185","185-190","190-195","195-200",">200"))+
+  theme(text = element_text(size = 15),axis.text.x = element_text(angle=45,vjust=0.5))+guides(fill="none")
+
+png(file=str_c(imgwd,"plot_histo_taille_angmont.png"),width=10,height=5,unit="in",res=200)
+print(plot_histo_taille_angmont)
+dev.off()
 
 @
+
+Au niveau du barrage de Poses - Amfreville-sous-les-Monts, les anguilles peuvent être contrôlées au niveau des quatre dispositifs de comptage, les passe pièges spécifique à anguille et les systèmes de vidéo-comptage. Sur les ouvrages de Pontoise et Carandeau, ils n'existent pas de rampes spécifiques à anguilles, ces poissons sont donc dénombrés uniquement au vidéo-comptage. Les anguilles empruntant les rampes à brosses sont des jeunes individus (entre 0 et quelques années en eau douce) et qui sont en phase de migration active. Les individus empruntant la passe à poissons sont des anguilles jaunes ou des anguilles argentées. Les anguilles jaunes peuvent être des individus ayant déjà séjourné plusieurs années en eau douce et étant toujours en migration active ou des anguilles sédentarisées en recherche de nourriture, de zones de repos, d'habitats etc. Ces déplacements peuvent se faire dans les deux sens et il est donc possible d'obtenir des sommes de migration négatives certaines années. Les anguilles argentées sont des anguilles dévalantes de taille importante qui effectuent leur migration génésique catadrome (Figure \ref{ANGUILLE}).
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{ANGUILLE}
+\caption{Anguilles observées au barrage de Poses - Amfreville-sous-les-Monts. A gauche, anguillette capturée dans la passe piège spécifique; au milieu, anguille jaune observée en vidéocompage; à droite, anguille argentée dévalante observée en vidéocomptage}
+\label{ANGUILLE}
+\end{figure}
+
+\subsubsection{Anguille en montaison (passe piège) au barrage de Poses}
+
+En rive droite, les premières arrivées d'anguillettes ont eu lieu le \Sexpr{format.Date(min(data_ang_mont_poses_RD_annee$bjo_jour),"%d %B")} et les captures se sont terminées le \Sexpr{format.Date(max(data_ang_mont_poses_RD_annee$bjo_jour),"%d %B")}. Au total, \Sexpr{format(round(sum(data_ang_mont_poses_RD_annee$bjo_valeur)),big.mark = " ")} anguilles ont franchi le dispositif de franchissement (Figure \ref{p_ang_mont_poses_RD}).
+
+En rive gauche, les premières arrivées d'anguillettes ont eu lieu \Sexpr{format.Date(min(data_ang_mont_poses_RG_annee$bjo_jour),"%d %B")} et les captures se sont terminées le \Sexpr{format.Date(max(data_ang_mont_poses_RG_annee$bjo_jour),"%d %B")}. Au total, \Sexpr{format(round(sum(data_ang_mont_poses_RG_annee$bjo_valeur)),big.mark = " ")} anguilles ont été comptabilisées sur le dispositif de franchissement (Figure \ref{p_ang_mont_poses_RG}).
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{p_ang_mont_poses_RD}
+\caption{Rythmes migratoires des anguilles en montaison dénombrées sur la passe piège en rive droite du barrage de Poses - Amfreville-sous-les-Monts}
+\label{p_ang_mont_poses_RD}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{p_ang_mont_poses_RG}
+\caption{Rythmes migratoires des anguilles en montaison dénombrées sur la passe piège en rive gauche du barrage de Poses - Amfreville-sous-les-Monts}
+\label{p_ang_mont_poses_RG}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_histo_taille_angmont}
+\caption{Représentation des classe de tailles des anguilles capturées dans les passes-pièges au barrage de Poses - Amfreville-sous-les-Monts. Les tailles historiques sont présentées en transparence sur les deux graphiques}
+\label{plot_histo_taille_angmont}
+\end{figure}
+
+\begin{figure}[htpb]
+\includegraphics[width=\textwidth]{plot_box_violin_plot_angmont}
+\caption{Box plot et violin plot des tailles des anguilles capturées dans les passes-pièges au barrage de Poses - Amfreville-sous-les-Monts. Les box plot présentent les données historiques et les violin plot représentent les données de l'année.}
+\label{plot_box_violin_plot_angmont}
+\end{figure}
 
 \clearpage
 
