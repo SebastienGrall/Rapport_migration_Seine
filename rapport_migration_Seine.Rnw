@@ -7,6 +7,7 @@ concordance=TRUE,fig.width=12,fig.height=6,include=FALSE,cache = F
 annee=2024
 selected_annee<-annee ## pour faire les subset, R n'aime pas les annee=annee quand l'intitule de la colonne du DF est annee
 options(encoding = "UTF-8")
+options(scipen=999)
 
 @
 
@@ -146,8 +147,8 @@ col_Poses_RD  <- darken(col_Poses, 0.15)
 col_Pontoise<-"#B1283A"
 col_Carandeau<-"#088158"
 
-mois_fr <- c("janvier", "février", "mars", "avril", "mai", "juin",
-             "juillet", "août", "septembre", "octobre", "novembre", "décembre")
+mois_fr <- c("jan.", "févr.", "mars", "avr.", "mai", "juin",
+             "juil.", "août", "sept.", "oct.", "nov.", "déc.")
 
 # A function factory for getting integer y-axis values.
 integer_breaks <- function(n = 5, ...) {
@@ -409,13 +410,13 @@ rm(r_mig_inter_ala_poses,r_mig_inter_ala_carandeau,r_mig_inter_ala_pontoise)
 @
 
 <<chunk data anguille,echo=FALSE,eval=TRUE,results='hide'>>=
-# data alose
 
 if(exists("con")){
 
 #data anguille
 r_mig_inter_ang_poses_rg_piege<-fn_rmiginter(le_dc=c(102),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2014)
 r_mig_inter_ang_poses_rd_piege<-fn_rmiginter(le_dc=c(104),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2018)
+r_mig_inter_ang_poses_piege<-fn_rmiginter(le_dc=c(102,104),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2014)
 r_mig_inter_ang_poses_video_agj<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2008)
 r_mig_inter_ang_poses_video_agg<-fn_rmiginter(le_dc=c(101,103,105),espece=c("Anguilla anguilla"),stade=c("AGG"),annee_debut = 2008)
 r_mig_inter_ang_carandeau_video_agj<-fn_rmiginter(le_dc=c(106,107),espece=c("Anguilla anguilla"),stade=c("4"),annee_debut = 2018)
@@ -425,6 +426,7 @@ r_mig_inter_ang_pontoise_agg<-fn_rmiginter(le_dc=c(108),espece=c("Anguilla angui
 
 data_ang<-c(r_mig_inter_ang_poses_rg_piege,
                 r_mig_inter_ang_poses_rd_piege,
+                r_mig_inter_ang_poses_piege,
                 r_mig_inter_ang_poses_video_agj,
                 r_mig_inter_ang_poses_video_agg,
                 r_mig_inter_ang_carandeau_video_agj,
@@ -1602,8 +1604,8 @@ data_taille_ang_piege <- data_taille_ang_piege %>%
                             ope_dic_identifiant == 102  ~ "Poses rive gauche",
                             ope_dic_identifiant == 104  ~ "Poses rive droite")) %>%
                           mutate(classe_taille=cut(car_valeur_quantitatif,
-                                                   breaks=c(0,60,65,70,75,80,85,90,95,100,105,110,115,120,125,130,135,
-                                                            140,145,150,155,160,165,170,175,180,185,190,195,200,600)
+                                                   breaks=c(0,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,
+                                                            210,220,230,240,250,600)
                                                      )) %>%
                         mutate(station=factor(station,levels=c("Poses rive gauche","Poses rive droite")))
 
@@ -1624,7 +1626,7 @@ plot_box_violin_plot_angmont <-
   labs(x = "mois", y = "taille (mm)")+
   theme(text = element_text(size = 15))+guides(fill="none")
 
-png(file=str_c(imgwd,"plot_box_violin_plot_angmont.png"),width=10,height=5,unit="in",res=200)
+png(file=str_c(imgwd,"plot_box_violin_plot_angmont.png"),width=5,height=4,unit="in",res=200)
 print(plot_box_violin_plot_angmont)
 dev.off()
 
@@ -1659,11 +1661,50 @@ plot_histo_taille_angmont<-ggplot()+
   scale_fill_manual(values = c(col_Poses_RD,col_Poses_RG),
                             labels = c("Poses rive droite", "Poses rive gauche"))+
   theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
-  scale_x_discrete(labels=c("<60","60-65","65-70","70-75","75-80","80-85","85-90","90-95","95-100","100-105","105-110","110-115","115-120","120-125","125-130","130-135","135-140","140-145","145-150","150-155","155-160","160-165","165-170","170-175","175-180","180-185","185-190","190-195","195-200",">200"))+
+scale_x_discrete(
+  breaks = levels(freq_taille_angmont$classe_taille)[seq(1, 21, by = 2)],
+  labels = c("<60","60-70","70-80","80-90","90-100","100-110","110-120","120-130",
+             "130-140","140-150","150-160","160-170","170-180","180-190","190-200",
+             "200-210","210-220","220-230","230-240","240-250",">250")[seq(1, 21, by = 2)]
+)+
   theme(text = element_text(size = 15),axis.text.x = element_text(angle=45,vjust=0.5))+guides(fill="none")
 
-png(file=str_c(imgwd,"plot_histo_taille_angmont.png"),width=10,height=5,unit="in",res=200)
+png(file=str_c(imgwd,"plot_histo_taille_angmont.png"),width=5,height=4,unit="in",res=200)
 print(plot_histo_taille_angmont)
+dev.off()
+
+#### plot effectifs historique ang montaison #####
+
+data_angmont_histo <- rbind(data_ang_mont_poses_RD,data_ang_mont_poses_RG)
+data_angmont_histo <- data_angmont_histo %>%   
+                                  mutate(station = case_when(
+                            bjo_dis_identifiant == 102  ~ "Poses rive gauche",
+                            bjo_dis_identifiant == 104  ~ "Poses rive droite")) %>%
+                                  mutate(station=factor(station,levels=c("Poses rive gauche","Poses rive droite"))) %>%
+                                  group_by(station,bjo_annee) %>%
+                                  summarise(effectif=round(sum(bjo_valeur)))
+
+plot_historique_angmont<- ggplot() +
+    geom_bar(
+        data = data_angmont_histo,
+        aes(x = bjo_annee, y = effectif, fill = station),
+        stat = "identity")+
+  scale_fill_manual(values = c(col_Poses_RG,col_Poses_RD),
+                            labels = c("Poses rive gauche", "Poses rive droite"))+
+    theme_bw() + xlab("") +
+    theme(text = element_text(size = 15))#,legend.position = "bottom")
+png(file=str_c(imgwd,"plot_historique_angmont.png"),width=8,height=5,unit="in",res=200)
+print(plot_historique_angmont)
+dev.off()
+
+#### plot seasonal angmont ####
+
+data_ang_mont_poses <- data_ang[[3]]
+plot(data_ang_mont_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
+p_seasonal_angmont_poses <- envir_stacomi$g_seasonal
+p_seasonal_angmont_poses <- p_seasonal_angmont_poses + theme(text = element_text(size = 15)) + xlab("")
+png(file=str_c(imgwd,"p_seasonal_angmont_poses.png"),width=8,height=4,unit="in",res=200)
+print(p_seasonal_angmont_poses)
 dev.off()
 
 @
@@ -1697,17 +1738,25 @@ En rive gauche, les premières arrivées d'anguillettes ont eu lieu \Sexpr{forma
 \label{p_ang_mont_poses_RG}
 \end{figure}
 
+historique
+
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=\textwidth]{plot_histo_taille_angmont}
-\caption{Représentation des classe de tailles des anguilles capturées dans les passes-pièges au barrage de Poses - Amfreville-sous-les-Monts. Les tailles historiques sont présentées en transparence sur les deux graphiques}
-\label{plot_histo_taille_angmont}
+\includegraphics[width=\textwidth]{plot_historique_angmont}
+\caption{Evolution interannuelle des effectifs des anguilles capturées dans les passes pièges au barrage de Poses - Amfreville-sous-les-Monts}
+\label{plot_historique_angmont}
 \end{figure}
 
 \begin{figure}[htpb]
-\includegraphics[width=\textwidth]{plot_box_violin_plot_angmont}
-\caption{Box plot et violin plot des tailles des anguilles capturées dans les passes-pièges au barrage de Poses - Amfreville-sous-les-Monts. Les box plot présentent les données historiques et les violin plot représentent les données de l'année.}
-\label{plot_box_violin_plot_angmont}
+    \centering
+      \begin{subfigure}[b]{0.48\textwidth}
+          \includegraphics[width=\textwidth]{plot_histo_taille_angmont}
+      \end{subfigure}
+      \begin{subfigure}[b]{0.48\textwidth}
+          \includegraphics[width=\textwidth]{plot_box_violin_plot_angmont}
+      \end{subfigure}
+  \caption{Représentation des tailles des Anguilles capturées dans les passes-pièges du barrage de Poses - Amfreville-sous-les-Monts. Les tailles historiques sont présentées en transparence sur les deux graphiques}
+  \label{Taille_ANGMONT}
 \end{figure}
 
 \clearpage
