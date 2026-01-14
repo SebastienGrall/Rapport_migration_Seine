@@ -533,7 +533,7 @@ Suite à l'enregistrement des séquences vidéo, celles-ci sont visualiser par u
 
 Les durées de dépouillement sont très variables. En réalité ces valeurs sont fonctions des conditions de milieu (visibilité, déclenchements parasites par des corps dérivants) et surtout des espèces comptabilisées (facilité de distinction des espèces, vitesse de passage, passages isolés ou en bancs, allers et retours, stabulation devant la vitre, mesure des poissons). A l'expérience des comptages \textit{in situ}, il ressort qu'en moyenne les durées de dépouillement sont de l'ordre de 4\% à 10\% du temps réel de surveillance (soit 1 h à 2,5 h par 24 h de suivi) pour les faibles passages (inférieurs à 400 poissons/jour) et de l'ordre de 15\% à 20\% du temps réel (soit 3,5 h à 5 h par 24 h de suivi) pour les passages nombreux (3 000 à 5 000 poissons/jour) \citep{travade_les_1992}.
 
-Tous les poissons franchissant les passes sont dénombrés et identifiés lors du vidéo-comptage. L'identification se fait à l'espèce ou à la famille, notamment dans le cas de passages importants de cyprinidés.
+Tous les poissons franchissant les passes sont dénombrés et identifiés lors du vidéo-comptage. L'identification se fait à l'espèce ou à la famille, notamment dans le cas de passages importants de cyprinidés. Les poissons migrateurs sont également mesurés sur les stations de Poses et de Pontoise. Un poisson en montaison (franchissant le couloir de vision de l'aval vers l'amont) est enregistré en "+1" alors qu'un individu dévalant est enregistré en "-1" (ex : une anguille argentée dévalante).
 
 A l'issue de cette phase de dépouillement, l'ensemble des données est compilé puis importé dans le logiciel \href{http://stacomir.r-forge.r-project.org/}{stacomiR}, afin d'en assurer le traitement et l'analyse, les données sont visualisables à travers une application \href{https://shiny.seinormigr.fr/Stacomi_App/}{Shiny}.
 
@@ -693,14 +693,30 @@ En rive gauche, les premières arrivées d'anguillettes ont eu lieu 04 avril et 
 \label{p_ang_mont_poses_RG}
 \end{figure}
 
-historique
+En rive gauche, les données historiques montrent des effectifs bien plus faibles que les premières données en rive droite avec une moyenne interannuelle d'environ 19 185 anguillettes, dont une majorité d'individus ayant au moins une année de vie continentale (Figure \ref{plot_historique_angmont}). Plusieurs facteurs expliquent les faibles remontées au niveau de cette rive. En premier lieu, la berge en aval de l'ouvrage est composée de palplanches lisses, le fort courant généré par les turbines de l'usine, dirigé contre elles, est rédhibitoire pour le déplacement des anguilles qui se servent habituellement des surfaces rugueuses pour progresser à contre-courant. De plus, le turbinage génère un fort débit d'attrait en comparaison de celui de la rampe à anguille, ce qui rend difficile de trouver l'accès aux tapis brosses.
+
+Des opérations de capture-marquage-recapture, réalisées depuis 2015, ont permis de confirmer la difficulté pour les anguilles d'accéder à la passe et également de la franchir. En effet, le taux de retour des anguilles marquées et relâchées à 200 mètres en aval de l'ouvrage varie entre 0\% (en 2018) et 13\% (en 2015) avec une moyenne de 6,3\%. Le taux de retour de 2018 est à prendre avec précaution puisque l'observation individuelle de chaque anguille est fastidieuse, le risque de non-lecture d'une marque augmente avec le nombre d'individus à contrôler. Les effectifs importants de 2018 ont donc pu faire baisser la fiabilité de ces opérations et montrent les limites de la méthode utilisée. Le taux de retour des anguilles déposées dans le premier collecteur de la rampe, à  la sortie des rampes à brosses, est également faible avec un taux de retour moyen d'environ 45\%. L'accès et le franchissement de la rampe sont très sélectifs pour les anguilles et notamment pour les jeunes stades qui ne disposent pas de capacité de nage importante.
+
+En rive droite, les effectifs sont largement supérieurs avec en moyenne 335 758 individus capturés. Cette année encore, les captures de la rive droite confirment la meilleure efficacité de cette rampe avec des données bien plus représentatives de la situation réelle, en termes d'effectifs et de structure de la population, pour un fleuve du gabarit de la Seine.
 
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{plot_historique_angmont}
-\caption{Evolution interannuelle des effectifs des anguilles capturées dans les passes pièges au barrage de Poses - Amfreville-sous-les-Monts}
+\caption{Evolution interannuelle des effectifs des anguilles capturées dans les passes pièges du barrage de Poses - Amfreville-sous-les-Monts}
 \label{plot_historique_angmont}
 \end{figure}
+
+La phénologie de la migration est similaire entre les années. Les captures s'intensifient à partir du mois de juin et la majorité des passages se concentrent ensuite en quelques pics intenses corrélés avec des coefficients de marée et qui ont lieu entre mi-juillet et mi-août.
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\textwidth]{p_seasonal_angmont_poses}
+\caption{Rythmes migratoires des anguilles capturées dans les passes pièges du barrage de Poses - Amfreville-sous-les-Monts.}
+\label{p_seasonal_angmont_poses}
+\end{figure}
+
+Les individus échantillonnés ont une taille comprise entre 65 mm et 429 mm et la majorité ont une taille inférieure à 100 mm. La taille médiane est de 88 mm.
+Au niveau de l'évolution des tailles au cours de la saison, on retrouve le pattern habituel qui voit la taille médiane et l'hétérogénéité des échantillons décroître jusqu'à l'été puis une stabilisation ou une légère hausse de ces variables jusqu'à la fin des suivis (Figure \ref{Taille_ANGMONT}). Celui-ci s'explique par la capture d'individus ayant arrêté leur migration l'année précédente et étant en attente en aval immédiat de l'ouvrage au début de la saison puis l'arrivée progressive des individus de l'année qui vont ensuite faire baisser la taille moyenne de la population piégée.
 
 \begin{figure}[htpb]
     \centering
@@ -713,6 +729,45 @@ historique
   \caption{Représentation des tailles des Anguilles capturées dans les passes-pièges du barrage de Poses - Amfreville-sous-les-Monts. Les tailles historiques sont présentées en transparence sur les deux graphiques}
   \label{Taille_ANGMONT}
 \end{figure}
+
+\subsubsection{Anguille jaune (vidéo-comptage)}
+
+
+
+Dans les passe à bassins,les individus observés peuvent être en phase de migration active ou être sédentaires et effectuer des déplacements dans un but trophique, en montant ou en dévalant la passe à poissons.La somme des effectifs peut donc être négative. A Pontoise, en raison d'un problème de conception du couloir de vidéo-comptage, le comptage des petites espèces dont les jeunes anguilles n'est pas exhaustif. Les données de cette station sont donc présentées à titre informatif.
+L'activité se concentre entre les mois de mai et de septembre (Figure \ref{plot_annuel_agj}), avec des intensités plus importantes au printemps, période concomitante à l'augmentation des températures de l'eau.
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_annuel_agj}
+\caption{Effectifs journaliers des anguilles jaunes recensés sur les STACOMI du bassin Seine.}
+\label{plot_annuel_agj}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_historique_agj}
+\caption{Evolution interannuelle des effectifs d'anguille jaune recensés sur les STACOMI du bassin Seine. Les individus dévalants (codés en "-1") sont transformés en valeur positive afin de mieux représenter le volume des anguilles ayant transité par les passes à poissons. Les axes des ordonnées n'ont pas la même échelle.}
+\label{plot_historique_agj}
+\end{figure}
+
+Les données historiques montrent des effectifs assez variables selon les années mais dans des gammes relativement similaires, de quelques dizaines à quelques centaines d'individus avec des valeurs logiquement plus importantes à Poses (Figure \ref{plot_historique_agj}). Au niveau des tailles des anguilles, les jeunes individus sont majoritaires sur le barrage de Poses et on observe une proportion importante d'individus en phase de migration active (<300mm) au niveau de Pontoise. L'activité horaire est majoritairement nocturne (Figure \ref{p_horaires_agj}).
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_histo_taille_agj}
+\caption{Distribution de tailles des anguilles jaunes mesurées aux stations de Poses et de Pontoise.}
+\label{plot_histo_taille_agj}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{p_horaires_agj}
+\caption{Horaires de migration des anguilles jaunes en 2024}
+\label{p_horaires_agj}
+\end{figure}
+
+
 
 \clearpage
 
