@@ -2337,14 +2337,50 @@ png(file=str_c(imgwd,"plot_historique_lpf.png"),width=8,height=4,unit="in",res=2
 print(plot_historique_lpf)
 dev.off()
 
-#### plot seasonal angmont ####
+#### plot ridgeline LPF ####
 
-# plot(r_mig_inter_lpf,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
-# p_seasonal_lpf <- envir_stacomi$g_seasonal
-# p_seasonal_lpf <- p_seasonal_lpf + theme(text = element_text(size = 15)) + xlab("")
-# png(file=str_c(imgwd,"p_seasonal_lpf.png"),width=8,height=4,unit="in",res=200)
-# print(p_seasonal_lpf)
-# dev.off()
+data_long_lpf <- data_lpf %>%  
+    group_by(station,bjo_jour) %>%
+  summarise(effectif=sum(bjo_valeur))
+
+data_long_lpf <- data_long_lpf %>%  
+  mutate(effectif=abs(effectif)) %>%
+  uncount(effectif) %>%
+  mutate(
+    # extraire année ou identifiant de saison
+    Saison = if_else(bjo_jour >= paste0(format(bjo_jour, "%Y"),"-08-31"),as.integer(format(bjo_jour, "%Y"))+1,as.integer(format(bjo_jour, "%Y")))
+  ) %>%
+ mutate(Saison = as.character(Saison))  %>%
+    as.data.frame()
+  
+## chat gpt 
+debut_saison <- ymd("2000-09-01")
+
+data_long_lpf$jour_saison <-
+  as.integer(
+    (yday(data_long_lpf$bjo_jour) - yday(debut_saison) + 365) %% 365
+  ) + 1
+
+
+plot_ridgeline_lpf<- ggplot(data_long_lpf,
+       aes(x = jour_saison,
+           y = factor(Saison),
+           fill = col_Poses)) +
+  ggridges::geom_density_ridges(
+    bandwidth = 7,
+    scale = 1.4,
+    alpha = 0.6
+  ) +
+  scale_x_continuous(
+    breaks = c(1, 60, 120, 180, 240, 300),
+    labels = c("Sep", "Oct", "Déc", "Fév", "Avr", "Juin")
+  ) +
+  theme_bw() +
+  labs(x = "Jour de la saison (début 1er septembre)", y = "Saison") +
+  guides(fill = "none")
+png(file=str_c(imgwd,"plot_ridgeline_lpf.png"),width=8,height=4,unit="in",res=200)
+print(plot_ridgeline_lpf)
+dev.off()
 
 #### plot horaires LPF ####
 
