@@ -1241,7 +1241,8 @@ plot_ridgeline_ala<-ggplot(data_long,
   ggridges::geom_density_ridges(
     color = "black",
     alpha = 0.5,
-    scale = 2
+    scale = 2,
+    bandwidth = 7
   ) +
       scale_fill_manual(values = c("Poses" = col_Poses,
                                     "Pontoise" = col_Pontoise,
@@ -1532,7 +1533,7 @@ La structure de taille des aloses est présentée sur la figure \ref{Taille_ALA}
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=\textwidth]{p_horaires_ala}
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{p_horaires_ala}
 \caption{Horaires de migration des aloses en \Sexpr{annee}}
 \label{p_horaires_ala}
 \end{figure}
@@ -2057,7 +2058,7 @@ Les données historiques montrent des effectifs assez variables selon les année
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=\textwidth]{p_horaires_agj}
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{p_horaires_agj}
 \caption{Horaires de migration des anguilles jaunes en \Sexpr{annee}}
 \label{p_horaires_agj}
 \end{figure}
@@ -2242,7 +2243,7 @@ Des études menées sur les ouvrages de Seine aval par le bureau d'étude Profis
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=\textwidth]{p_horaires_agg}
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{p_horaires_agg}
 \caption{Horaires de migration des anguilles argentées en \Sexpr{annee}}
 \label{p_horaires_agg}
 \end{figure}
@@ -2353,7 +2354,7 @@ data_long_lpf <- data_long_lpf %>%
  mutate(Saison = as.character(Saison))  %>%
     as.data.frame()
   
-## chat gpt 
+## changement date saison
 debut_saison <- ymd("2000-09-01")
 
 data_long_lpf$jour_saison <-
@@ -2364,12 +2365,13 @@ data_long_lpf$jour_saison <-
 
 plot_ridgeline_lpf<- ggplot(data_long_lpf,
        aes(x = jour_saison,
-           y = factor(Saison),
-           fill = col_Poses)) +
+           y = factor(Saison))) +
   ggridges::geom_density_ridges(
     bandwidth = 7,
-    scale = 1.4,
-    alpha = 0.6
+    scale = 1.5,
+    alpha = 0.5,
+    fill = col_Poses,
+    color = "black"
   ) +
   scale_x_continuous(
     breaks = c(1, 60, 120, 180, 240, 300),
@@ -2377,8 +2379,9 @@ plot_ridgeline_lpf<- ggplot(data_long_lpf,
   ) +
   theme_bw() +
   labs(x = "Jour de la saison (début 1er septembre)", y = "Saison") +
-  guides(fill = "none")
-png(file=str_c(imgwd,"plot_ridgeline_lpf.png"),width=8,height=4,unit="in",res=200)
+  guides(fill = "none")+
+  theme(text = element_text(size = 15))
+png(file=str_c(imgwd,"plot_ridgeline_lpf.png"),width=6,height=8,unit="in",res=200)
 print(plot_ridgeline_lpf)
 dev.off()
 
@@ -2437,7 +2440,7 @@ p_horaires_lpf <- ggplot() +
         axis.title.y = element_text(angle = -90),
         axis.text.y = element_text(angle = -45,hjust=0.5)
     )
-  png(file=str_c(imgwd,"p_horaires_lpf.png"),width=15,height=10,unit="in",res=200)		
+  png(file=str_c(imgwd,"p_horaires_lpf.png"),width=7.5,height=5,unit="in",res=200)		
 	print(p_horaires_lpf)
   dev.off()
 
@@ -2464,16 +2467,16 @@ image_write(img, path = file.path(imgwd, "p_horaires_lpf.png"))
 \label{plot_historique_lpf}
 \end{figure}
 
-% \begin{figure}[htpb]
-% \centering
-% \includegraphics[width=0.8\textwidth]{p_seasonal_lpf}
-% \caption{Rythmes migratoires des lamproies fluviatiles au barrage de Poses - Amfreville-sous-les-Monts.}
-% \label{p_seasonal_lpf}
-% \end{figure}
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\textwidth]{plot_ridgeline_lpf}
+\caption{Rythmes migratoires des lamproies fluviatiles au barrage de Poses - Amfreville-sous-les-Monts.}
+\label{plot_ridgeline_lpf}
+\end{figure}
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=\textwidth]{p_horaires_lpf}
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{p_horaires_lpf}
 \caption{Horaires de migration des lamproies fluviatiles en \Sexpr{annee}}
 \label{p_horaires_lpf}
 \end{figure}
