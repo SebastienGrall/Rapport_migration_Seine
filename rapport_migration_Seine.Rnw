@@ -2489,7 +2489,25 @@ img <- image_read(file.path(imgwd, "p_horaires_lpf.png")) %>%
   
 image_write(img, path = file.path(imgwd, "p_horaires_lpf.png"))
 
+#### phrases conditionnelles en fonction des effectifs de LPF ####
+
+phrase_effectif_annuel <- if_else(nrow(data_lpf_annee)==0,
+                                  "Cette année, aucune lamproie fluviatile n'a été observée sur le barrage de Poses",
+                                  paste0("Cette année, ",sum(data_lpf_annee$bjo_valeur)," lamproies fluviatiles ont été observés sur le barrage de Poses"))
+
 @
+
+La lamproie fluviatile est recensée sur le bassin de la Seine (Figure \ref{LPF}) mais cette espèce n'a pas un comportement de montaison systématique et ses zones de reproduction sont généralement cantonnées sur les parties aval des bassins, en raison notamment de ses capacités de nage et de franchissement limitées. Sa présence n'a donc logiquement jamais été détectée sur les stations de Pontoise et de Carandeau.
+De plus, son dénombrement est assez peu significatif sur le barrage de Poses, notamment en rive gauche. En effet, en plus de la turbidité, le comportement de l'espèce qui effectue des allers-retours devant les vitres entraîne des mauvais décomptes. Par exemple un individu peut être compté comme dévalant s'il n'a pas été détecté en montaison (en raison de la turbidité et/ou d'un passage du côté de la vitre opposée à la caméra) mais qu'il a ensuite été détecté en dévalaison.
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.3\textwidth]{LPF_sur_ALA}
+\caption{Lamproie fluviatile, fixée sur une alose, observée en vidéocompage en rive droite du barrage de Poses - Amfreville-sous-les-Monts.}
+\label{LPF}
+\end{figure}
+
+\Sexpr{phrase_effectif_annuel} (Figure \ref{plot_annuel_lpf}). Historiquement à Poses, malgré les difficultés de détection et à titre de comparaison, les données montrent une variabilité assez importante pouvant aller d'une dizaine d'individus jusqu'à plusieurs centaines selon les années (Figure \ref{plot_historique_lpf}). Les faibles observations en rive droite pourrait s'expliquer par les défaillances des organes permettant un débit d'attrait optimal à l'entrée de la passe, qui est d'autant plus important quand les débits du fleuve sont élevés.
 
 \begin{figure}[htpb]
 \centering
@@ -2504,6 +2522,8 @@ image_write(img, path = file.path(imgwd, "p_horaires_lpf.png"))
 \caption{Evolution interannuelle des effectifs de lamproies fluviatiles recensés sur les STACOMI du bassin Seine.}
 \label{plot_historique_lpf}
 \end{figure}
+
+L'activité migratoire de l'espèce commence tôt dans l'année, avec des premières montaisons au cours du mois de janvier mais il est fréquent d'observer des passages plus précoces, dès octobre/novembre de l'année précédente (Figure \ref{plot_ridgeline_lpf}). Ces individus sont alors rattachés à la cohorte de reproduction de l'année suivante. Les individus les plus tardifs peuvent quant à eux franchir l'ouvrage jusqu'au mois d'avril. La migration est principalement nocturne mais des passages en journée sont courants notamment quand la turbidité est importante (Figure \ref{p_horaires_lpf}).
 
 \begin{figure}[htpb]
 \centering
