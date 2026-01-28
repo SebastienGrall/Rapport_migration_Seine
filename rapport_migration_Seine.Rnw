@@ -4,8 +4,7 @@ library(knitr)
 opts_chunk$set(
 concordance=TRUE,fig.width=12,fig.height=6,include=FALSE,cache = F
 )
-annee=2024
-selected_annee<-annee ## pour faire les subset, R n'aime pas les annee=annee quand l'intitule de la colonne du DF est annee
+annee <- selected_annee <- 2024 ## pour faire les subset, R n'aime pas les annee=annee quand l'intitule de la colonne du DF est annee
 options(encoding = "UTF-8")
 options(scipen=999)
 
@@ -1315,7 +1314,8 @@ plot_historique_ala<- ggplot() +
         labels = c("Gauche", "Droite")
     ) +
     theme_bw() + xlab("") +
-    theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
+    theme(text = element_text(size = 15),
+          plot.margin = margin(0.2, 0, 0, 0, "cm"))  # top, right, bottom, left)) + #,legend.position = "bottom")+ 
   scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_ala.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_ala)
@@ -1337,9 +1337,14 @@ data_taille_alose <- data_taille_alose %>%
                           mutate(station = case_when(
                             ope_dic_identifiant %in% c(101,103,105)  ~ "Poses",
                             ope_dic_identifiant == 108  ~ "Pontoise")) %>%
-                          mutate(classe_taille=cut(car_valeur_quantitatif,
-                                                   breaks=c(0,300,350,400,450,500,550,600,650,700,750,800,2000)
-                                                     ))%>%
+                          mutate(classe_taille=cut(
+                            car_valeur_quantitatif,
+                            breaks=c(0,300,350,400,450,500,550,600,650,700,750,800,2000),
+                            labels = c("<300","300-350","350-400","400-450","450-500",
+                            "500-550","550-600","600-650","650-700",
+                            "700-750","750-800",">800"),
+                            include.lowest = TRUE,
+                            right = FALSE ))%>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))
 
 data_taille_alose$mois <- factor(
@@ -1398,8 +1403,7 @@ plot_histo_taille_ala<-ggplot()+
                                                ),
                                     drop = FALSE)+
   theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
-  scale_x_discrete(labels=c("<300","300-350","350-400","400-450","450-500","500-550","550-600",
-                            "600-650","650-700","700-750","750-800",">800"))+
+  scale_x_discrete(drop=FALSE)+
   theme(text = element_text(size = 15),axis.text.x = element_text(angle=45,vjust=0.5))+guides(fill="none")
 
 png(file=str_c(imgwd,"plot_histo_taille_ala.png"),width=5,height=4,unit="in",res=200)
@@ -1652,10 +1656,16 @@ data_taille_ang_piege <- data_taille_ang_piege %>%
                           mutate(station = case_when(
                             ope_dic_identifiant == 102  ~ "Poses rive gauche",
                             ope_dic_identifiant == 104  ~ "Poses rive droite")) %>%
-                          mutate(classe_taille=cut(car_valeur_quantitatif,
-                                                   breaks=c(0,60,70,80,90,100,110,120,130,140,150,160,170,180,190,200,
-                                                            210,220,230,240,250,600)
-                                                     )) %>%
+  
+  mutate(classe_taille=cut( car_valeur_quantitatif,
+                            breaks=c(0,60,70,80,90,100,110,120,130,
+                                    140,150,160,170,180,190,200,
+                                    210,220,230,240,250,600),
+                            labels = c("<60","60-70","70-80","80-90","90-100","100-110","110-120","120-130",
+             "130-140","140-150","150-160","160-170","170-180","180-190","190-200",
+             "200-210","210-220","220-230","230-240","240-250",">250"),
+                            include.lowest = TRUE,
+                            right = FALSE ))%>%
                         mutate(station=factor(station,levels=c("Poses rive gauche","Poses rive droite")))
 
 data_taille_ang_piege$mois <- factor(
@@ -1712,12 +1722,7 @@ plot_histo_taille_angmont<-ggplot()+
   scale_fill_manual(values = c(col_Poses_RD,col_Poses_RG),
                             labels = c("Poses rive droite", "Poses rive gauche"))+
   theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
-scale_x_discrete(
-  breaks = levels(freq_taille_angmont$classe_taille)[seq(1, 21, by = 2)],
-  labels = c("<60","60-70","70-80","80-90","90-100","100-110","110-120","120-130",
-             "130-140","140-150","150-160","160-170","170-180","180-190","190-200",
-             "200-210","210-220","220-230","230-240","240-250",">250")[seq(1, 21, by = 2)]
-)+
+scale_x_discrete(drop=FALSE)+
   theme(text = element_text(size = 15),axis.text.x = element_text(angle=45,vjust=0.5))+guides(fill="none")
 
 png(file=str_c(imgwd,"plot_histo_taille_angmont.png"),width=5,height=4,unit="in",res=200)
@@ -1894,9 +1899,13 @@ data_taille_agj <- data_taille_agj %>%
                           mutate(station = case_when(
                             ope_dic_identifiant %in% c(101,103,105)  ~ "Poses",
                             ope_dic_identifiant == 108  ~ "Pontoise")) %>%
-                          mutate(classe_taille=cut(car_valeur_quantitatif,
-                                                   breaks=c(0,150,200,250,300,350,400,450,500,550,600,650,700,750,800,20000)
-                                                     ))%>%
+                            mutate(classe_taille=cut(
+                            car_valeur_quantitatif,
+                            breaks=c(0,150,200,250,300,350,400,450,500,550,600,650,700,750,800,20000),
+                            labels = c("<150","150-200","200-250","250-300","300-350","350-400","400-450","450-500","500-550","550-600",
+                            "600-650","650-700","700-750","750-800",">800"),
+                            include.lowest = TRUE,
+                            right = FALSE ))%>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))
 
 freq_taille_histo <- data_taille_agj %>% 
@@ -1931,8 +1940,7 @@ plot_histo_taille_agj<-ggplot()+
                                                ),
                                     drop = FALSE)+
   theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
-  scale_x_discrete(labels=c("<150","150-200","200-250","250-300","300-350","350-400","400-450","450-500","500-550","550-600",
-                            "600-650","650-700","700-750","750-800",">800"))+
+  scale_x_discrete(drop=FALSE)+
   theme(text = element_text(size = 15),axis.text.x = element_text(angle=45,vjust=0.5))+guides(fill="none")
 
 png(file=str_c(imgwd,"plot_histo_taille_agj.png"),width=8,height=4,unit="in",res=200)
@@ -2133,7 +2141,8 @@ plot_annuel_agg<-ggplot(ang_video_agg_annee)+geom_bar(aes(x=bjo_jour,y=bjo_valeu
         labels = c("Gauche", "Droite")
     ) +
                   theme_bw()+
-                  theme(text = element_text(size = 15))+ 
+                  theme(text = element_text(size = 15),
+                        plot.margin = margin(0.2, 0, 0, 0, "cm"))  # top, right, bottom, left))+ 
   scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 png(file=str_c(imgwd,"plot_annuel_agg.png"),width=8,height=4,unit="in",res=200)
@@ -2633,7 +2642,8 @@ plot_historique_lpm<- ggplot() +
         labels = c("Gauche", "Droite")
     ) +
     theme_bw() + xlab("") +
-    theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
+    theme(text = element_text(size = 15),
+          plot.margin = margin(0.2, 0, 0, 0, "cm"))  # top, right, bottom, left
   scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_lpm.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_lpm)
@@ -2656,9 +2666,13 @@ data_taille_lpm <- data_taille_lpm %>%
                           filter(ope_date_debut >= "2021-01-01") %>% ###  il y a des valeurs bizarres quand le dépouillement était fait par la Base de Loisirs (confusion LPM/LPF)
                           mutate(station = case_when(
                             ope_dic_identifiant %in% c(101,103,105)  ~ "Poses")) %>%
-                          mutate(classe_taille=cut(car_valeur_quantitatif,
-                                                   breaks=c(0,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,2000)
-                                                     ))%>%
+                          mutate(classe_taille=cut(
+                            car_valeur_quantitatif,
+                            breaks=c(0,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,2000),
+                            labels = c("<300","300-350","350-400","400-450","450-500","500-550","550-600",
+                            "600-650","650-700","700-750","750-800","800-850","850-900","900-950","950-1000",">1000"),
+                            include.lowest = TRUE,
+                            right = FALSE ))%>%
                         mutate(station=factor(station,levels=c("Poses")))
 
 freq_taille_histo <- data_taille_lpm %>% 
@@ -2686,16 +2700,18 @@ freq_taille_lpm<-rbind(freq_taille_histo,freq_taille_annee)
 plot_histo_taille_lpm<-ggplot()+
   geom_bar(data=subset(freq_taille_lpm,annee!=selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",alpha=0.5)+
   geom_bar(data=subset(freq_taille_lpm,annee==selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",width=0.5)+
-  facet_grid(rows=vars(station))+
+ # facet_grid(rows=vars(station))+
       scale_fill_manual(values = c("Poses" = col_Poses,
                                     "Pontoise" = col_Pontoise,
                                     "Carandeau" =  col_Carandeau
                                                ),
                                     drop = FALSE)+
   theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
-  scale_x_discrete(labels=c("<300","300-350","350-400","400-450","450-500","500-550","550-600",
-                            "600-650","650-700","700-750","750-800","800-850","850-900","900-950","950-1000",">1000"))+
-  theme(text = element_text(size = 15),axis.text.x = element_text(angle=45,vjust=0.5))+guides(fill="none")
+  scale_x_discrete(drop=FALSE)+
+  theme(text = element_text(size = 15),
+        axis.text.x = element_text(angle=45,vjust=0.5),
+        plot.margin = margin(0.1, 0, 0, 0, "cm")) +  # top, right, bottom, left
+  guides(fill="none")
 
 png(file=str_c(imgwd,"plot_histo_taille_lpm.png"),width=8,height=4,unit="in",res=200)
 print(plot_histo_taille_lpm)
@@ -2936,9 +2952,13 @@ data_taille_mup <- data_taille_mup %>%
                           filter(ope_dic_identifiant %in% c(101,103,105)) %>%
                           mutate(station = case_when(
                             ope_dic_identifiant %in% c(101,103,105)  ~ "Poses")) %>%
-                          mutate(classe_taille=cut(car_valeur_quantitatif,
-                                                   breaks=c(0,300,350,400,450,500,550,600,650,700,2000)
-                                                     ))%>%
+                            mutate(classe_taille=cut(
+                            car_valeur_quantitatif,
+                            breaks=c(0,300,350,400,450,500,550,600,650,700,750,800,2000),
+                            labels = c("<300","300-350","350-400","400-450","450-500","500-550","550-600",
+                            "600-650","650-700","700-750","750-800",">800"),
+                            include.lowest = TRUE,
+                            right = FALSE ))%>%
                         mutate(station=factor(station,levels=c("Poses")))
 
 freq_taille_histo <- data_taille_mup %>% 
@@ -2966,15 +2986,14 @@ freq_taille_mup<-rbind(freq_taille_histo,freq_taille_annee)
 plot_histo_taille_mup<-ggplot()+
   geom_bar(data=subset(freq_taille_mup,annee!=selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",alpha=0.5)+
   geom_bar(data=subset(freq_taille_mup,annee==selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",width=0.5)+
-  facet_grid(rows=vars(station))+
+  #facet_grid(rows=vars(station))+
       scale_fill_manual(values = c("Poses" = col_Poses,
                                     "Pontoise" = col_Pontoise,
                                     "Carandeau" =  col_Carandeau
                                                ),
                                     drop = FALSE)+
   theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
-  scale_x_discrete(labels=c("<300","300-350","350-400","400-450","450-500","500-550","550-600",
-                            "600-650","650-700",">700"))+
+  scale_x_discrete(drop=FALSE)+
   theme(text = element_text(size = 15),axis.text.x = element_text(angle=45,vjust=0.5))+guides(fill="none")
 
 png(file=str_c(imgwd,"plot_histo_taille_mup.png"),width=8,height=4,unit="in",res=200)
@@ -3101,7 +3120,7 @@ La distribution des taille des mulets observées au barrage de Poses est présen
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=0.4\textwidth]{p_horaires_mup}
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{p_horaires_mup}
 \caption{Horaires de migration des mulets en \Sexpr{annee}}
 \label{p_horaires_mup}
 \end{figure}
@@ -3113,7 +3132,366 @@ La distribution des taille des mulets observées au barrage de Poses est présen
 
 <<chunk Saumon atlantique ,echo=FALSE, eval=TRUE,results='hide'>>=
 
+data_sat_poses<-data_sat[[1]]
+data_sat_poses_annee<-subset(data_sat_poses@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+data_sat_pontoise<- data_sat[[3]]
+data_sat_pontoise_annee <- subset(data_sat_pontoise@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+data_sat_carandeau <- data_sat[[2]]
+data_sat_carandeau_annee <- subset(data_sat_carandeau@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+#### plot annuelle SAT ####
+
+data_sat_annuelle<-rbind(data_sat_poses_annee,data_sat_pontoise_annee,data_sat_carandeau_annee)
+data_sat_annuelle <- data_sat_annuelle %>% mutate(station = case_when(
+                            bjo_dis_identifiant %in% c(101,103,105)  ~ "Poses",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise")) %>%
+                        mutate(rive = case_when(
+                            bjo_dis_identifiant == 101  ~ "Poses rive gauche",
+                            bjo_dis_identifiant %in% c(103,105)  ~ "Poses rive droite",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise")) 
+
+data_sat_annuelle <- data_sat_annuelle %>% 
+                        group_by(bjo_jour,station,rive) %>% 
+                        summarise(bjo_valeur=sum(bjo_valeur))
+data_sat_annuelle <- data_sat_annuelle %>%
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>%
+                        mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau")))
+
+plot_annuel_sat<-ggplot(data_sat_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+                  facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
+                    scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
+                                                 "Poses rive droite" = col_Poses_RD,
+                                               "Pontoise" = col_Pontoise,
+                                               "Carandeau" =  col_Carandeau
+                                               ),
+                                    drop = FALSE,
+        breaks = c("Poses rive gauche", "Poses rive droite"),  # <-- Seuls ces deux apparaissent en légende
+        name   = "Rive (Poses)",
+        labels = c("Gauche", "Droite")
+    ) +
+                  theme_bw()+
+                  theme(text = element_text(size = 15))+#guides(fill="none")+ 
+  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+
+png(file=str_c(imgwd,"plot_annuel_sat.png"),width=8,height=4,unit="in",res=200)
+print(plot_annuel_sat)
+dev.off()
+
+#### plot effectifs historiques SAT ####
+
+data_sat_pluri<-rbind(data_sat_poses@data,data_sat_pontoise@data,data_sat_carandeau@data)
+data_sat_pluri<-subset(data_sat_pluri,bjo_labelquantite=="Effectif_total")
+data_sat_pluri  <- data_sat_historique <- data_sat_pluri %>% mutate(station = case_when(
+                            bjo_dis_identifiant %in% c(101,103,105)  ~ "Poses",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise"))
+
+data_sat_historique <- data_sat_historique %>% 
+                        mutate(rive = case_when(
+                            bjo_dis_identifiant == 101  ~ "Poses rive gauche",
+                            bjo_dis_identifiant %in% c(103,105)  ~ "Poses rive droite",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise")) %>%
+                        group_by(bjo_annee,station,rive) %>% 
+                        summarise(effectif=sum(bjo_valeur)) %>%
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau"))) %>%
+                        mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau"))) %>%
+  as.data.frame()
+
+plot_historique_sat<- ggplot() +
+    geom_bar(
+        data = data_sat_historique,
+        aes(x = bjo_annee, y = effectif, fill = rive),
+        stat = "identity"
+    ) +
+    facet_grid(rows = vars(station),scales="free") +
+                    scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
+                                                 "Poses rive droite" = col_Poses_RD,
+                                               "Pontoise" = col_Pontoise,
+                                               "Carandeau" =  col_Carandeau
+                                               ),
+                                    drop = FALSE,
+        breaks = c("Poses rive gauche", "Poses rive droite"),  # <-- Seuls ces deux apparaissent en légende
+        name   = "Rive (Poses)",
+        labels = c("Gauche", "Droite")
+    ) +
+    theme_bw() + xlab("") +
+    theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
+  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+png(file=str_c(imgwd,"plot_historique_sat.png"),width=8,height=4,unit="in",res=200)
+print(plot_historique_sat)
+dev.off()
+
+#### plot ridgeline SAT ####
+
+# data_sat_pluri <- summarise(group_by(data_sat_pluri,bjo_jour,station),effectif=sum(bjo_valeur)) %>%
+#                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau"))) %>%
+#   as.data.frame()
+# data_sat_pluri$effectif <- abs(data_sat_pluri$effectif)
+# 
+# data_long <- data_sat_pluri %>%  
+#   mutate(effectif = abs(effectif)) %>%
+#   uncount(effectif) %>%
+#   mutate(
+#     # extraire année ou identifiant de saison
+#     Saison = format(bjo_jour, "%Y")
+#   )
+# data_long$bjo_jour_annee <- as.Date(
+#   paste0(annee,"-", format(data_long$bjo_jour, "%m-%d"))
+# )
+# 
+# plot_ridgeline_sat<-ggplot(data_long,
+#        aes(x = bjo_jour_annee, y = Saison, fill = station)) +
+#   ggridges::geom_density_ridges(
+#     color = "black",
+#     alpha = 0.5,
+#     scale = 2,
+#     bandwidth = 7
+#   ) +
+#       scale_fill_manual(values = c("Poses" = col_Poses,
+#                                     "Pontoise" = col_Pontoise,
+#                                     "Carandeau" =  col_Carandeau
+#                                                ),
+#                                     drop = FALSE)+
+#   theme_bw() +
+#   labs(x = "", y = "annee")+
+#   theme(text = element_text(size = 15))#,legend.position = "bottom")
+# png(file=str_c(imgwd,"plot_ridgeline_sat.png"),width=8,height=4,unit="in",res=200)
+# print(plot_ridgeline_sat)
+# dev.off()
+
+#### plot seasonal SAT ####
+
+plot(data_sat_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
+p_seasonal_sat <- envir_stacomi$g_seasonal
+p_seasonal_sat <- p_seasonal_sat + theme(text = element_text(size = 15)) + xlab("")
+png(file=str_c(imgwd,"p_seasonal_sat.png"),width=8,height=6,unit="in",res=200)
+print(p_seasonal_sat)
+dev.off()
+
+#### plot taille SAT ####
+
+data_taille_sat<-subset(data_taille_video, tax_nom_latin == "Salmo salar")
+data_taille_sat <- data_taille_sat %>% 
+                          mutate(station = case_when(
+                            ope_dic_identifiant %in% c(101,103,105)  ~ "Poses",
+                            ope_dic_identifiant == 108  ~ "Pontoise")) %>%
+                          filter(station == "Poses") %>%
+                            mutate(classe_taille=cut(
+                            car_valeur_quantitatif,
+                            breaks=c(0,300,350,400,450,500,550,600,650,700,750,800,850,900,950,1000,2000),
+                            labels = c("<300","300-350","350-400","400-450","450-500","500-550","550-600",
+                            "600-650","650-700","700-750","750-800","800-850","850-900","900-950","950-1000",">1000"),
+                            include.lowest = TRUE,
+                            right = FALSE ))%>%
+                             mutate(age_de_mer=cut(
+                            car_valeur_quantitatif,
+                            breaks=c(0,670,900,2000),
+                            labels = c("1 HM","2 HM","3 HM"),
+                            include.lowest = TRUE,
+                            right = FALSE ))%>% 
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>% 
+                        mutate(age_de_mer=factor(age_de_mer,levels=c("3 HM","2 HM","1 HM")))
+
+freq_taille_histo <- data_taille_sat %>% 
+                      filter(annee != selected_annee) %>%
+                      group_by(station,classe_taille) %>%
+  summarise(effectif = n(), .groups = "drop")
+
+freq_taille_histo <- freq_taille_histo %>%
+  group_by(station) %>%
+  mutate(frequence = effectif / sum(effectif)*100) %>%
+  ungroup() %>% mutate(annee=2000)
+
+freq_taille_annee <- data_taille_sat %>% 
+                      filter(annee == selected_annee) %>%
+                      group_by(station,classe_taille) %>%
+  summarise(effectif = n(), .groups = "drop")
+
+freq_taille_annee <- freq_taille_annee %>%
+  group_by(station) %>%
+  mutate(frequence = effectif / sum(effectif)*100) %>%
+  ungroup() %>% mutate(annee = selected_annee)
+
+freq_taille_sat<-rbind(freq_taille_histo,freq_taille_annee)
+
+plot_histo_taille_sat<-ggplot()+
+  geom_bar(data=subset(freq_taille_sat,annee!=selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",alpha=0.5)+
+  geom_bar(data=subset(freq_taille_sat,annee==selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",width=0.5)+
+ # facet_grid(rows=vars(station))+
+      scale_fill_manual(values = c("Poses" = col_Poses,
+                                    "Pontoise" = col_Pontoise,
+                                    "Carandeau" =  col_Carandeau
+                                               ),
+                                    drop = FALSE)+
+  theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
+  scale_x_discrete(drop=FALSE)+
+  theme(text = element_text(size = 15),
+        axis.text.x = element_text(angle=45,vjust=0.5),
+        plot.margin = margin(0.2, 0.2, 0, 0, "cm"))+
+  guides(fill="none")
+
+png(file=str_c(imgwd,"plot_histo_taille_sat.png"),width=5,height=4,unit="in",res=200)
+print(plot_histo_taille_sat)
+dev.off()
+
+#### Plot age de mer SAT #####
+
+recap_stade_sat <- data_taille_sat %>% 
+  group_by(annee, tax_nom_latin, age_de_mer) %>% 
+  summarise(sum = sum(lot_effectif), .groups = "drop") %>% 
+  group_by(annee) %>% 
+  mutate(percentage = sum / sum(sum)) %>% 
+  ungroup() %>% 
+  as.data.frame()
+recap_stade_sat$annee<-lubridate::year(as.Date(recap_stade_sat$annee, format = "%Y"))
+recap_stade_sat$annee <- factor(recap_stade_sat$annee)
+
+plot_age_de_mer_sat<-ggplot(
+    recap_stade_sat,
+    aes(x = annee, y = percentage, fill = age_de_mer)
+) +
+    geom_col(width = 1, color = "black", linewidth = 0.3) +
+    scale_x_discrete(expand = c(0, 0)) +
+    scale_y_continuous(labels = scales::percent,limits = c(0,1)) +
+    scale_fill_viridis_d(name = "Âge de mer") +
+    theme_bw() +
+    ylab("Proportion (%)") +
+    xlab("")+
+  theme(axis.text=element_text(size=15),
+        axis.text.x = element_text(angle=45,vjust=0.5,size=12),
+        legend.position = "bottom",
+        plot.margin = margin(0.2, 0.2, 0, 0, "cm"))  # top, right, bottom, left
+
+png(file=str_c(imgwd,"plot_age_mer_sat.png"),width=5,height=4,unit="in",res=200)
+print(plot_age_de_mer_sat)
+dev.off()
+
+##### plot horaires passages SAT ####
+
+horaires_sat<-fn_horaires(espece = "Salmo salar")
+
+mig <- horaires_sat
+mig <- mig %>% mutate(time=strftime(ope_date_debut, format="%H:%M:%S",tz="UTC"),
+		date=as.Date(ope_date_debut))
+mig <-	fun_date_extraction(
+		data=mig,
+		nom_coldt="ope_date_debut", annee = FALSE, mois = TRUE,
+		quinzaine = FALSE, semaine = FALSE, semaine_std = FALSE,
+		jour_an = FALSE, jour_mois = TRUE, heure = TRUE)
+
+#
+hhh <- mig %>% group_by(heure,station) %>% summarize(N=sum(abs(lot_effectif)))
+touteslesheures<-c("00","01","02","03","04","05", "06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23")
+hhh <- hhh %>%
+  ungroup() %>%  
+  complete(
+    heure=touteslesheures,
+    station = c("Poses", "Pontoise", "Carandeau"),
+    fill = list(N = 0)
+  ) %>% 
+  mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>%
+  group_by(station) %>%
+  filter(sum(N, na.rm = TRUE) > 0) %>%
+  ungroup() %>%
+  droplevels()
+hhh$heure<-as.character(hhh$heure)
+hhh<-arrange(hhh,heure) %>% as.data.frame()
+#
+
+p_horaires_sat <- ggplot() + 
+    geom_col(
+        data = hhh,
+        aes(x = heure, y = N, fill = station),
+        width = 0.6
+    ) +
+    ylab("Nombre") +
+    scale_y_continuous(breaks = integer_breaks()) +
+    coord_polar(start = pi/2) +
+    theme_bw() +
+    facet_grid(rows = vars(station), scales = "free_y") +
+      scale_fill_manual(values = c("Poses" = col_Poses,
+                                    "Pontoise" = col_Pontoise,
+                                    "Carandeau" =  col_Carandeau
+                                               ),
+                                    drop = FALSE)+
+  xlab("") + ylab("Nombre d'observations par heure") + guides(fill="none") +
+    theme(
+        text = element_text(size = 15),
+        axis.text.x  = element_text(angle = -90, vjust = 0.5, hjust = 1),
+        axis.title.y = element_text(angle = -90),
+        axis.text.y = element_text(angle = -45,hjust=0.5)
+    )
+taille <- fn_taille_export(hhh)
+png(
+  file = str_c(imgwd, "p_horaires_sat.png"),
+  width = taille$width,
+  height = taille$height,
+  units = "in",
+  res = 200
+)		
+	print(p_horaires_sat)
+  dev.off()
+
+img <- image_read(file.path(imgwd, "p_horaires_sat.png")) %>%
+  image_rotate(-90) %>%          # rotation 90°
+  image_trim(fuzz = 1) %>%            # coupe les blancs (ajuste fuzz si besoin)
+  image_border(color = "white", geometry = "15x15") 
+  
+image_write(img, path = file.path(imgwd, "p_horaires_sat.png"))
+
 @
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.3\textwidth]{SAT}
+\caption{Saumon observé en vidéocompage en rive droite du barrage de Poses - Amfreville-sous-les-Monts.}
+\label{SAT}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\textwidth]{plot_annuel_sat}
+\caption{Effectifs journaliers des saumons atlantiques observés sur les STACOMI du bassin Seine en \Sexpr{annee}.}
+\label{plot_annuel_sat}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_historique_sat}
+\caption{Evolution interannuelle des effectifs des saumons atlantiques en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle.}
+\label{plot_historique_sat}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\textwidth]{p_seasonal_sat}
+\caption{Rythmes migratoires des saumons atlantiques au barrage de Poses - Amfreville-sous-les-Monts.}
+\label{p_seasonal_sat}
+\end{figure}
+
+\begin{figure}[htpb]
+    \centering
+      \begin{subfigure}[b]{0.48\textwidth}
+          \includegraphics[width=\textwidth]{plot_histo_taille_sat}
+      \end{subfigure}
+      \begin{subfigure}[b]{0.48\textwidth}
+          \includegraphics[width=\textwidth]{plot_age_mer_sat}
+      \end{subfigure}
+  \caption{Représentation des tailles et des âges de mer des saumons atlantiques observées en vidéocompage au barrage de Poses - Amfreville-sous-les-Monts. Les tailles historiques sont présentées en transparence sur le graphique de gauche.}
+  \label{Taille_SAT}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{p_horaires_sat}
+\caption{Horaires de migration des saumons atlantiques en \Sexpr{annee}}
+\label{p_horaires_sat}
+\end{figure}
 
 \clearpage
 
@@ -3121,7 +3499,367 @@ La distribution des taille des mulets observées au barrage de Poses est présen
 
 <<chunk Truite de mer,echo=FALSE, eval=TRUE,results='hide'>>=
 
+data_trm_poses<-data_trm[[1]]
+data_trm_poses_annee<-subset(data_trm_poses@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+data_trm_pontoise<- data_trm[[3]]
+data_trm_pontoise_annee <- subset(data_trm_pontoise@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+data_trm_carandeau <- data_trm[[2]]
+data_trm_carandeau_annee <- subset(data_trm_carandeau@data,bjo_annee==annee & bjo_labelquantite=="Effectif_total")
+
+#### plot annuelle TRM ####
+
+data_trm_annuelle<-rbind(data_trm_poses_annee,data_trm_pontoise_annee,data_trm_carandeau_annee)
+data_trm_annuelle <- data_trm_annuelle %>% mutate(station = case_when(
+                            bjo_dis_identifiant %in% c(101,103,105)  ~ "Poses",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise")) %>%
+                        mutate(rive = case_when(
+                            bjo_dis_identifiant == 101  ~ "Poses rive gauche",
+                            bjo_dis_identifiant %in% c(103,105)  ~ "Poses rive droite",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise")) 
+
+data_trm_annuelle <- data_trm_annuelle %>% 
+                        group_by(bjo_jour,station,rive) %>% 
+                        summarise(bjo_valeur=sum(bjo_valeur))
+data_trm_annuelle <- data_trm_annuelle %>%
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>%
+                        mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau")))
+
+plot_annuel_trm<-ggplot(data_trm_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+                  facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
+                    scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
+                                                 "Poses rive droite" = col_Poses_RD,
+                                               "Pontoise" = col_Pontoise,
+                                               "Carandeau" =  col_Carandeau
+                                               ),
+                                    drop = FALSE,
+        breaks = c("Poses rive gauche", "Poses rive droite"),  # <-- Seuls ces deux apparaissent en légende
+        name   = "Rive (Poses)",
+        labels = c("Gauche", "Droite")
+    ) +
+                  theme_bw()+
+                  theme(text = element_text(size = 15))+#guides(fill="none")+ 
+  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+
+png(file=str_c(imgwd,"plot_annuel_trm.png"),width=8,height=4,unit="in",res=200)
+print(plot_annuel_trm)
+dev.off()
+
+#### plot effectifs historiques TRM ####
+
+data_trm_pluri<-rbind(data_trm_poses@data,data_trm_pontoise@data,data_trm_carandeau@data)
+data_trm_pluri<-subset(data_trm_pluri,bjo_labelquantite=="Effectif_total")
+data_trm_pluri  <- data_trm_historique <- data_trm_pluri %>% mutate(station = case_when(
+                            bjo_dis_identifiant %in% c(101,103,105)  ~ "Poses",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise"))
+
+data_trm_historique <- data_trm_historique %>% 
+                        mutate(rive = case_when(
+                            bjo_dis_identifiant == 101  ~ "Poses rive gauche",
+                            bjo_dis_identifiant %in% c(103,105)  ~ "Poses rive droite",
+                            bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
+                            bjo_dis_identifiant == 108  ~ "Pontoise")) %>%
+                        group_by(bjo_annee,station,rive) %>% 
+                        summarise(effectif=sum(bjo_valeur)) %>%
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau"))) %>%
+                        mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau"))) %>%
+  as.data.frame()
+
+plot_historique_trm<- ggplot() +
+    geom_bar(
+        data = data_trm_historique,
+        aes(x = bjo_annee, y = effectif, fill = rive),
+        stat = "identity"
+    ) +
+    facet_grid(rows = vars(station),scales="free") +
+                    scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
+                                                 "Poses rive droite" = col_Poses_RD,
+                                               "Pontoise" = col_Pontoise,
+                                               "Carandeau" =  col_Carandeau
+                                               ),
+                                    drop = FALSE,
+        breaks = c("Poses rive gauche", "Poses rive droite"),  # <-- Seuls ces deux apparaissent en légende
+        name   = "Rive (Poses)",
+        labels = c("Gauche", "Droite")
+    ) +
+    theme_bw() + xlab("") +
+    theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
+  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+png(file=str_c(imgwd,"plot_historique_trm.png"),width=8,height=4,unit="in",res=200)
+print(plot_historique_trm)
+dev.off()
+
+#### plot ridgeline TRM ####
+
+# data_trm_pluri <- summarise(group_by(data_trm_pluri,bjo_jour,station),effectif=sum(bjo_valeur)) %>%
+#                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau"))) %>%
+#   as.data.frame()
+# data_trm_pluri$effectif <- abs(data_trm_pluri$effectif)
+# 
+# data_long <- data_trm_pluri %>%
+#   mutate(effectif = abs(effectif)) %>%
+#   uncount(effectif) %>%
+#   mutate(
+#     # extraire année ou identifiant de saison
+#     Saison = format(bjo_jour, "%Y")
+#   )
+# data_long$bjo_jour_annee <- as.Date(
+#   paste0(annee,"-", format(data_long$bjo_jour, "%m-%d"))
+# )
+# 
+# plot_ridgeline_trm<-ggplot(data_long,
+#        aes(x = bjo_jour_annee, y = Saison, fill = station)) +
+#   ggridges::geom_density_ridges(
+#     color = "black",
+#     alpha = 0.5,
+#     scale = 2,
+#     bandwidth = 7
+#   ) +
+#       scale_fill_manual(values = c("Poses" = col_Poses,
+#                                     "Pontoise" = col_Pontoise,
+#                                     "Carandeau" =  col_Carandeau
+#                                                ),
+#                                     drop = FALSE)+
+#   theme_bw() +
+#   labs(x = "", y = "annee")+
+#   theme(text = element_text(size = 15))#,legend.position = "bottom")
+# png(file=str_c(imgwd,"plot_ridgeline_trm.png"),width=8,height=4,unit="in",res=200)
+# print(plot_ridgeline_trm)
+# dev.off()
+
+#### plot seasonal TRM ####
+
+plot(data_trm_poses,plot.type="seasonal",timesplit="semaine",year_choice=annee,silent=TRUE)
+p_seasonal_trm <- envir_stacomi$g_seasonal
+p_seasonal_trm <- p_seasonal_trm + theme(text = element_text(size = 15)) + xlab("")
+png(file=str_c(imgwd,"p_seasonal_trm.png"),width=8,height=6,unit="in",res=200)
+print(p_seasonal_trm)
+dev.off()
+
+#### plot taille TRM ####
+
+data_taille_trm<-subset(data_taille_video, tax_nom_latin == "Salmo trutta trutta")
+data_taille_trm <- data_taille_trm %>% 
+                          mutate(station = case_when(
+                            ope_dic_identifiant %in% c(101,103,105)  ~ "Poses",
+                            ope_dic_identifiant == 108  ~ "Pontoise")) %>%
+                          filter(station == "Poses") %>%
+                            mutate(classe_taille=cut(
+                            car_valeur_quantitatif,
+                            breaks=c(0,300,350,400,450,500,550,600,650,700,750,800,2000),
+                            labels = c("<300","300-350","350-400","400-450","450-500","500-550","550-600",
+                            "600-650","650-700","700-750","750-800",">800"),
+                            include.lowest = TRUE,
+                            right = FALSE ))%>%
+                             mutate(age_de_mer=cut(
+                            car_valeur_quantitatif,
+                            breaks=c(0,430,590,2000),
+                            labels = c("Finnock","1 HM",">=2 HM"),
+                            include.lowest = TRUE,
+                            right = FALSE ))%>% 
+                        mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>% 
+                        mutate(age_de_mer=factor(age_de_mer,levels=c(">=2 HM","1 HM","Finnock")))
+
+freq_taille_histo <- data_taille_trm %>% 
+                      filter(annee != selected_annee) %>%
+                      group_by(station,classe_taille) %>%
+  summarise(effectif = n(), .groups = "drop")
+
+freq_taille_histo <- freq_taille_histo %>%
+  group_by(station) %>%
+  mutate(frequence = effectif / sum(effectif)*100) %>%
+  ungroup() %>% mutate(annee=2000)
+
+freq_taille_annee <- data_taille_trm %>% 
+                      filter(annee == selected_annee) %>%
+                      group_by(station,classe_taille) %>%
+  summarise(effectif = n(), .groups = "drop")
+
+freq_taille_annee <- freq_taille_annee %>%
+  group_by(station) %>%
+  mutate(frequence = effectif / sum(effectif)*100) %>%
+  ungroup() %>% mutate(annee = selected_annee)
+
+freq_taille_trm<-rbind(freq_taille_histo,freq_taille_annee)
+
+plot_histo_taille_trm<-ggplot()+
+  geom_bar(data=subset(freq_taille_trm,annee!=selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",alpha=0.5)+
+  geom_bar(data=subset(freq_taille_trm,annee==selected_annee),aes(x=classe_taille,y=frequence,fill=station),stat="identity",width=0.5)+
+ # facet_grid(rows=vars(station))+
+      scale_fill_manual(values = c("Poses" = col_Poses,
+                                    "Pontoise" = col_Pontoise,
+                                    "Carandeau" =  col_Carandeau
+                                               ),
+                                    drop = FALSE)+
+  theme_bw()+ xlab("Classe de taille (mm)")+ylab("Proportion des classe de taille (%)")+
+  scale_x_discrete(drop=FALSE)+
+  theme(text = element_text(size = 15),
+        axis.text.x = element_text(angle=45,vjust=0.5),
+        plot.margin = margin(0.2, 0.2, 0, 0, "cm"))+
+  guides(fill="none")
+
+png(file=str_c(imgwd,"plot_histo_taille_trm.png"),width=5,height=4,unit="in",res=200)
+print(plot_histo_taille_trm)
+dev.off()
+
+#### Plot age de mer TRM #####
+
+recap_stade_trm <- data_taille_trm %>% 
+  group_by(annee, tax_nom_latin, age_de_mer) %>% 
+  summarise(sum = sum(lot_effectif), .groups = "drop") %>% 
+  group_by(annee) %>% 
+  mutate(percentage = sum / sum(sum)) %>% 
+  ungroup() %>% 
+  as.data.frame()
+recap_stade_trm$annee<-lubridate::year(as.Date(recap_stade_trm$annee, format = "%Y"))
+recap_stade_trm$annee <- factor(recap_stade_trm$annee)
+
+plot_age_de_mer_trm<-ggplot(
+    recap_stade_trm,
+    aes(x = annee, y = percentage, fill = age_de_mer)
+) +
+    geom_col(width = 1, color = "black", linewidth = 0.3) +
+    scale_x_discrete(expand = c(0, 0)) +
+    scale_y_continuous(labels = scales::percent,limits = c(0,1)) +
+    scale_fill_viridis_d(name = "Âge de mer") +
+    theme_bw() +
+    ylab("Proportion (%)") +
+    xlab("")+
+  theme(axis.text=element_text(size=15),
+        axis.text.x = element_text(angle=45,vjust=0.5,size=12),
+        legend.position = "bottom",
+        plot.margin = margin(0.2, 0.2, 0, 0, "cm"))  # top, right, bottom, left
+
+png(file=str_c(imgwd,"plot_age_mer_trm.png"),width=5,height=4,unit="in",res=200)
+print(plot_age_de_mer_trm)
+dev.off()
+
+##### plot horaires passages TRM ####
+
+horaires_trm<-fn_horaires(espece = "Salmo trutta trutta")
+
+mig <- horaires_trm
+mig <- mig %>% mutate(time=strftime(ope_date_debut, format="%H:%M:%S",tz="UTC"),
+		date=as.Date(ope_date_debut))
+mig <-	fun_date_extraction(
+		data=mig,
+		nom_coldt="ope_date_debut", annee = FALSE, mois = TRUE,
+		quinzaine = FALSE, semaine = FALSE, semaine_std = FALSE,
+		jour_an = FALSE, jour_mois = TRUE, heure = TRUE)
+
+#
+hhh <- mig %>% group_by(heure,station) %>% summarize(N=sum(abs(lot_effectif)))
+touteslesheures<-c("00","01","02","03","04","05", "06","07","08","09","10","11","12","13","14","15","16","17","18","19","20","21","22","23")
+hhh <- hhh %>%
+  ungroup() %>%  
+  complete(
+    heure=touteslesheures,
+    station = c("Poses", "Pontoise", "Carandeau"),
+    fill = list(N = 0)
+  ) %>% 
+  mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>%
+  group_by(station) %>%
+  filter(sum(N, na.rm = TRUE) > 0) %>%
+  ungroup() %>%
+  droplevels()
+hhh$heure<-as.character(hhh$heure)
+hhh<-arrange(hhh,heure) %>% as.data.frame()
+#
+
+p_horaires_trm <- ggplot() + 
+    geom_col(
+        data = hhh,
+        aes(x = heure, y = N, fill = station),
+        width = 0.6
+    ) +
+    ylab("Nombre") +
+    scale_y_continuous(breaks = integer_breaks()) +
+    coord_polar(start = pi/2) +
+    theme_bw() +
+    facet_grid(rows = vars(station), scales = "free_y") +
+      scale_fill_manual(values = c("Poses" = col_Poses,
+                                    "Pontoise" = col_Pontoise,
+                                    "Carandeau" =  col_Carandeau
+                                               ),
+                                    drop = FALSE)+
+  xlab("") + ylab("Nombre d'observations par heure") + guides(fill="none") +
+    theme(
+        text = element_text(size = 15),
+        axis.text.x  = element_text(angle = -90, vjust = 0.5, hjust = 1),
+        axis.title.y = element_text(angle = -90),
+        axis.text.y = element_text(angle = -45,hjust=0.5)
+    )
+taille <- fn_taille_export(hhh)
+png(
+  file = str_c(imgwd, "p_horaires_trm.png"),
+  width = taille$width,
+  height = taille$height,
+  units = "in",
+  res = 200
+)		
+	print(p_horaires_trm)
+  dev.off()
+
+img <- image_read(file.path(imgwd, "p_horaires_trm.png")) %>%
+  image_rotate(-90) %>%          # rotation 90°
+  image_trim(fuzz = 1) %>%            # coupe les blancs (ajuste fuzz si besoin)
+  image_border(color = "white", geometry = "15x15") 
+  
+image_write(img, path = file.path(imgwd, "p_horaires_trm.png"))
+
 @
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.3\textwidth]{TRM}
+\caption{Truite de mer observé en vidéocompage en rive droite du barrage de Poses - Amfreville-sous-les-Monts.}
+\label{TRM}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\textwidth]{plot_annuel_trm}
+\caption{Effectifs journaliers des truites de mer observés sur les STACOMI du bassin Seine en \Sexpr{annee}.}
+\label{plot_annuel_trm}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth]{plot_historique_trm}
+\caption{Evolution interannuelle des effectifs des truites de mer en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle.}
+\label{plot_historique_trm}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\textwidth]{p_seasonal_trm}
+\caption{Rythmes migratoires des truites de mer au barrage de Poses - Amfreville-sous-les-Monts.}
+\label{p_seasonal_trm}
+\end{figure}
+
+\begin{figure}[htpb]
+    \centering
+      \begin{subfigure}[b]{0.48\textwidth}
+          \includegraphics[width=\textwidth]{plot_histo_taille_trm}
+      \end{subfigure}
+      \begin{subfigure}[b]{0.48\textwidth}
+          \includegraphics[width=\textwidth]{plot_age_mer_trm}
+      \end{subfigure}
+  \caption{Représentation des tailles et des âges de mer des truites de mer observées en vidéocompage au barrage de Poses - Amfreville-sous-les-Monts. Les tailles historiques sont présentées en transparence sur le graphique de gauche.}
+  \label{Taille_trm}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{p_horaires_trm}
+\caption{Horaires de migration des truites de mer en \Sexpr{annee}}
+\label{p_horaires_trm}
+\end{figure}
+
 
 \clearpage
 
@@ -3129,7 +3867,30 @@ La distribution des taille des mulets observées au barrage de Poses est présen
 
 <<chunk bil esp,echo=FALSE, eval=TRUE,results='hide'>>=
 
+tax_ref<-data.frame(tax_nom_latin=c("Abramis brama", "Alburnus alburnus", "Aspius aspius", "Barbus barbus", "Carassius",
+                                    "Chondrostoma nasus", "Ctenopharyngodon idellus", "Cyprinidae", "Cyprinus carpio",
+                                    "Esox lucius", "Leuciscus cephalus", "Leuciscus idus", "Perca fluviatilis", "Rutilus rutilus",
+                                    "Salmo trutta fario", "Sander lucioperca", "Scardinius erythrophthalmus", "Silurus glanis",
+                                    "Tinca tinca", "Chelon ramada", "Acipenser", "Eriocheir sinensis", "Lepomis gibbosus",
+                                    "Neogobius melanostomus", "Ameiurus melas", "Gobio gobio", "Lampetra", "Leuciscus leuciscus",
+                                    "Oncorhynchus mykiss","Taxon inconnu"),
+                      tax_commun=c("Brème commune","Ablette","Aspe","Barbeau fluviatile","Carassin commun","Hotu","Amour blanc","Cyprinidé indéterminé",
+                                   "Carpe commune","Brochet","Chevesne","Ide mélanote","Perche","Gardon","Truite fario","Sandre","Rotengle","Silure glane","Tanche","Mulet porc","Esturgeon exotique indéterminé","Crabe chinois","Perche soleil","Gobie à tâches noires","Poisson-chat","Goujon",
+                                   "Lamproie indéterminée","Vandoise","Truite arc-en-ciel","Taxon indéterminé"))
+
+bilesp_poses_vc_rd$station <- "Poses"
+bilesp_poses_vc_rg$station <- "Poses"
+bilesp_pontoise$station <- "Pontoise"
+bilesp_carandeau$station <- "Carandeau"
+bilesp_tot<-rbind(bilesp_poses_vc_rd,bilesp_poses_vc_rg,bilesp_pontoise,bilesp_carandeau)
+bilesp_tot <- bilesp_tot %>% filter(!tax_nom_latin %in% c
+                                    ("Alosa","Anguilla anguilla","Lampetra fluviatilis",
+                                     "Petromyzon marinus","Chelon ramada","Salmo salar","Salmo trutta trutta")) %>%
+                              group_by(tax_nom_latin,station) %>%
+                              summarise(effectifs=sum(abs(lot_effectif)))
+bilesp_tot<-merge(tax_ref,bilesp_tot,by="tax_nom_latin",all.y = TRUE)
 @
+
 
 \clearpage
 
