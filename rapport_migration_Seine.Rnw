@@ -193,6 +193,29 @@ fn_taille_export <- function(data){
   if (n == 1) return(list(width = 5, height = 3.5))
 }
 
+####### Fonction bilan  DC et DF ######
+
+fndc<-function(le_dc=c(104)){
+  r_dc=new("report_dc")
+  r_dc<-choice_c(r_dc,
+                 le_dc,
+                 horodatedebut=str_c(annee,"-01-01"),
+                 horodatefin=str_c(annee,"-12-31"),
+                 silent=TRUE)
+  Sys.setenv(TZ='GMT')
+  report_dc<-connect(r_dc)
+}
+
+fndf<-function(le_df=c(1)){
+  r_df=new("report_df")
+  r_df<-choice_c(r_df,
+                 le_df,
+                 horodatedebut=str_c(annee,"-01-01"),
+                 horodatefin=str_c(annee,"-12-31"),
+                 silent=TRUE)
+  Sys.setenv(TZ='GMT')
+  report_df<-connect(r_df)
+}
 @
 
 <<chunk debit,echo=FALSE,eval=TRUE,results='hide'>>=
@@ -374,7 +397,6 @@ dev.off()
 @
 
 <<chunk fonction r_mig_inter et connexion base,echo=FALSE,eval=TRUE,results='hide'>>=
-
 
 if(exists("con")){
 
@@ -606,12 +628,40 @@ bilesp_pontoise<-bilesp@data
 }
 @
 
+<<chunk data bilan DC et DF,echo=FALSE,eval=TRUE,results='hide'>>=
+
+if(exists("con")){
+
+  #### bilans des DC
+
+dc_101<-fndc(le_dc=c(101))
+dc_102<-fndc(le_dc=c(102))
+dc_103<-fndc(le_dc=c(103))
+dc_104<-fndc(le_dc=c(104))
+dc_105<-fndc(le_dc=c(105))
+dc_106<-fndc(le_dc=c(106))
+dc_107<-fndc(le_dc=c(107))
+dc_108<-fndc(le_dc=c(108))
+
+
+#### bilans des DF
+df_1<-fndf(le_df=c(1))
+df_2<-fndf(le_df=c(2))
+df_3<-fndf(le_df=c(3))
+df_4<-fndf(le_df=c(4))
+df_5<-fndf(le_df=c(5))
+df_6<-fndf(le_df=c(6))
+}
+@
+
 <<chunk saving or loading data,echo=FALSE,eval=TRUE,results='hide'>>=
 
 if(exists("con")){
 # sauvegarde data
 save(data_alose,data_ang,data_lpf,data_lpm,data_mup,data_sat,data_trm,data_taille_video,
      data_taille_ang_piege,bilesp_poses_vc_rg,bilesp_poses_vc_rd,bilesp_carandeau,bilesp_pontoise,
+     dc_101,dc_102,dc_103,dc_104,dc_105,dc_106,dc_107,dc_108,
+     df_1,df_2,df_3,df_4,df_5,df_6,
      file=str_c(datawd,"data_report_",annee,".Rdata"))
 
 }else{
@@ -815,7 +865,7 @@ resume<-resume[c("Alose","Anguille en montaison (passe piège)","Anguille jaune 
           "Lamproie marine","Mulet porc","Saumon atlantique","Truite de mer"),]
 
 resume2 <- resume %>%
-  tibble::rownames_to_column(var = "Espèce")%>%
+  tibble::rownames_to_column(var = "Espèce") %>%
   mutate(across(where(is.numeric), ~replace_na(.x, 0)))
 
 resume2[2:6]<-format(resume2[2:6],big.mark = " ")
@@ -823,7 +873,8 @@ resume2[2:6]<-format(resume2[2:6],big.mark = " ")
 resume2 <- resume2 %>%
   mutate(
     Pontoise  = if_else(`Espèce` == "Anguille en montaison (passe piège)", "", Pontoise),
-    Carandeau = if_else(`Espèce` == "Anguille en montaison (passe piège)", "", Carandeau)) 
+    Carandeau = if_else(`Espèce` == "Anguille en montaison (passe piège)", "", Carandeau)) %>%
+   rename(Espèces = Espèce)
 
 resume_latex <- resume2 %>%
   kbl(
@@ -3888,15 +3939,67 @@ bilesp_tot <- bilesp_tot %>% filter(!tax_nom_latin %in% c
                                      "Petromyzon marinus","Chelon ramada","Salmo salar","Salmo trutta trutta")) %>%
                               group_by(tax_nom_latin,station) %>%
                               summarise(effectifs=sum(abs(lot_effectif)))
-bilesp_tot<-merge(tax_ref,bilesp_tot,by="tax_nom_latin",all.y = TRUE)
+bilesp_tot<-right_join(tax_ref,bilesp_tot,by="tax_nom_latin") 
+bilesp_poses <- bilesp_tot %>% filter(station == "Poses") %>%
+                select(-tax_nom_latin) %>%
+                rename(Poses=effectifs) %>%
+                select(-station)
+
+bilesp_pontoise <- bilesp_tot %>% filter(station == "Pontoise") %>%
+                select(-tax_nom_latin) %>%
+                rename(Pontoise=effectifs) %>%
+                select(-station)
+
+bilesp_carandeau <- bilesp_tot %>% filter(station == "Carandeau") %>%
+                select(-tax_nom_latin) %>%
+                rename(Carandeau=effectifs) %>%
+                select(-station)
+
+bilesp_all <- bilesp_poses %>% full_join(bilesp_pontoise, by="tax_commun") %>%
+              full_join(bilesp_carandeau, by="tax_commun") %>% 
+              rename(Espèces = tax_commun) %>%
+              arrange(Espèces) 
+
+bilesp_all_fmt <- bilesp_all %>%
+  mutate(across(c(Poses, Pontoise, Carandeau),
+                ~ ifelse(is.na(.), NA_character_,
+                         scales::number(., big_mark = " ", decimal_mark = ","))))
+options(knitr.kable.NA = "")
+
+bilesp_all_latex <- bilesp_all_fmt %>%
+  kbl(
+    caption = "Effectifs annuels des poissons holobiotiques comptabilisés sur les stations de contrôle des migrations du bassin de la Seine",
+    booktabs = TRUE,
+    format = "latex",
+    escape = FALSE,
+    linesep = "",
+    label = "recap_holobiotique",
+    na = ""
+  )  %>%
+  kable_styling(
+    latex_options = c("striped","hold_position", "scale_down"),
+    position = "center",
+    full_width = FALSE)   %>%
+  column_spec(1, width = "4cm") %>%
+  column_spec(2, latex_column_spec = "C{2cm}", bold = F) %>%
+  column_spec(3, latex_column_spec = "C{2cm}", bold = F) %>%
+  column_spec(4, latex_column_spec = "C{2cm}", bold = F)
+
+writeLines(bilesp_all_latex, str_c(tabwd, "recap_holobiotique.tex"))
+
 @
 
+Hormis les grands poissons migrateurs, d'autres espèces empruntent les passe à poissons du barrage de Poses, de Pontoise et de Carandeau (Tableau \ref{recap_holobiotique}). L'effectif correspond au nombre de fois où l'espèce a été observée par les caméras, que ça soit en montaison ou en dévalaison. Un effectif égal à zéro correspond à un poisson observé mais dont le sens de migration n'a pas été déterminé (apparition ou disparition du poisson au cours de la séquence vidéo).
+
+\input{table/recap_holobiotique.tex}
 
 \clearpage
 
 \section{Suivi et fonctionnement technique des dispositifs de contrôle}
 
 <<chunk fonctionnement dispositifs,echo=FALSE, eval=TRUE,results='hide'>>=
+
+
 
 @
 
