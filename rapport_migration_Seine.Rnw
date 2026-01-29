@@ -3989,7 +3989,7 @@ writeLines(bilesp_all_latex, str_c(tabwd, "recap_holobiotique.tex"))
 
 @
 
-Hormis les grands poissons migrateurs, d'autres espèces empruntent les passe à poissons du barrage de Poses, de Pontoise et de Carandeau (Tableau \ref{recap_holobiotique}). L'effectif correspond au nombre de fois où l'espèce a été observée par les caméras, que ça soit en montaison ou en dévalaison. Un effectif égal à zéro correspond à un poisson observé mais dont le sens de migration n'a pas été déterminé (apparition ou disparition du poisson au cours de la séquence vidéo).
+Hormis les grands poissons migrateurs, d'autres espèces empruntent les passe à poissons du barrage de Poses, de Pontoise et de Carandeau (Tableau \ref{tab:recap_holobiotique}). L'effectif correspond au nombre de fois où l'espèce a été observée par les caméras, que ça soit en montaison ou en dévalaison. Un effectif égal à zéro correspond à un poisson observé mais dont le sens de migration n'a pas été déterminé (apparition ou disparition du poisson au cours de la séquence vidéo).
 
 \input{table/recap_holobiotique.tex}
 
