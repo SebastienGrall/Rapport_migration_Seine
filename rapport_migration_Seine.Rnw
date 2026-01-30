@@ -216,6 +216,75 @@ fndf<-function(le_df=c(1)){
   Sys.setenv(TZ='GMT')
   report_df<-connect(r_df)
 }
+
+etat_levels <- c(
+  "Fonc normal",
+  "Arr ponctuel",
+  "Arr maint",
+  "Dysfonc",
+  "Non connu"
+)
+
+etat_colors <- c(
+  "Fonc normal" = "#1B9E77",
+  "Arr ponctuel" = "#E6AB02",
+  "Arr maint"   = "#9E0142",
+  "Dysfonc"     = "#E41A1C",
+  "Non connu"   = "#999999"
+)
+
+fn_plot_dc <- function(le_dc=c(dc_101)){
+  plot(le_dc,plot.type=1)
+  get_data_dc <- envir_stacomi$periodeDC
+  get_data_dc$libelle <- factor(get_data_dc$libelle,levels = etat_levels)
+  
+  get_data_dc <- get_data_dc %>%
+  complete(
+    mois,
+    libelle = etat_levels,
+    fill = list(sumduree = 0)
+  )
+  
+ get_plot_dc <- ggplot(get_data_dc, aes(x = mois, y = sumduree, fill = libelle)) +
+    geom_col() +
+    scale_fill_manual(
+      values = etat_colors,
+      limits = etat_levels,
+      drop = FALSE,
+      name = "état"
+    ) +
+    theme_bw() +
+    ylab("durée (heures)") +
+   theme(text = element_text(size = 15))
+  return(get_plot_dc)
+}
+
+fn_plot_df <- function(le_df=c(df_1)){
+  plot(le_df,plot.type=1)
+  get_data_df <- envir_stacomi$periodeDF
+  
+  get_data_df$libelle <- factor(get_data_df$libelle,levels = etat_levels)
+  
+  get_data_df <- get_data_df %>%
+  complete(
+    mois,
+    libelle = etat_levels,
+    fill = list(sumduree = 0)
+  )
+  
+  get_plot_df <- ggplot(get_data_df, aes(x = mois, y = sumduree, fill = libelle)) +
+    geom_col() +
+    scale_fill_manual(
+      values = etat_colors,
+      limits = etat_levels,
+      drop = FALSE,
+      name = "état"
+    ) +
+    theme_bw() +
+    ylab("durée (heures)") +
+   theme(text = element_text(size = 15))
+  return(get_plot_df)
+}
 @
 
 <<chunk debit,echo=FALSE,eval=TRUE,results='hide'>>=
@@ -3999,9 +4068,43 @@ Hormis les grands poissons migrateurs, d'autres espèces empruntent les passe à
 
 <<chunk fonctionnement dispositifs,echo=FALSE, eval=TRUE,results='hide'>>=
 
+plot_DC_101<-fn_plot_dc(dc_101)
+plot_DC_102<-fn_plot_dc(dc_102)
+plot_DC_103<-fn_plot_dc(dc_103)
+plot_DC_104<-fn_plot_dc(dc_104)
+plot_DC_105<-fn_plot_dc(dc_105)
+plot_DC_106<-fn_plot_dc(dc_106)
+plot_DC_107<-fn_plot_dc(dc_107)
+plot_DC_108<-fn_plot_dc(dc_108)
 
+plot_DF_1<-fn_plot_df(df_1)
+plot_DF_2<-fn_plot_df(df_2)
+plot_DF_3<-fn_plot_df(df_3)
+plot_DF_4<-fn_plot_df(df_4)
+plot_DF_5<-fn_plot_df(df_5)
+plot_DF_6<-fn_plot_df(df_6)
+
+final_plot <- plot_DF_1+plot_DC_101+plot_spacer()+
+plot_DF_2+plot_DC_102+plot_spacer()+
+plot_DF_3+plot_DC_103+plot_DC_105+
+plot_DF_4+plot_DC_104+plot_spacer()+
+plot_DF_5+plot_DC_106+plot_DC_107+
+plot_DF_6+plot_DC_108+plot_spacer()+
+  plot_layout(ncol=3,axes = "collect",guides = "collect") &
+  theme(legend.position = "bottom")
+
+png(file=str_c(imgwd,"plot_DC_DF.png"),width=10,height=14,unit="in",res=200)
+print(final_plot)
+dev.off()
 
 @
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{plot_DC_DF}
+\caption{Blablabla.}
+\label{plot_DC_DF}
+\end{figure}
 
 \clearpage
 
