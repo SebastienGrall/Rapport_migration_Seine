@@ -255,7 +255,7 @@ fn_plot_dc <- function(le_dc=c(dc_101)){
     ) +
     theme_bw() +
     ylab("durée (heures)") +
-   theme(text = element_text(size = 15))
+   theme(text = element_text(size = 15), plot.title = element_text(size=10))
   return(get_plot_dc)
 }
 
@@ -282,7 +282,7 @@ fn_plot_df <- function(le_df=c(df_1)){
     ) +
     theme_bw() +
     ylab("durée (heures)") +
-   theme(text = element_text(size = 15))
+   theme(text = element_text(size = 15), plot.title = element_text(size=10))
   return(get_plot_df)
 }
 @
@@ -4068,42 +4068,77 @@ Hormis les grands poissons migrateurs, d'autres espèces empruntent les passe à
 
 <<chunk fonctionnement dispositifs,echo=FALSE, eval=TRUE,results='hide'>>=
 
-plot_DC_101<-fn_plot_dc(dc_101)
-plot_DC_102<-fn_plot_dc(dc_102)
-plot_DC_103<-fn_plot_dc(dc_103)
-plot_DC_104<-fn_plot_dc(dc_104)
-plot_DC_105<-fn_plot_dc(dc_105)
-plot_DC_106<-fn_plot_dc(dc_106)
-plot_DC_107<-fn_plot_dc(dc_107)
-plot_DC_108<-fn_plot_dc(dc_108)
+plot_DC_101<-fn_plot_dc(dc_101) + ggtitle("Poste de vidéo-comptage")
+plot_DC_102<-fn_plot_dc(dc_102) + ggtitle("Piège anguille")
+plot_DC_103<-fn_plot_dc(dc_103) + ggtitle("Poste 1 de vidéo-comptage")
+plot_DC_104<-fn_plot_dc(dc_104) + ggtitle("Piège anguille")
+plot_DC_105<-fn_plot_dc(dc_105) + ggtitle("Poste 2 de vidéo-comptage")
+plot_DC_106<-fn_plot_dc(dc_106) + ggtitle("Poste 1 de vidéo-comptage")
+plot_DC_107<-fn_plot_dc(dc_107) + ggtitle("Poste 2 de vidéo-comptage")
+plot_DC_108<-fn_plot_dc(dc_108) + ggtitle("Poste de vidéo-comptage")
 
-plot_DF_1<-fn_plot_df(df_1)
-plot_DF_2<-fn_plot_df(df_2)
-plot_DF_3<-fn_plot_df(df_3)
-plot_DF_4<-fn_plot_df(df_4)
-plot_DF_5<-fn_plot_df(df_5)
-plot_DF_6<-fn_plot_df(df_6)
+plot_DF_1<-fn_plot_df(df_1) + ggtitle("Passe à poissons")
+plot_DF_2<-fn_plot_df(df_2) + ggtitle("Passe à anguilles")
+plot_DF_3<-fn_plot_df(df_3) + ggtitle("Passe à poissons")
+plot_DF_4<-fn_plot_df(df_4) + ggtitle("Passe à anguilles")
+plot_DF_5<-fn_plot_df(df_5) + ggtitle("Passe à poissons")
+plot_DF_6<-fn_plot_df(df_6) + ggtitle("Passe à poissons")
 
-final_plot <- plot_DF_1+plot_DC_101+plot_spacer()+
-plot_DF_2+plot_DC_102+plot_spacer()+
-plot_DF_3+plot_DC_103+plot_DC_105+
-plot_DF_4+plot_DC_104+plot_spacer()+
-plot_DF_5+plot_DC_106+plot_DC_107+
-plot_DF_6+plot_DC_108+plot_spacer()+
-  plot_layout(ncol=3,axes = "collect",guides = "collect") &
-  theme(legend.position = "bottom")
+plot_DC_DF_Poses_RG <- plot_DF_1+plot_DC_101+plot_spacer()+
+plot_DF_2+plot_DC_102+guide_area()+
+  plot_layout(ncol=3,axes = "collect",guides = "collect")
+png(file=str_c(imgwd,"plot_DC_DF_Poses_RG.png"),width=12,height=6,unit="in",res=200)
+print(plot_DC_DF_Poses_RG)
+dev.off()
 
-png(file=str_c(imgwd,"plot_DC_DF.png"),width=10,height=14,unit="in",res=200)
-print(final_plot)
+plot_DC_DF_Poses_RD <- plot_DF_3+plot_DC_103+plot_DC_105+
+plot_DF_4+plot_DC_104+guide_area()+
+  plot_layout(ncol=3,axes = "collect",guides = "collect")
+png(file=str_c(imgwd,"plot_DC_DF_Poses_RD.png"),width=12,height=6,unit="in",res=200)
+print(plot_DC_DF_Poses_RD)
+dev.off()
+
+plot_DC_DF_Carandeau <- plot_DF_5+plot_DC_106+plot_DC_107+guide_area()+
+   plot_layout(ncol=4,widths = c(2,2,2, 1),axes = "collect",guides = "collect") #&
+  # theme(legend.position = "bottom")
+png(file=str_c(imgwd,"plot_DC_DF_Carandeau.png"),width=12,height=4,unit="in",res=200)
+print(plot_DC_DF_Carandeau)
+dev.off()
+
+plot_DC_DF_Pontoise <- plot_DF_6+plot_DC_108+guide_area()+
+  plot_layout(ncol=3,axes = "collect",guides = "collect")
+png(file=str_c(imgwd,"plot_DC_DF_Pontoise.png"),width=12,height=4,unit="in",res=200)
+print(plot_DC_DF_Pontoise)
 dev.off()
 
 @
 
 \begin{figure}[htpb]
 \centering
-\includegraphics[width=\textwidth,height=0.7\textheight,keepaspectratio]{plot_DC_DF}
-\caption{Blablabla.}
-\label{plot_DC_DF}
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{plot_DC_DF_Poses_RG}
+\caption{Fonctionnement des dispositifs de franchissement et de comptage en rive gauche de Poses.}
+\label{plot_DC_DF_Poses_RG}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=\textwidth,height=0.3\textheight,keepaspectratio]{plot_DC_DF_Poses_RD}
+\caption{Fonctionnement des dispositifs de franchissement et de comptage en rive droite de Poses.}
+\label{plot_DC_DF_Poses_RD}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\textwidth,height=0.3\textheight,keepaspectratio]{plot_DC_DF_Carandeau}
+\caption{Fonctionnement des dispositifs de franchissement et de comptage à Carandeau.}
+\label{plot_DC_DF_Carandeau}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\textwidth,height=0.3\textheight,keepaspectratio]{plot_DC_DF_Pontoise}
+\caption{Fonctionnement des dispositifs de franchissement et de comptage à Pontoise.}
+\label{plot_DC_DF_Pontoise}
 \end{figure}
 
 \clearpage
