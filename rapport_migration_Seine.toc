@@ -1,0 +1,33 @@
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{1}{section.1}%
+\contentsline {section}{\numberline {2}Contexte de l'étude}{3}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Le bassin de la Seine}{3}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Situation des poissons grands migrateurs sur la Seine}{4}{subsection.2.2}%
+\contentsline {section}{\numberline {3}Matériels et Méthodes}{6}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Site de Poses - Amfreville-sous-les-Monts}{6}{subsection.3.1}%
+\contentsline {subsubsection}{\numberline {3.1.1}Barrage}{6}{subsubsection.3.1.1}%
+\contentsline {subsubsection}{\numberline {3.1.2}Dispositif de franchissement}{6}{subsubsection.3.1.2}%
+\contentsline {subsection}{\numberline {3.2}Site de Pontoise}{8}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Barrage}{8}{subsubsection.3.2.1}%
+\contentsline {subsubsection}{\numberline {3.2.2}Dispositif de franchissement}{8}{subsubsection.3.2.2}%
+\contentsline {subsection}{\numberline {3.3}Site de Carandeau}{9}{subsection.3.3}%
+\contentsline {subsubsection}{\numberline {3.3.1}Barrage}{9}{subsubsection.3.3.1}%
+\contentsline {subsubsection}{\numberline {3.3.2}Dispositif de franchissement}{9}{subsubsection.3.3.2}%
+\contentsline {subsection}{\numberline {3.4}Contrôle des migrations}{10}{subsection.3.4}%
+\contentsline {subsubsection}{\numberline {3.4.1}Dispositif de vidéo-comptage}{10}{subsubsection.3.4.1}%
+\contentsline {subsubsection}{\numberline {3.4.2}Dépouillement des données de vidéo-comptage}{12}{subsubsection.3.4.2}%
+\contentsline {subsubsection}{\numberline {3.4.3}Dispositif de piégeage des anguilles}{13}{subsubsection.3.4.3}%
+\contentsline {subsubsection}{\numberline {3.4.4}Protocole de suivi}{13}{subsubsection.3.4.4}%
+\contentsline {section}{\numberline {4}Suivi des migrations 2024}{16}{section.4}%
+\contentsline {subsection}{\numberline {4.1}Alose (\textit {Alosa alosa})}{16}{subsection.4.1}%
+\contentsline {subsection}{\numberline {4.2}Anguille européenne (\textit {Anguilla anguilla})}{21}{subsection.4.2}%
+\contentsline {subsubsection}{\numberline {4.2.1}Anguille en montaison (passe piège) au barrage de Poses}{21}{subsubsection.4.2.1}%
+\contentsline {subsubsection}{\numberline {4.2.2}Anguille jaune (vidéo-comptage)}{26}{subsubsection.4.2.2}%
+\contentsline {subsubsection}{\numberline {4.2.3}Anguille argentée (vidéo-comptage)}{29}{subsubsection.4.2.3}%
+\contentsline {subsection}{\numberline {4.3}Lamproie fluviatile (\textit {Lampetra fluviatilis})}{32}{subsection.4.3}%
+\contentsline {subsection}{\numberline {4.4}Lamproie marine (\textit {Petromyzon marinus})}{36}{subsection.4.4}%
+\contentsline {subsection}{\numberline {4.5}Mulet porc (\textit {Chelon ramada})}{40}{subsection.4.5}%
+\contentsline {subsection}{\numberline {4.6}Saumon atlantique (\textit {Salmo salar})}{44}{subsection.4.6}%
+\contentsline {subsection}{\numberline {4.7}Truite de mer (\textit {Salmo trutta trutta})}{47}{subsection.4.7}%
+\contentsline {subsection}{\numberline {4.8}Autres espèces}{50}{subsection.4.8}%
+\contentsline {section}{\numberline {5}Suivi et fonctionnement technique des dispositifs de contrôle}{51}{section.5}%
