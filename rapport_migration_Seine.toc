@@ -17,7 +17,7 @@
 \contentsline {subsubsection}{\numberline {3.4.1}Dispositif de vidéo-comptage}{10}{subsubsection.3.4.1}%
 \contentsline {subsubsection}{\numberline {3.4.2}Dépouillement des données de vidéo-comptage}{12}{subsubsection.3.4.2}%
 \contentsline {subsubsection}{\numberline {3.4.3}Dispositif de piégeage des anguilles}{13}{subsubsection.3.4.3}%
-\contentsline {subsubsection}{\numberline {3.4.4}Protocole de suivi}{13}{subsubsection.3.4.4}%
+\contentsline {subsubsection}{\numberline {3.4.4}Protocole de suivi}{14}{subsubsection.3.4.4}%
 \contentsline {section}{\numberline {4}Suivi des migrations 2024}{16}{section.4}%
 \contentsline {subsection}{\numberline {4.1}Alose (\textit {Alosa alosa})}{16}{subsection.4.1}%
 \contentsline {subsection}{\numberline {4.2}Anguille européenne (\textit {Anguilla anguilla})}{21}{subsection.4.2}%
