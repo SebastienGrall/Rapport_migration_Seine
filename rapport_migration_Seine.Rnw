@@ -136,6 +136,7 @@ require(hubeau)
 require(patchwork)
 require(magick)
 require(colorspace)
+require(glue)
 
 #repertoire contenant les images
 imgwd<-str_c(getwd(),"/image/")
@@ -284,6 +285,49 @@ fn_plot_df <- function(le_df=c(df_1)){
     ylab("durée (heures)") +
    theme(text = element_text(size = 15), plot.title = element_text(size=10))
   return(get_plot_df)
+}
+
+phrase_obs_pc <- function(data,
+                          stations_ref = c("Pontoise", "Carandeau")) {
+
+  resum <- data %>%
+    mutate(station = as.character(station)) %>%
+    filter(station %in% stations_ref) %>%
+    group_by(station) %>%
+    summarise(n = sum(bjo_valeur, na.rm = TRUE), .groups = "drop") %>%
+    right_join(tibble(station = stations_ref), by = "station") %>%
+    mutate(n = tidyr::replace_na(n, 0L)) %>%
+    mutate(station = factor(station, levels = stations_ref)) %>%
+    arrange(station)
+
+  n1 <- resum$n[1]
+  n2 <- resum$n[2]
+  st1 <- resum$station[1]
+  st2 <- resum$station[2]
+
+  # -------- Cas spécial : aucun aux deux --------
+  if (n1 == 0 && n2 == 0) {
+    return("Cette année, aucun individu n’a été observé à Pontoise et à Carandeau.")
+  }
+
+  # -------- Construction du segment 1 --------
+  seg1 <- dplyr::case_when(
+    n1 == 0 ~ "aucun individu n’a été observé",
+    n1 == 1 ~ "1 individu a été observé",
+    TRUE    ~ paste0(n1, " individus ont été observés")
+  )
+  seg1 <- paste(seg1, "à", st1)
+
+  # -------- Construction du segment 2 (forme courte) --------
+  seg2 <- dplyr::case_when(
+    n2 == 0 ~ "aucun à",
+    n2 == 1 ~ "1 à",
+    TRUE    ~ paste0(n2, " à")
+  )
+  seg2 <- paste(seg2, st2)
+
+  # -------- Phrase finale --------
+  glue::glue("Cette année, {seg1} et {seg2}.")
 }
 @
 
@@ -2986,6 +3030,9 @@ img <- image_read(file.path(imgwd, "p_horaires_lpm.png")) %>%
   image_border(color = "white", geometry = "15x15") 
   
 image_write(img, path = file.path(imgwd, "p_horaires_lpm.png"))
+
+phrase_effectif_pont_carand_lpm<-phrase_obs_pc(data_lpm_annuelle)
+
 @
 
 La lamproie marine, autre espèce de la famille des Petromyzontidae, est également recensée sur le bassin de la Seine (Figure \ref{LPM}). Plusieurs sites de reproduction naturelle sont identifiés à ce jour sur des affluents estuariens: l'Eure, l'Andelle et la Risle. Des frayères ont également été observées sur l'Epte, seul affluent de la Seine à l'amont de l'estuaire mais de façon plus ponctuelle.
@@ -2998,6 +3045,7 @@ La lamproie marine, autre espèce de la famille des Petromyzontidae, est égalem
 \end{figure}
 
 La détection de certains individus peut s’avérer difficile, notamment en raison des nombreux allers‑retours effectués devant les caméras, et de conditions de visualisation parfois médiocres en rive gauche (couloir large, bullage important). Malgré cela, l'effectif total de \Sexpr{sum(data_lpm_poses_annee$bjo_valeur)} lamproies marines sur l'ensemble du barrage est bien représentatif des effectifs réels ayant réellement franchi l'estuaire (Figure \ref{plot_annuel_lpm}).
+\Sexpr{phrase_effectif_pont_carand_lpm}
 
 \begin{figure}[htpb]
 \centering
@@ -3651,9 +3699,11 @@ img <- image_read(file.path(imgwd, "p_horaires_sat.png")) %>%
   
 image_write(img, path = file.path(imgwd, "p_horaires_sat.png"))
 
+phrase_effectif_pont_carand_sat<-phrase_obs_pc(data_sat_annuelle)
+
 @
 
-Le premier saumon a franchi la passe à poissons le \Sexpr{format.Date(min(data_sat_poses_annee$bjo_jour),"%d %B")} et le dernier passage a été observé le \Sexpr{format.Date(max(data_sat_poses_annee$bjo_jour),"%d %B")} (Figure \ref{SAT}). Au total, \Sexpr{sum(data_sat_poses_annee$bjo_valeur)} individus ont été recensés en montaison à Poses (Figure \ref{plot_annuel_sat}).
+Le premier saumon a franchi la passe à poissons le \Sexpr{format.Date(min(data_sat_poses_annee$bjo_jour),"%d %B")} et le dernier passage a été observé le \Sexpr{format.Date(max(data_sat_poses_annee$bjo_jour),"%d %B")} (Figure \ref{SAT}). Au total, \Sexpr{sum(data_sat_poses_annee$bjo_valeur)} individus ont été recensés en montaison à Poses (Figure \ref{plot_annuel_sat}). \Sexpr{phrase_effectif_pont_carand_sat}
 
 \begin{figure}[htpb]
 \centering
@@ -4039,9 +4089,11 @@ img <- image_read(file.path(imgwd, "p_horaires_trm.png")) %>%
   
 image_write(img, path = file.path(imgwd, "p_horaires_trm.png"))
 
+phrase_effectif_pont_carand_trm<-phrase_obs_pc(data_trm_annuelle)
+
 @
 
-Le premier individu s'est présenté le \Sexpr{format.Date(min(data_trm_poses_annee$bjo_jour),"%d %B")} au barrage de Poses, afin d'amorcer la première vague de migration dite \og printanière \fg{} (Figure \ref{TRM}). En effet, au même titre que le saumon, l'activité migratoire de la truite de mer s'articule autour de deux vagues de migration au printemps et à l'automne. Au total, \Sexpr{sum(data_trm_poses_annee$bjo_valeur)} individus ont été recensés en montaison à Poses (Figure \ref{plot_annuel_trm}).
+Le premier individu s'est présenté le \Sexpr{format.Date(min(data_trm_poses_annee$bjo_jour),"%d %B")} au barrage de Poses, afin d'amorcer la première vague de migration dite \og printanière \fg{} (Figure \ref{TRM}). En effet, au même titre que le saumon, l'activité migratoire de la truite de mer s'articule autour de deux vagues de migration au printemps et à l'automne. Au total, \Sexpr{sum(data_trm_poses_annee$bjo_valeur)} individus ont été recensés en montaison à Poses (Figure \ref{plot_annuel_trm}). \Sexpr{phrase_effectif_pont_carand_trm}
 
 \begin{figure}[htpb]
 \centering
@@ -4301,7 +4353,7 @@ packages R : \vspace{1mm}
 StacomiR \citep{legrand_stacomir_2019}, hubeau\\
 \LaTeX \ :Hmisc, kableExtra, xtable\\
 graphiques : ggplot2, patchwork, magick\\
-traitements : stringr, lubridate, reshape2, dplyr, plyr, tidyr, questionr\\
+traitements : stringr, lubridate, reshape2, dplyr, plyr, tidyr, questionr, glue\\
 ------------------------\\
 Dernière compilation : le \today \\
  \Sexpr{sanitize(print(version["version.string"]))}\\
