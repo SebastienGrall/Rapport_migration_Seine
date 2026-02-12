@@ -1016,7 +1016,7 @@ writeLines(resume_latex, str_c(tabwd, "recap.tex"))
 @
 
 
-Les poissons migrateurs entrant dans l'estuaire de la Seine sont contrôlés au niveau du barrage de Poses, marquant la fin de l'estuaire et qui est équipé de dispositifs de comptage sur les deux rives. Les individus s'engageant sur l'axe Oise peuvent ensuite être observés au barrage de Pontoise, équipé d'un système de vidéocomptage depuis 2023. Un dernier point de contrôle est positionné sur l'Aisne, au barrage de Carandeau.
+Les poissons migrateurs entrant dans l'estuaire de la Seine sont contrôlés au niveau du barrage de Poses, marquant la fin de l'estuaire. Cette ouvrage est équipé de dispositifs de franchissement piscicole et de comptage sur les deux rives. Les individus s'engageant sur l'axe Oise peuvent ensuite être observés au barrage de Pontoise, équipé d'un système de vidéocomptage depuis 2023. Un dernier point de contrôle est positionné sur l'Aisne, au barrage de Carandeau.
 Les effectifs comptabilisés en \Sexpr{annee} sur l'ensemble de ces stations sont présentés dans le tableau \ref{tab:recap}. Les valeurs négatives correspondent à des individus dévalants enregistrés lors du vidéocomptage.
 
 
@@ -1065,15 +1065,15 @@ seule l'Anguille européenne subsistait encore à cette période \citep{boet_mul
 
 Néanmoins, les efforts entrepris dans le traitement des effluents anthropiques, notamment ceux de l'agglomération parisienne, durant ces deux dernières décennies ont contribué à la franche amélioration de la qualité de l'eau de la Seine \citep{billen_programme_1999,belliard_return_2009,
 gousailles_limpact_2009}.
-Cette amélioration s’est rapidement traduite par le retour des poissons amphihalins, incluant plusieurs espèces estuariennes telles que l’Éperlan (\textit{Osmerus eperlanus}), le Flet commun (\textit{Platichthys flesus}) et le Mulet porc (\textit{Chelon ramada}). Par ailleurs, un retour progressif des six espèces constituant la communauté historique des grands poissons migrateurs de la Seine est également observé \citep{rochard_identification_2009, duhamel_peuplement_2004} : le Saumon atlantique (\textit{Salmo salar}), la Truite de mer (\textit{Salmo trutta trutta}), la Grande alose (\textit{Alosa alosa}), l'Alose feinte (\textit{Alosa fallax}), la Lamproie marine (\textit{Petromyzon marinus}) et la Lamproie fluviatile (\textit{Lampetra fluviatilis}), qui recolonisent progressivement l'aval du bassin.
-L'Anguille européenne (\textit{Anguilla anguilla}) est, quant à elle, présente également sur les zones amonts bien que ses effectifs soient relictuels.
+Cette amélioration s’est rapidement traduite par le retour des poissons amphihalins, incluant plusieurs espèces estuariennes telles que \href{https://seinormigr.fr/fr/petits-migrateurs-d332}{l’Éperlan} (\textit{Osmerus eperlanus}), \href{https://seinormigr.fr/fr/petits-migrateurs-d332}{le Flet commun} (\textit{Platichthys flesus}) et \href{https://seinormigr.fr/fr/petits-migrateurs-d332}{le Mulet porc} (\textit{Chelon ramada}). Par ailleurs, un retour progressif des six espèces constituant la communauté historique des grands poissons migrateurs de la Seine est également observé \citep{rochard_identification_2009, duhamel_peuplement_2004} : \href{https://seinormigr.fr/fr/saumon-atlantique-7036}{le Saumon atlantique} (\textit{Salmo salar}), \href{https://seinormigr.fr/fr/truite-de-mer-e71d}{la Truite de mer} (\textit{Salmo trutta trutta}), \href{https://seinormigr.fr/fr/grande-alose-0d85}{la Grande alose} (\textit{Alosa alosa}), \href{https://seinormigr.fr/fr/l-alose-feinte-9df4}{l'Alose feinte} (\textit{Alosa fallax}), \href{https://seinormigr.fr/fr/lamproie-marine-a53d}{la Lamproie marine} (\textit{Petromyzon marinus}) et \href{https://seinormigr.fr/fr/lamproie-fluviatile-faf3}{la Lamproie fluviatile} (\textit{Lampetra fluviatilis}), qui recolonisent progressivement l'aval du bassin.
+\href{https://seinormigr.fr/fr/l-anguille-europeenne-6bca}{L'Anguille européenne} (\textit{Anguilla anguilla}) est, quant à elle, présente également sur les zones amonts bien que ses effectifs soient relictuels.
 
 Dès lors, il s'est rapidement avéré primordial de suivre l'évolution de la recolonisation de ces espèces, notamment à travers des dispositifs pérennes de contrôle des migrations. Pour ce faire, il s'agit de s'intéresser aux éléments clés du cycle biologique liés au domaine continental chaque année. Cela implique
 le recensement des zones de frayères et du succès reproducteur; mais avant tout, le dénombrement des géniteurs en montaison en différents points du bassin versant en réponse notamment aux travaux de restauration de la continuité écologique sur le fleuve.
 
 C'est au barrage de Poses dans l'Eure (27), le premier ouvrage sur l'axe Seine, que se sont organisés les premiers éléments de ce suivi, avec la mise en place d'une Station de Contrôle des Migrations (STACOMI) sur la passe à poissons existante en rive gauche depuis octobre 2007. Afin d'assurer la mise en conformité de l'ouvrage dans le cadre du plan de gestion Anguille, le dispositif a été complété en 2013 par l'ajout d'une passe piège à anguilles sur cette même rive.
 
-En raison de la longueur de l'ouvrage (470 m) et de la localisation sur le bassin, la rive droite a également été aménagée par les Voies Navigables de France (VNF). Ce nouveau dispositif, mis en service à l'automne 2017 est constitué d'une passe à bassins équipée d'une chambre de vidéocomptage ainsi qu'une passe piège à anguilles. À la même période une autre installation a vu le jour sur le barrage de Carandeau, première ouvrage sur l'Aisne. Depuis avril 2023, le barrage de Pontoise, premier ouvrage sur l'Oise a également été équipé d'un système de vidéocomptage.
+En raison de la longueur de l'ouvrage (470 m) et de la localisation sur le bassin, la rive droite a également été aménagée par les Voies Navigables de France (VNF). Ce nouveau dispositif, mis en service à l'automne 2017 est constitué d'une passe à bassins équipée d'une chambre de vidéocomptage ainsi que d'une passe piège à anguilles. À la même période, une autre installation a vu le jour sur le barrage de Carandeau, première ouvrage sur l'Aisne. Depuis avril 2023, le barrage de Pontoise, premier ouvrage sur l'Oise a également été équipé d'un système de vidéocomptage.
 
 Ce rapport présente les résultats des suivis réalisés sur les dispositifs de comptage des trois ouvrages cités précédemment, et les associe aux données historiques afin de proposer une vision globale de l'activité migratoire sur le bassin de la Seine.
 
@@ -1104,7 +1104,7 @@ En fond d'estuaire, le débit moyen du fleuve fluctue, ces dernières années, a
 
 En tête de bassin, le réseau hydrographique de la Seine traverse quelques massifs cristallins et métamorphiques, notamment dans les Ardennes et le Morvan, avant de s’étendre majoritairement dans la cuvette sédimentaire du bassin parisien. Ce réseau présente les deux extrêmes en matière de densité de cours d'eau, avec des zones fortement densifiées sur les massifs anciens comme dans la Nièvre (58), et des zones crayeuses au drainage peu dense, mais avec un écoulement soutenu et régulier comme en Haute-Normandie.
 
-La Seine est depuis plusieurs siècles une voie importante de communication et de commerce. Elle présente aujourd'hui 1 427 km de voies navigables, dont 496 km adaptées aux grands gabarits. HAROPA Port est le gestionnaire des ports fluvio-maritimes de la Seine. Il est le premier établissement portuaire de France et le quatrième port nord-européen en tonnage.
+La Seine est depuis plusieurs siècles une voie importante de communication et de commerce. Elle présente aujourd'hui 1 427 km de voies navigables, dont 496 km adaptés aux grands gabarits. HAROPA Port est le gestionnaire des ports fluvio-maritimes de la Seine. Il est le premier établissement portuaire de France et le quatrième port nord-européen en tonnage.
 
 Plus de 18 millions de personnes habitent sur le bassin versant, correspondant à 27 \% de la population nationale, dont 65 \% (11,8 millions) dans la seule région d’Île-de-France. La Seine est considérée comme le fleuve le plus anthropisé de France. Les impacts physico-chimiques (détergents, pesticides...) et morphologiques (artificialisation des berges, chenalisation, édification d'ouvrages...) se ressentent aujourd'hui dans tous les compartiments de l'écosystème, de la source à l'estuaire, jusqu'en baie de Seine.
 
@@ -1168,14 +1168,14 @@ La passe est de type passe à bassins à fentes verticales, elle est composée d
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{DF_rg_poses}
-\caption{Dispositif de franchissement en rive gauche du barrage de Poses - Amfreville-sous-les-Monts. A gauche, passe à bassins à fentes verticales; à droite, rampes de types \og tapis-brosse \fg{}}
+\caption{Dispositif de franchissement en rive gauche du barrage de Poses - Amfreville-sous-les-Monts. A gauche, passe à bassins à fentes verticales; à droite, rampes de type \og tapis-brosse \fg{}}
 \label{DF_rg_poses}
 \end{figure}
 
 \begin{figure}
 \centering
 \includegraphics[width=0.8\textwidth]{DF_rd_poses}
-\caption{Dispositif de franchissement en rive droite du barrage de Poses - Amfreville-sous-les-Monts. A gauche, passe à bassins à fentes verticales; à droite, rampes de types \og tapis-brosse \fg{}}
+\caption{Dispositif de franchissement en rive droite du barrage de Poses - Amfreville-sous-les-Monts. A gauche, passe à bassins à fentes verticales; à droite, rampes de type \og tapis-brosse \fg{}}
 \label{DF_rd_poses}
 \end{figure}
 
@@ -1240,7 +1240,7 @@ La passe à poissons est située sur la rive droite et est constituée de 8 bass
 Sur le barrage de Poses, les premières années de suivi de la passe à poissons en rive gauche ont été réalisées par le syndicat mixte de la Base de Plein Air et de Loisirs de Léry-Poses. En 2014, à la suite de l’installation de la rampe à anguilles et de son piège, l’association Seine-Normandie Migrateurs a pris en charge son exploitation, puis celle des systèmes de comptage situés en rive droite du barrage lors de leur mise en service en 2018. Depuis 2021, Seinormigr assure également la gestion et le suivi des comptages de la passe à poissons en rive gauche de Poses.
 
 En 2023, l’association a fait installer un système de comptage sur le barrage de Pontoise, dont elle assure la gestion.
-Le contrôle des migrations au niveau de la passe à poissons de l’ouvrage de Carandeau est, quant à lui, assuré par la Fédération de l’Oise pour la pêche et la protection du milieu aquatique.
+Le contrôle des migrations au niveau de la passe à poissons de l’ouvrage de Carandeau est, quant à lui, assuré par la Fédération de l’Oise pour la pêche et la protection du milieu aquatique depuis 2018.
 
 \subsubsection{Dispositif de vidéocomptage}
 
@@ -1686,7 +1686,7 @@ La migration génésique des aloses feintes se cantonne généralement aux parti
   \label{ALA}
 \end{figure}
 
-En \Sexpr{annee}, \Sexpr{gras(sum(data_alose_poses_annee$bjo_valeur))} aloses ont franchi l'estuaire de la Seine à Poses. Une fraction de cette cohorte a ensuite atteint les stations de contrôle amont : \Sexpr{gras(sum(data_alose_pontoise_annee$bjo_valeur))} individus ont été observés à Pontoise et \Sexpr{gras(sum(data_alose_carandeau_annee$bjo_valeur))} à Carandeau (Figure \ref{p_annuel_ala}). Les aloses présentent une capacité notable à emprunter les écluses de navigation, phénomène accentué lorsque les dispositifs de franchissement sont peu adaptés à l’espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. Ainsi, les comptages vidéo sous‑estiment le nombre réel d’aloses franchissant l’ouvrage. Cela se vérifie certaines années, lorsque les premières détections sont enregistrées en amont avant d’apparaître à Poses, comme en 2023 (Figure \ref{plot_ridgeline_ala}).  
+En \Sexpr{annee}, \Sexpr{sum(data_alose_poses_annee$bjo_valeur)} aloses ont franchi l'estuaire de la Seine à Poses. Une fraction de cette cohorte a ensuite atteint les stations de contrôle amont : \Sexpr{sum(data_alose_pontoise_annee$bjo_valeur)} individus ont été observés à Pontoise et \Sexpr{sum(data_alose_carandeau_annee$bjo_valeur)} à Carandeau (Figure \ref{p_annuel_ala}). Les aloses présentent une capacité notable à emprunter les écluses de navigation, phénomène accentué lorsque les dispositifs de franchissement sont peu adaptés à l’espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. Ainsi, les comptages vidéo sous‑estiment le nombre réel d’aloses franchissant l’ouvrage. Cela se vérifie certaines années, lorsque les premières détections sont enregistrées en amont avant d’apparaître à Poses, comme en 2023 (Figure \ref{plot_ridgeline_ala}).  
 
 \begin{figure}[htpb]
 \centering
@@ -1706,12 +1706,12 @@ Historiquement, les effectifs d'aloses en montaison se caractérisent par une fo
 
 Depuis l'ouverture de la passe à poissons en rive droite de Poses, les résultats montrent une préférence des aloses pour ce dispositif, dont la conception plus récente et mieux adaptée à l’espèce favorise le franchissement, malgré l’absence de débit d’attrait. En effet, les hauteurs inter-bassins de la passe à poissons en rive gauche, ainsi que les zones de turbulence créées par les remous de l'usine hydroélectrique, leur sont défavorables \citep{bagliniere_les_2000}.
 
-La proportion des individus contrôlés à la sortie de l'estuaire qu'on retrouve à Carandeau est en moyenne de \Sexpr{format(round(ratio_carandeau_ala,1),dec=",")} \%.
+La proportion des individus contrôlés à la sortie de l'estuaire et retrouvés à Carandeau est en moyenne de \Sexpr{format(round(ratio_carandeau_ala,1),dec=",")} \%.
 
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{plot_historique_ala}
-\caption{Evolution interannuelle des effectifs d'alose en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle.}
+\caption{Evolution interannuelle des effectifs d'alose en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle. Début des comptages : Poses rive gauche en 2008, Poses rive droite et Carandeau en 2018, Pontoise en 2023.}
 \label{plot_historique_ala}
 \end{figure}
 
@@ -1736,7 +1736,7 @@ L'activité horaire est majoritairement diurne avec une intensité accrue en fin
       \begin{subfigure}[b]{0.48\textwidth}
           \includegraphics[width=\textwidth]{plot_box_violin_plot_ala}
       \end{subfigure}
-  \caption{Représentation des tailles des Aloses observées en vidéocomptage au barrage de Poses - Amfreville-sous-les-Monts et au barrage de Pontoise. Les tailles historiques sont présentées en transparence sur les deux graphiques.}
+  \caption{Représentation des tailles des aloses observées en vidéocomptage au barrage de Poses - Amfreville-sous-les-Monts et au barrage de Pontoise. Les tailles historiques sont présentées en transparence sur les deux graphiques.}
   \label{Taille_ALA}
 \end{figure}
 
@@ -1963,7 +1963,7 @@ dev.off()
 
 @
 
-Au niveau du barrage de Poses - Amfreville-sous-les-Monts, les anguilles peuvent être contrôlées au niveau des quatre dispositifs de comptage, les deux passes pièges spécifiques à anguille et les deux systèmes de vidéocomptage. Sur les ouvrages de Pontoise et Carandeau, il n'existe pas de rampes spécifiques. Les anguilles y sont donc dénombrées uniquement grâce au vidéocomptage.
+Au niveau du barrage de Poses - Amfreville-sous-les-Monts, les anguilles peuvent être contrôlées au niveau des quatre dispositifs de comptage, les deux passes pièges spécifiques à anguille et les deux systèmes de vidéocomptage. Sur les ouvrages de Pontoise et Carandeau, il n'existe pas de rampe spécifique. Les anguilles y sont donc dénombrées uniquement grâce au vidéocomptage.
 
 Les anguilles empruntant les rampes à brosses sont des jeunes individus (entre 0 et quelques années en eau douce) et en phase de migration active.
 
@@ -2045,7 +2045,7 @@ L'évolution saisonnière des tailles suit le schéma habituel qui voit la taill
       \begin{subfigure}[b]{0.48\textwidth}
           \includegraphics[width=\textwidth]{plot_box_violin_plot_angmont}
       \end{subfigure}
-  \caption{Représentation des tailles des Anguilles capturées dans les passes-pièges du barrage de Poses - Amfreville-sous-les-Monts. Les tailles historiques sont présentées en transparence sur les deux graphiques.}
+  \caption{Représentation des tailles des anguilles capturées dans les passes-pièges du barrage de Poses - Amfreville-sous-les-Monts. Les tailles historiques sont présentées en transparence sur les deux graphiques.}
   \label{Taille_ANGMONT}
 \end{figure}
 
@@ -2286,7 +2286,7 @@ L'activité est concentrée entre mai et septembre (Figure \ref{plot_annuel_agj}
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{plot_historique_agj}
-\caption{Evolution interannuelle des effectifs d'anguille jaune recensés sur les STACOMI du bassin Seine. Les individus dévalants (codés en "-1") sont transformés en valeur positive afin de mieux représenter le volume des anguilles ayant transité par les passes à poissons. Les axes des ordonnées n'ont pas la même échelle.}
+\caption{Evolution interannuelle des effectifs d'anguille jaune recensés sur les STACOMI du bassin Seine. Les individus dévalants (codés en "-1") sont transformés en valeur positive afin de mieux représenter le volume des anguilles ayant transité par les passes à poissons. Les axes des ordonnées n'ont pas la même échelle. Début des comptages : Poses rive gauche en 2008, Poses rive droite et Carandeau en 2018, Pontoise en 2023.}
 \label{plot_historique_agj}
 \end{figure}
 
@@ -2479,7 +2479,7 @@ image_write(img, path = file.path(imgwd, "p_horaires_agg.png"))
 
 @
 
-La production d'anguille argentée en amont de Poses est estimée, à partir du modèle EDA, à environ 24 000 individus, 5 500 à l'amont de Pontoise et 2 000 à l'amont de Carandeau \citep{briand_eel_2022}. Ces valeurs permettent d’estimer la production générale du bassin, mais le nombre d’individus effectivement contrôlés sur les stations n’est pas représentatif de cette production réelle : seule une fraction des anguilles dévalantes emprunte les passes à poissons.
+La production d'anguilles argentées en amont de Poses est estimée, à partir du modèle EDA, à environ 24 000 individus, 5 500 à l'amont de Pontoise et 2 000 à l'amont de Carandeau \citep{briand_eel_2022}. Ces valeurs permettent d’estimer la production générale du bassin, mais le nombre d’individus effectivement contrôlés sur les stations n’est pas représentatif de cette production réelle : seule une fraction des anguilles dévalantes emprunte les passes à poissons.
 
 Plusieurs voies de franchissement sont en effet disponibles pour les anguilles argentées situées en amont des ouvrages :
 
@@ -2507,7 +2507,7 @@ Des études menées sur les ouvrages de Seine aval par le bureau d'étude Profis
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{plot_historique_agg}
-\caption{Evolution interannuelle des effectifs d'anguille argentées recensés sur les STACOMI du bassin Seine. Les axes des ordonnées n'ont pas la même échelle.}
+\caption{Evolution interannuelle des effectifs d'anguille argentées recensés sur les STACOMI du bassin Seine. Les axes des ordonnées n'ont pas la même échelle. Début des comptages : Poses rive gauche en 2008, Poses rive droite et Carandeau en 2018, Pontoise en 2023.}
 \label{plot_historique_agg}
 \end{figure}
 
@@ -2654,7 +2654,7 @@ plot_ridgeline_lpf<- ggplot(data_long_lpf,
   theme_bw() +
   labs(x = "Jour de la saison (début 1er septembre)", y = "Saison") +
   guides(fill = "none")+
-  theme(text = element_text(size = 15))
+  theme(text = element_text(size = 15),axis.title.x = element_text(size=12))
 png(file=str_c(imgwd,"plot_ridgeline_lpf.png"),width=6,height=8,unit="in",res=200)
 print(plot_ridgeline_lpf)
 dev.off()
@@ -3063,7 +3063,7 @@ Les suivis de reproduction réalisés sur les affluents de la Seine aval confirm
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{plot_historique_lpm}
-\caption{Evolution interannuelle des effectifs des lamproies marines en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle.}
+\caption{Evolution interannuelle des effectifs des lamproies marines en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle. Début des comptages : Poses rive gauche en 2008, Poses rive droite et Carandeau en 2018, Pontoise en 2023.}
 \label{plot_historique_lpm}
 \end{figure}
 
@@ -3328,7 +3328,7 @@ image_write(img, path = file.path(imgwd, "p_horaires_mup.png"))
 
 @
 
-Le Mulet porc, de la famille des Mugilidae, est la seule des cinq espèces de muges européens pour laquelle la catadromie a été mise en évidence (Figure \ref{MUP}). Grâce à sa grande capacité d'adaptation en termes de salinité, de température et d'alimentation, le mulet ne bénéficie d'aucun statut de protection à l'échelle nationale ou européenne. Cependant une tendance à la baisse des effectifs des Mugilidés est observée depuis les années 1990-2000 dont les causes probables sont la destruction des habitats, la surpêche et la pollution chronique d'origine agricole et industrielle \citep{bartulovic_reproductive_2011}.
+Le Mulet porc, de la famille des Mugilidae, est la seule des cinq espèces de muges européens pour laquelle la catadromie a été mise en évidence (Figure \ref{MUP}). Grâce à sa grande capacité d'adaptation en termes de salinité, de température et d'alimentation, le mulet porc ne bénéficie d'aucun statut de protection à l'échelle nationale ou européenne. Cependant une tendance à la baisse des effectifs des Mugilidés est observée depuis les années 1990-2000 dont les causes probables sont la destruction des habitats, la surpêche et la pollution chronique d'origine agricole et industrielle \citep{bartulovic_reproductive_2011}.
 
 \begin{figure}[htpb]
 \centering
@@ -3727,13 +3727,13 @@ Le premier saumon a franchi la passe à poissons le \Sexpr{format.Date(min(data_
 \label{plot_annuel_sat}
 \end{figure}
 
-Lors des premières années de suivi en rive gauche, les effectifs observés avoisinaient en moyenne une soixantaine d’individus, ce qui laissait déjà peu d’espoir quant à l’existence d’une reproduction significative en amont du bassin.
+Lors des premières années de suivi en rive gauche, les effectifs observés avoisinaient en moyenne une soixantaine d’individus, ce qui réduisait fortement la probabilité d’une reproduction significative en amont du bassin.
 La baisse des effectifs enregistrés ces dernières années à la sortie de l’estuaire explique la rareté croissante des observations en amont, tant à Pontoise qu’à Carandeau (Figure \ref{plot_historique_sat}).
 
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{plot_historique_sat}
-\caption{Evolution interannuelle des effectifs des saumons atlantiques en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle.}
+\caption{Evolution interannuelle des effectifs des saumons atlantiques en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle. Début des comptages : Poses rive gauche en 2008, Poses rive droite et Carandeau en 2018, Pontoise en 2023.}
 \label{plot_historique_sat}
 \end{figure}
 
@@ -3750,7 +3750,7 @@ Les tailles mesurées à l'aide du logiciel de dépouillement sont comprises ent
 
 Les études scalimétriques ont aidé à démontrer que chez le poisson, hors conditions particulières, la taille d'un individu est corrélée à son âge.
 
-Le saumon peut être classé en trois catégories :
+Ainsi, le saumon peut être classé en trois catégories :
 
 - les \og castillons \fg{} remontant le fleuve après seulement un hiver en mer dépassent rarement 670 millimètres ;
 
@@ -4127,7 +4127,7 @@ La population de truite de mer est historiquement plus abondante que celle du sa
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{plot_historique_trm}
-\caption{Evolution interannuelle des effectifs des truites de mer en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle.}
+\caption{Evolution interannuelle des effectifs des truites de mer en montaison sur les STACOMI du bassin de la Seine. Les axes des ordonnées n'ont pas la même échelle. Début des comptages : Poses rive gauche en 2008, Poses rive droite et Carandeau en 2018, Pontoise en 2023.}
 \label{plot_historique_trm}
 \end{figure}
 
@@ -4142,7 +4142,7 @@ Au niveau de la phénologie de la migration et comme chez le saumon, on observe 
 
 Comprise entre \Sexpr{round(min(subset(data_taille_trm,annee==selected_annee)$car_valeur_quantitatif))} et \Sexpr{round(max(subset(data_taille_sat,annee==selected_annee)$car_valeur_quantitatif))} mm, la taille moyenne de la population atteint \Sexpr{round(mean(subset(data_taille_sat,annee==selected_annee)$car_valeur_quantitatif))} mm (Figure \ref{Taille_TRM}).
 
-Chez la Truite de mer, la lecture des écailles (scalimétrie) permet de classer les individus en plusieurs catégories :
+Chez la truite de mer, la lecture des écailles (scalimétrie) permet de classer les individus en plusieurs catégories :
 
 - les finnocks, jeunes individus ayant passé 4 à 6 mois en mer, atteignent rarement 430 mm ;
 
