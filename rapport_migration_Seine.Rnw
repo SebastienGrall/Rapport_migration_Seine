@@ -307,22 +307,22 @@ phrase_obs_pc <- function(data,
 
   # -------- Cas spécial : aucun aux deux --------
   if (n1 == 0 && n2 == 0) {
-    return("Cette année, aucun individu n’a été observé à Pontoise et à Carandeau.")
+    return(str_c("Cette année, ",gras("aucun")," individu n’a été observé à Pontoise et à Carandeau."))
   }
 
   # -------- Construction du segment 1 --------
   seg1 <- dplyr::case_when(
-    n1 == 0 ~ "aucun individu n’a été observé",
-    n1 == 1 ~ "1 individu a été observé",
-    TRUE    ~ paste0(n1, " individus ont été observés")
+    n1 == 0 ~ str_c(gras("aucun")," individu n’a été observé"),
+    n1 == 1 ~ str_c(gras("1")," individu a été observé"),
+    TRUE    ~ paste0(gras(n1), " individus ont été observés")
   )
   seg1 <- paste(seg1, "à", st1)
 
   # -------- Construction du segment 2 (forme courte) --------
   seg2 <- dplyr::case_when(
-    n2 == 0 ~ "aucun à",
-    n2 == 1 ~ "1 à",
-    TRUE    ~ paste0(n2, " à")
+    n2 == 0 ~ str_c(gras("aucun")," à"),
+    n2 == 1 ~ str_c(gras("1")," à"),
+    TRUE    ~ paste0(gras(n2), " à")
   )
   seg2 <- paste(seg2, st2)
 
@@ -1016,12 +1016,10 @@ writeLines(resume_latex, str_c(tabwd, "recap.tex"))
 @
 
 
-Les poissons migrateurs entrant dans l'estuaire de la Seine sont contrôlés au niveau du barrage de Poses, marquant la fin de l'estuaire. Cette ouvrage est équipé de dispositifs de franchissement piscicole et de comptage sur les deux rives. Les individus s'engageant sur l'axe Oise peuvent ensuite être observés au barrage de Pontoise, équipé d'un système de vidéocomptage depuis 2023. Un dernier point de contrôle est positionné sur l'Aisne, au barrage de Carandeau.
+Les poissons migrateurs entrant dans l'estuaire de la Seine sont contrôlés au niveau du barrage de Poses, marquant la fin de l'estuaire. Cette ouvrage est équipé de dispositifs de franchissement piscicole et de comptage sur les deux rives. Les individus s'engageant sur l'axe Oise peuvent ensuite être observés au barrage de Pontoise, équipé d'un système de vidéocomptage depuis 2023. Un dernier point de contrôle est positionné sur l'Aisne, au barrage de Carandeau depuis 2018.
 Les effectifs comptabilisés en \Sexpr{annee} sur l'ensemble de ces stations sont présentés dans le tableau \ref{tab:recap}. Les valeurs négatives correspondent à des individus dévalants enregistrés lors du vidéocomptage.
 
-
 \input{table/recap.tex}
-
 
 \end{abstract}
 
@@ -1686,7 +1684,7 @@ La migration génésique des aloses feintes se cantonne généralement aux parti
   \label{ALA}
 \end{figure}
 
-En \Sexpr{annee}, \Sexpr{sum(data_alose_poses_annee$bjo_valeur)} aloses ont franchi l'estuaire de la Seine à Poses. Une fraction de cette cohorte a ensuite atteint les stations de contrôle amont : \Sexpr{sum(data_alose_pontoise_annee$bjo_valeur)} individus ont été observés à Pontoise et \Sexpr{sum(data_alose_carandeau_annee$bjo_valeur)} à Carandeau (Figure \ref{p_annuel_ala}). Les aloses présentent une capacité notable à emprunter les écluses de navigation, phénomène accentué lorsque les dispositifs de franchissement sont peu adaptés à l’espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. Ainsi, les comptages vidéo sous‑estiment le nombre réel d’aloses franchissant l’ouvrage. Cela se vérifie certaines années, lorsque les premières détections sont enregistrées en amont avant d’apparaître à Poses, comme en 2023 (Figure \ref{plot_ridgeline_ala}).  
+En \Sexpr{annee}, \Sexpr{gras(format(sum(data_alose_poses_annee$bjo_valeur),big.mark=" "))} aloses ont franchi l'estuaire de la Seine à Poses. Une fraction de cette cohorte a ensuite atteint les stations de contrôle amont : \Sexpr{gras(sum(data_alose_pontoise_annee$bjo_valeur))} individus ont été observés à Pontoise et \Sexpr{gras(sum(data_alose_carandeau_annee$bjo_valeur))} à Carandeau (Figure \ref{p_annuel_ala}). Les aloses présentent une capacité notable à emprunter les écluses de navigation, phénomène accentué lorsque les dispositifs de franchissement sont peu adaptés à l’espèce, ce qui est notamment le cas sur la Seine aval \citep{le_pichon_continuite_2024}. Ainsi, les comptages vidéo sous‑estiment le nombre réel d’aloses franchissant l’ouvrage. Cela se vérifie certaines années, lorsque les premières détections sont enregistrées en amont avant d’apparaître à Poses, comme en 2023 (Figure \ref{plot_ridgeline_ala}).  
 
 \begin{figure}[htpb]
 \centering
@@ -1983,9 +1981,9 @@ Les anguilles jaunes se déplaçant dans les passes à poissons peuvent circuler
 
 \subsubsection{Anguille en montaison (passe piège) au barrage de Poses}
 
-En rive droite, les premières arrivées d'anguillettes ont eu lieu le \Sexpr{format.Date(min(data_ang_mont_poses_RD_annee$bjo_jour),"%d %B")} et les captures se sont terminées le \Sexpr{format.Date(max(data_ang_mont_poses_RD_annee$bjo_jour),"%d %B")}. Au total, \Sexpr{format(round(sum(data_ang_mont_poses_RD_annee$bjo_valeur)),big.mark = " ")} anguilles ont franchi le dispositif de franchissement (Figure \ref{p_ang_mont_poses_RD}).
+En rive droite, les premières arrivées d'anguillettes ont eu lieu le \Sexpr{format.Date(min(data_ang_mont_poses_RD_annee$bjo_jour),"%d %B")} et les captures se sont terminées le \Sexpr{format.Date(max(data_ang_mont_poses_RD_annee$bjo_jour),"%d %B")}. Au total, \Sexpr{gras(format(round(sum(data_ang_mont_poses_RD_annee$bjo_valeur)),big.mark = " "))} anguilles ont franchi le dispositif de franchissement (Figure \ref{p_ang_mont_poses_RD}).
 
-En rive gauche, les premières arrivées d'anguillettes ont eu lieu le \Sexpr{format.Date(min(data_ang_mont_poses_RG_annee$bjo_jour),"%d %B")} et les captures se sont terminées le \Sexpr{format.Date(max(data_ang_mont_poses_RG_annee$bjo_jour),"%d %B")}. Au total, \Sexpr{format(round(sum(data_ang_mont_poses_RG_annee$bjo_valeur)),big.mark = " ")} anguilles ont été comptabilisées sur le dispositif de franchissement (Figure \ref{p_ang_mont_poses_RG}).
+En rive gauche, les premières arrivées d'anguillettes ont eu lieu le \Sexpr{format.Date(min(data_ang_mont_poses_RG_annee$bjo_jour),"%d %B")} et les captures se sont terminées le \Sexpr{format.Date(max(data_ang_mont_poses_RG_annee$bjo_jour),"%d %B")}. Au total, \Sexpr{gras(format(round(sum(data_ang_mont_poses_RG_annee$bjo_valeur)),big.mark = " "))} anguilles ont été comptabilisées sur le dispositif de franchissement (Figure \ref{p_ang_mont_poses_RG}).
 
 \begin{figure}[htpb]
 \centering
@@ -2339,7 +2337,7 @@ ang_video_agg_annee <- ang_video_agg_annee %>%
                             bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
                             bjo_dis_identifiant == 108  ~ "Pontoise"))   %>% 
                         group_by(bjo_jour,station,rive) %>% 
-                        summarise(bjo_valeur=sum(abs(bjo_valeur)))
+                        summarise(bjo_valeur=sum(-1*(bjo_valeur)))
 ang_video_agg_annee <- ang_video_agg_annee %>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau"))) %>%
                         mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau"))) 
@@ -2374,7 +2372,7 @@ ang_video_agg_histo <- ang_video_agg %>%
                             bjo_dis_identifiant %in% c(106,107)  ~ "Carandeau",
                             bjo_dis_identifiant == 108  ~ "Pontoise")) %>%
                         group_by(bjo_annee,station,rive) %>% 
-                        summarise(effectif=sum(abs(bjo_valeur))) %>%
+                        summarise(effectif=sum(-1*(bjo_valeur))) %>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau"))) %>%
                         mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau"))) %>%
   as.data.frame()
@@ -2736,8 +2734,8 @@ image_write(img, path = file.path(imgwd, "p_horaires_lpf.png"))
 #### phrases conditionnelles en fonction des effectifs de LPF ####
 
 phrase_effectif_annuel <- if_else(nrow(data_lpf_annee)==0,
-                                  "Cette année, aucune lamproie fluviatile n'a été observée sur le barrage de Poses",
-                                  paste0("Cette année, ",sum(data_lpf_annee$bjo_valeur)," lamproies fluviatiles ont été observées sur le barrage de Poses"))
+                                  paste0("Cette année, ",gras("aucune")," lamproie fluviatile n'a été observée sur le barrage de Poses"),
+                                  paste0("Cette année, ",gras(sum(data_lpf_annee$bjo_valeur))," lamproies fluviatiles ont été observées sur le barrage de Poses"))
 
 @
 
@@ -3046,7 +3044,7 @@ La lamproie marine, autre espèce de la famille des Petromyzontidae, est égalem
 \label{LPM}
 \end{figure}
 
-La détection de certains individus peut s’avérer difficile, notamment en raison des nombreux allers‑retours effectués devant les caméras, et de conditions de visualisation parfois médiocres en rive gauche (couloir large, bullage important). Malgré cela, l'effectif total de \Sexpr{sum(data_lpm_poses_annee$bjo_valeur)} lamproies marines sur l'ensemble du barrage est bien représentatif des effectifs réels ayant réellement franchi l'estuaire (Figure \ref{plot_annuel_lpm}).
+La détection de certains individus peut s’avérer difficile, notamment en raison des nombreux allers‑retours effectués devant les caméras, et de conditions de visualisation parfois médiocres en rive gauche (couloir large, bullage important). Malgré cela, l'effectif total de \Sexpr{gras(sum(data_lpm_poses_annee$bjo_valeur))} lamproies marines sur l'ensemble du barrage est bien représentatif des effectifs réels ayant réellement franchi l'estuaire (Figure \ref{plot_annuel_lpm}).
 \Sexpr{phrase_effectif_pont_carand_lpm}
 
 \begin{figure}[htpb]
@@ -3337,7 +3335,7 @@ Le Mulet porc, de la famille des Mugilidae, est la seule des cinq espèces de mu
 \label{MUP}
 \end{figure}
 
-Bien que l'essentiel de la population des mulets soit cantonné à la partie estuarienne de la Seine, \Sexpr{format(sum(data_mup_annuelle$bjo_valeur),big.mark=" ")} individus ont été observés au barrage de Poses en \Sexpr{annee} (Figure \ref{plot_annuel_mup}). Aucune observation n’a été enregistrée sur les autres stations de comptage du bassin, bien que l’espèce soit régulièrement recensée plus en amont dans d’autres bassins équipés de STACOMI, notamment ceux de la Loire et de la Garonne  \citep{dindart_strategie_2024}.
+Bien que l'essentiel de la population des mulets soit cantonné à la partie estuarienne de la Seine, \Sexpr{gras(format(sum(data_mup_annuelle$bjo_valeur),big.mark=" "))} individus ont été observés au barrage de Poses en \Sexpr{annee} (Figure \ref{plot_annuel_mup}). Aucune observation n’a été enregistrée sur les autres stations de comptage du bassin, bien que l’espèce soit régulièrement recensée plus en amont dans d’autres bassins équipés de STACOMI, notamment ceux de la Loire et de la Garonne  \citep{dindart_strategie_2024}.
 
 \begin{figure}[htpb]
 \centering
@@ -3705,7 +3703,7 @@ phrase_effectif_pont_carand_sat<-phrase_obs_pc(data_sat_annuelle)
 
 @
 
-Le premier saumon a franchi la passe à poissons le \Sexpr{format.Date(min(data_sat_poses_annee$bjo_jour),"%d %B")} et le dernier passage a été observé le \Sexpr{format.Date(max(data_sat_poses_annee$bjo_jour),"%d %B")} (Figure \ref{SAT}). Au total, \Sexpr{sum(data_sat_poses_annee$bjo_valeur)} individus ont été recensés en montaison à Poses (Figure \ref{plot_annuel_sat}). \Sexpr{phrase_effectif_pont_carand_sat}
+Le premier saumon a franchi la passe à poissons le \Sexpr{format.Date(min(data_sat_poses_annee$bjo_jour),"%d %B")} et le dernier passage a été observé le \Sexpr{format.Date(max(data_sat_poses_annee$bjo_jour),"%d %B")} (Figure \ref{SAT}). Au total, \Sexpr{gras(sum(data_sat_poses_annee$bjo_valeur))} individus ont été recensés en montaison à Poses (Figure \ref{plot_annuel_sat}). \Sexpr{phrase_effectif_pont_carand_sat}
 
 \begin{figure}[hptb]
   \centering
@@ -4101,7 +4099,7 @@ phrase_effectif_pont_carand_trm<-phrase_obs_pc(data_trm_annuelle)
 
 @
 
-Le premier individu s'est présenté le \Sexpr{format.Date(min(data_trm_poses_annee$bjo_jour),"%d %B")} au barrage de Poses, afin d'amorcer la première vague de migration dite \og printanière \fg{} (Figure \ref{TRM}). En effet, au même titre que le saumon, l'activité migratoire de la truite de mer s'articule autour de deux vagues de migration au printemps et à l'automne. Au total, \Sexpr{sum(data_trm_poses_annee$bjo_valeur)} individus ont été recensés en montaison à Poses (Figure \ref{plot_annuel_trm}). \Sexpr{phrase_effectif_pont_carand_trm}
+Le premier individu s'est présenté le \Sexpr{format.Date(min(data_trm_poses_annee$bjo_jour),"%d %B")} au barrage de Poses, afin d'amorcer la première vague de migration dite \og printanière \fg{} (Figure \ref{TRM}). En effet, au même titre que le saumon, l'activité migratoire de la truite de mer s'articule autour de deux vagues de migration au printemps et à l'automne. Au total, \Sexpr{gras(sum(data_trm_poses_annee$bjo_valeur))} individus ont été recensés en montaison à Poses (Figure \ref{plot_annuel_trm}). \Sexpr{phrase_effectif_pont_carand_trm}
 
 \begin{figure}[hptb]
   \centering
