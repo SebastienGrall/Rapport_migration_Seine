@@ -56,6 +56,7 @@ options(scipen=999)
 \usepackage[table]{xcolor}
 \usepackage{ae,aeguill}
 \usepackage{subcaption}
+\usepackage{csquotes}
 
 
 % Colonne centrée horizontalement avec largeur fixe
@@ -2277,7 +2278,7 @@ Dans les passes à bassins,les anguilles jaunes observées peuvent être en phas
 
 À Pontoise, en raison d'un problème de conception du couloir de vidéocomptage, le comptage des petites espèces, notamment des jeunes anguilles, n'est pas exhaustif. En effet, le radier ne couvre pas l'ensemble du couloir et présente deux voies de passages au niveau des vitres, non couvertes par la caméra, par lesquelles les petits poissons peuvent circuler.
 
-Il est ainsi fréquent que des anguilles apparaissent directement au milieu du couloir, sans possibilité d'identifier leur sens de migration. Elles sont alors enregistrées dans le logiciel avec un sens "indéterminé".
+Il est ainsi fréquent que des anguilles apparaissent directement au milieu du couloir, sans possibilité d'identifier leur sens de migration. Elles sont alors enregistrées dans le logiciel avec un sens \textquote{indéterminé}.
 
 Les données de cette station ne permettent donc pas de d'estimer un nombre d'anguilles en montaison et doivent donc être considérées à titre informatif. L'espèce est néanmoins bien présente sur cette station, puisque le nombre total d'observations, tous sens de migration confondus (montaison, dévalaison ou indéterminé) atteint \Sexpr{nrow(subset(bilesp_pontoise,lot_tax_code=="2038" & std_libelle == "Juvénile"))} individus.
 
@@ -2293,7 +2294,7 @@ L'activité est concentrée entre mai et septembre (Figure \ref{plot_annuel_agj}
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=\textwidth]{plot_historique_agj}
-\caption{Evolution interannuelle des effectifs d'anguille jaune recensés sur les STACOMI du bassin Seine. Les individus dévalants (codés en "-1") sont transformés en valeur positive afin de mieux représenter le volume des anguilles ayant transité par les passes à poissons. Les axes des ordonnées n'ont pas la même échelle. Début des comptages : Poses rive gauche en 2008, Poses rive droite et Carandeau en 2018, Pontoise en 2023.}
+\caption{Evolution interannuelle des effectifs d'anguille jaune recensés sur les STACOMI du bassin Seine. Les individus dévalants (codés en \textquote{-1}) sont transformés en valeur positive afin de mieux représenter le volume des anguilles ayant transité par les passes à poissons. Les axes des ordonnées n'ont pas la même échelle. Début des comptages : Poses rive gauche en 2008, Poses rive droite et Carandeau en 2018, Pontoise en 2023.}
 \label{plot_historique_agj}
 \end{figure}
 
