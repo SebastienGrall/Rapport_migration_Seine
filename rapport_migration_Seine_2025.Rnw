@@ -10,14 +10,14 @@ options(scipen=999)
 
 ###### connexion à la base Stacomi, schéma Seinormigr ###########
 
-con<-  pool::dbPool(
-  drv=RPostgres::Postgres(),
-  dbname = keyring::key_get("dbname_server"),
-  host = keyring::key_get("host_server"),
-  port = keyring::key_get("port_server"),
-  user = keyring::key_get("user_server"),
-  password = keyring::key_get("pwd_server")
-)
+# con<-  pool::dbPool(
+#   drv=RPostgres::Postgres(),
+#   dbname = keyring::key_get("dbname_server"),
+#   host = keyring::key_get("host_server"),
+#   port = keyring::key_get("port_server"),
+#   user = keyring::key_get("user_server"),
+#   password = keyring::key_get("pwd_server")
+# )
 
 @
 
