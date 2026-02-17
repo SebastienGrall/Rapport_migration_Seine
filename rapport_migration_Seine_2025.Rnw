@@ -4,20 +4,20 @@ library(knitr)
 opts_chunk$set(
 concordance=TRUE,fig.width=12,fig.height=6,include=FALSE,cache = F
 )
-annee <- selected_annee <- 2024 ## pour faire les subset, R n'aime pas les annee=annee quand l'intitule de la colonne du DF est annee
+annee <- selected_annee <- 2025 ## pour faire les subset, R n'aime pas les annee=annee quand l'intitule de la colonne du DF est annee
 options(encoding = "UTF-8")
 options(scipen=999)
 
 ###### connexion à la base Stacomi, schéma Seinormigr ###########
 
-# con<-  pool::dbPool(
-#   drv=RPostgres::Postgres(),
-#   dbname = keyring::key_get("dbname_server"),
-#   host = keyring::key_get("host_server"),
-#   port = keyring::key_get("port_server"),
-#   user = keyring::key_get("user_server"),
-#   password = keyring::key_get("pwd_server")
-# )
+con<-  pool::dbPool(
+  drv=RPostgres::Postgres(),
+  dbname = keyring::key_get("dbname_server"),
+  host = keyring::key_get("host_server"),
+  port = keyring::key_get("port_server"),
+  user = keyring::key_get("user_server"),
+  password = keyring::key_get("pwd_server")
+)
 
 @
 
@@ -386,7 +386,7 @@ debit_seine_histo<-ggplot() +
     legend.title = element_blank(),
     legend.text = element_text(size = 15)
   ) + 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 ## Debit histo Oise ##
 
@@ -441,7 +441,7 @@ debit_oise_histo<-ggplot() +
     legend.title = element_blank(),
     legend.text = element_text(size = 15)
   )+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 
 ### Debit Aisne #### 
@@ -497,7 +497,7 @@ debit_aisne_histo<-ggplot() +
     legend.title = element_blank(),
     legend.text = element_text(size = 15)
   )+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 debit_seine_oise_aisne <-  debit_seine_histo/
   debit_oise_histo/
@@ -928,7 +928,7 @@ mig_annee_poses_rd<-mig_annee_poses_rd %>% mutate(Espèces = case_when(
                             lot_tax_code == "2055" & lot_std_code =="5" ~ "Alose",
                             lot_tax_code == "2183" & lot_std_code =="5" ~ "Mulet porc",
                             lot_tax_code == "2220" & lot_std_code =="5" ~ "Saumon atlantique",
-                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer"
+                            lot_tax_code == "2224" & lot_std_code =="5" ~ "Truite de mer",
                            )) %>% ungroup() %>% select(4,3)
 mig_annee_poses_rd<-rbind(mig_annee_poses_rd, tibble(`Espèces`= c("Lamproie fluviatile"),effectifs_poses_rd= sum(lpf_poses_rd$bjo_valeur)))
 
@@ -967,8 +967,11 @@ resume_poses<-full_join(mig_annee_poses_rg,mig_annee_poses_rd,by=c("Espèces")) 
   rowwise(Espèces) %>% 
   mutate(total_poses = sum(c(effectifs_poses_rg,effectifs_poses_rd),na.rm = T))
 
-resume <-resume_poses %>% full_join(mig_annee_pontoise,by=c("Espèces")) %>% 
-  full_join(mig_annee_carandeau,by=c("Espèces"))
+resume <-resume_poses %>% 
+  full_join(mig_annee_pontoise,by=c("Espèces")) %>% 
+  full_join(mig_annee_carandeau,by=c("Espèces")) %>%
+  drop_na(Espèces)
+
 
 resume<-resume %>% rename("Poses rive gauche" = effectifs_poses_rg, "Poses rive droite" = effectifs_poses_rd, "Total Poses" = total_poses,
                   "Pontoise" = effectifs_pontoise, "Carandeau" = effectifs_carandeau) %>% as.data.frame()
@@ -1381,7 +1384,7 @@ data_alose_annuelle <- data_alose_annuelle %>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>%
                         mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau")))
 
-plot_annuel_ala<-ggplot(data_alose_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+plot_annuel_ala<-ggplot(data_alose_annuelle)+geom_bar(aes(x=as.Date(bjo_jour),y=bjo_valeur,fill=rive),stat = "identity")+
                   facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
                     scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
                                                  "Poses rive droite" = col_Poses_RD,
@@ -1395,7 +1398,7 @@ plot_annuel_ala<-ggplot(data_alose_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeu
     ) +
                   theme_bw()+
                   theme(text = element_text(size = 15))+#guides(fill="none")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 png(file=str_c(imgwd,"plot_annuel_ala.png"),width=8,height=4,unit="in",res=200)
 print(plot_annuel_ala)
@@ -1498,7 +1501,7 @@ plot_historique_ala<- ggplot() +
     theme_bw() + xlab("") +
     theme(text = element_text(size = 15),
           plot.margin = margin(0.2, 0, 0, 0, "cm"))  # top, right, bottom, left)) + #,legend.position = "bottom")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_ala.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_ala)
 dev.off()
@@ -1784,7 +1787,7 @@ p_ang_mont_poses_RG <- ggplot()+
                                "11"="#912E0F",
                                "12"="#33004B"
   ))+
-  scale_y_continuous(name="Migration cumulée", sec.axis=sec_axis(~./scaleFactor,name="Effectifs journaliers",labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = ".")),labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))+xlab("")+ theme_bw()+
+  scale_y_continuous(name="Migration cumulée", sec.axis=sec_axis(~./scaleFactor,name="Effectifs journaliers",labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = ".")),labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))+xlab("")+ theme_bw()+
   theme(axis.title.y.left=element_text(color="blue"),
                             axis.text.y.left=element_text(color="blue"),
                             axis.title.y.right=element_text(color="black"),
@@ -1826,7 +1829,7 @@ p_ang_mont_poses_RD <- ggplot()+
                                "11"="#912E0F",
                                "12"="#33004B"
   ))+
-  scale_y_continuous(name="Migration cumulée", sec.axis=sec_axis(~./scaleFactor,name="Effectifs journaliers",labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = ".")),labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))+xlab("")+ theme_bw()+
+  scale_y_continuous(name="Migration cumulée", sec.axis=sec_axis(~./scaleFactor,name="Effectifs journaliers",labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = ".")),labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))+xlab("")+ theme_bw()+
   theme(axis.title.y.left=element_text(color="blue"),
                             axis.text.y.left=element_text(color="blue"),
                             axis.title.y.right=element_text(color="black"),
@@ -1945,7 +1948,7 @@ plot_historique_angmont<- ggplot() +
     ) +
     theme_bw() + xlab("") +
     theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_angmont.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_angmont)
 dev.off()
@@ -2085,7 +2088,7 @@ valeurs_agj_annuelles <-c(sum(subset(ang_video_agj_annee,station == "Poses")$bjo
                               sum(subset(ang_video_agj_annee,station == "Carandeau")$bjo_valeur)
                                )
 
-plot_annuel_agj<-ggplot(ang_video_agj_annee)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+plot_annuel_agj<-ggplot(ang_video_agj_annee)+geom_bar(aes(x=as.Date(bjo_jour),y=bjo_valeur,fill=rive),stat = "identity")+
                   facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
                     scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
                                                  "Poses rive droite" = col_Poses_RD,
@@ -2099,7 +2102,7 @@ plot_annuel_agj<-ggplot(ang_video_agj_annee)+geom_bar(aes(x=bjo_jour,y=bjo_valeu
     ) +
                   theme_bw()+
                   theme(text = element_text(size = 15))+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 png(file=str_c(imgwd,"plot_annuel_agj.png"),width=8,height=4,unit="in",res=200)
 print(plot_annuel_agj)
@@ -2193,7 +2196,7 @@ plot_historique_agj<- ggplot() +
     ) +
     theme_bw() + xlab("") +
     theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_agj.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_agj)
 dev.off()
@@ -2280,7 +2283,7 @@ Dans les passes à bassins,les anguilles jaunes observées peuvent être en phas
 
 Il est ainsi fréquent que des anguilles apparaissent directement au milieu du couloir, sans possibilité d'identifier leur sens de migration. Elles sont alors enregistrées dans le logiciel avec un sens \textquote{indéterminé}.
 
-Les données de cette station ne permettent donc pas de d'estimer un nombre d'anguilles en montaison et doivent donc être considérées à titre informatif. L'espèce est néanmoins bien présente sur cette station, puisque le nombre total d'observations, tous sens de migration confondus (montaison, dévalaison ou indéterminé) atteint \Sexpr{nrow(subset(bilesp_pontoise,lot_tax_code=="2038" & std_libelle == "Juvénile"))} individus.
+Les données de cette station ne permettent donc pas de d'estimer un nombre d'anguilles en montaison et doivent donc être considérées à titre informatif. L'espèce est néanmoins bien présente sur cette station, puisque le nombre total d'observations, tous sens de migration confondus (montaison, dévalaison ou indéterminé) atteint \Sexpr{format(nrow(subset(bilesp_pontoise,lot_tax_code=="2038" & std_libelle == "Juvénile")),big.mark=" ")} individus.
 
 L'activité est concentrée entre mai et septembre (Figure \ref{plot_annuel_agj}), avec un pic d’intensité au printemps, période correspondant à la hausse saisonnière des températures de l’eau.
 
@@ -2352,7 +2355,7 @@ ang_video_agg_annee <- ang_video_agg_annee %>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau"))) %>%
                         mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau"))) 
 
-plot_annuel_agg<-ggplot(ang_video_agg_annee)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+plot_annuel_agg<-ggplot(ang_video_agg_annee)+geom_bar(aes(x=as.Date(bjo_jour),y=bjo_valeur,fill=rive),stat = "identity")+
                   facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
                     scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
                                                  "Poses rive droite" = col_Poses_RD,
@@ -2367,7 +2370,7 @@ plot_annuel_agg<-ggplot(ang_video_agg_annee)+geom_bar(aes(x=bjo_jour,y=bjo_valeu
                   theme_bw()+
                   theme(text = element_text(size = 15),
                         plot.margin = margin(0.2, 0, 0, 0, "cm"))  # top, right, bottom, left))+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 png(file=str_c(imgwd,"plot_annuel_agg.png"),width=8,height=4,unit="in",res=200)
 print(plot_annuel_agg)
@@ -2406,7 +2409,7 @@ plot_historique_agg<- ggplot() +
     ) +
     theme_bw() + xlab("") +
     theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_agg.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_agg)
 dev.off()
@@ -2570,7 +2573,7 @@ data_lpf_annee <- data_lpf_annee %>%
   ) %>%
   ungroup()
 
-plot_annuel_lpf<-ggplot(data_lpf_annee)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+plot_annuel_lpf<-ggplot(data_lpf_annee)+geom_bar(aes(x=as.Date(bjo_jour),y=bjo_valeur,fill=rive),stat = "identity")+
                   facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
                     scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
                                                  "Poses rive droite" = col_Poses_RD,
@@ -2584,7 +2587,7 @@ plot_annuel_lpf<-ggplot(data_lpf_annee)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fil
     ) +
                   theme_bw()+
                   theme(text = element_text(size = 15))+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 png(file=str_c(imgwd,"plot_annuel_lpf.png"),width=8,height=4,unit="in",res=200)
 print(plot_annuel_lpf)
@@ -2615,7 +2618,7 @@ plot_historique_lpf<- ggplot() +
     ) +
     theme_bw() + xlab("") +
     theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_lpf.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_lpf)
 dev.off()
@@ -2829,7 +2832,7 @@ data_lpm_annuelle <- data_lpm_annuelle %>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>%
                         mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau")))
 
-plot_annuel_lpm<-ggplot(data_lpm_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+plot_annuel_lpm<-ggplot(data_lpm_annuelle)+geom_bar(aes(x=as.Date(bjo_jour),y=bjo_valeur,fill=rive),stat = "identity")+
                   facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
                     scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
                                                  "Poses rive droite" = col_Poses_RD,
@@ -2843,7 +2846,7 @@ plot_annuel_lpm<-ggplot(data_lpm_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,
     ) +
                   theme_bw()+
                   theme(text = element_text(size = 15))+#guides(fill="none")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 png(file=str_c(imgwd,"plot_annuel_lpm.png"),width=8,height=4,unit="in",res=200)
 print(plot_annuel_lpm)
@@ -2890,7 +2893,7 @@ plot_historique_lpm<- ggplot() +
     theme_bw() + xlab("") +
     theme(text = element_text(size = 15),
           plot.margin = margin(0.2, 0, 0, 0, "cm"))  # top, right, bottom, left
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_lpm.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_lpm)
 dev.off()
@@ -3131,7 +3134,7 @@ data_mup_annuelle <- data_mup_annuelle %>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>%
                         mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau")))
 
-plot_annuel_mup<-ggplot(data_mup_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+plot_annuel_mup<-ggplot(data_mup_annuelle)+geom_bar(aes(x=as.Date(bjo_jour),y=bjo_valeur,fill=rive),stat = "identity")+
                   facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
                     scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
                                                  "Poses rive droite" = col_Poses_RD,
@@ -3145,7 +3148,7 @@ plot_annuel_mup<-ggplot(data_mup_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,
     ) +
                   theme_bw()+
                   theme(text = element_text(size = 15))+#guides(fill="none")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 png(file=str_c(imgwd,"plot_annuel_mup.png"),width=8,height=4,unit="in",res=200)
 print(plot_annuel_mup)
@@ -3192,7 +3195,7 @@ plot_historique_mup<- ggplot() +
     ) +
     theme_bw() + xlab("") +
     theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_mup.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_mup)
 dev.off()
@@ -3426,7 +3429,7 @@ data_sat_annuelle <- data_sat_annuelle %>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>%
                         mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau")))
 
-plot_annuel_sat<-ggplot(data_sat_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+plot_annuel_sat<-ggplot(data_sat_annuelle)+geom_bar(aes(x=as.Date(bjo_jour),y=bjo_valeur,fill=rive),stat = "identity")+
                   facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
                     scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
                                                  "Poses rive droite" = col_Poses_RD,
@@ -3440,7 +3443,7 @@ plot_annuel_sat<-ggplot(data_sat_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,
     ) +
                   theme_bw()+
                   theme(text = element_text(size = 15))+#guides(fill="none")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 png(file=str_c(imgwd,"plot_annuel_sat.png"),width=8,height=4,unit="in",res=200)
 print(plot_annuel_sat)
@@ -3486,7 +3489,7 @@ plot_historique_sat<- ggplot() +
     ) +
     theme_bw() + xlab("") +
     theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_sat.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_sat)
 dev.off()
@@ -3822,7 +3825,7 @@ data_trm_annuelle <- data_trm_annuelle %>%
                         mutate(station=factor(station,levels=c("Poses","Pontoise","Carandeau")))%>%
                         mutate(rive=factor(rive,levels=c("Poses rive gauche","Poses rive droite","Pontoise","Carandeau")))
 
-plot_annuel_trm<-ggplot(data_trm_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,fill=rive),stat = "identity")+
+plot_annuel_trm<-ggplot(data_trm_annuelle)+geom_bar(aes(x=as.Date(bjo_jour),y=bjo_valeur,fill=rive),stat = "identity")+
                   facet_grid(rows=vars(station))+ xlab("")+ylab("Effectifs")+
                     scale_fill_manual(values = c("Poses rive gauche" = col_Poses_RG,
                                                  "Poses rive droite" = col_Poses_RD,
@@ -3836,7 +3839,7 @@ plot_annuel_trm<-ggplot(data_trm_annuelle)+geom_bar(aes(x=bjo_jour,y=bjo_valeur,
     ) +
                   theme_bw()+
                   theme(text = element_text(size = 15))+#guides(fill="none")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 
 png(file=str_c(imgwd,"plot_annuel_trm.png"),width=8,height=4,unit="in",res=200)
 print(plot_annuel_trm)
@@ -3882,7 +3885,7 @@ plot_historique_trm<- ggplot() +
     ) +
     theme_bw() + xlab("") +
     theme(text = element_text(size = 15)) + #,legend.position = "bottom")+ 
-  scale_y_continuous(labels = scales::comma_format(accuracy = 1, scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
+  scale_y_continuous(labels = scales::comma_format(scale = 1, prefix = "", suffix = "",  big.mark = " ", decimal.mark = "."))
 png(file=str_c(imgwd,"plot_historique_trm.png"),width=8,height=4,unit="in",res=200)
 print(plot_historique_trm)
 dev.off()
@@ -4324,8 +4327,8 @@ Les dysfonctionnements les plus courants concernent :
 
 Le bilan de l'activité des dispositifs au niveau de la rive gauche de Poses est présenté sur la figure \ref{plot_DC_DF_Poses_RG} et celui de la rive droite est présenté sur la figure \ref{plot_DC_DF_Poses_RD}.
 
-Comme les années précédentes, le dysfonctionnement majeur sur le barrage de Poses concerne l'attrait de la passe à poissons en rive droite.
-En effet, la vanne de régulation de la sortie hydraulique destinée à maintenir une légère chute ne fonctionne pas. A cela s'ajoute un colmatage important de la prise d'eau du canal d'attrait en raison de la panne du dégrilleur, ce qui entraîne une perte de charge dans ce canal et donc une réduction du débit entrant.
+Comme les années précédentes, le dysfonctionnement majeur sur le barrage de Poses concernait l'attrait de la passe à poissons en rive droite.
+En effet, la vanne de régulation de la sortie hydraulique destinée à maintenir une légère chute ne fonctionnait pas. A cela s'ajoutait un colmatage important de la prise d'eau du canal d'attrait en raison de la panne du dégrilleur, ce qui entraînait une perte de charge dans ce canal et donc une réduction du débit entrant. Des travaux réalisés à partir d'avril ont permis de rétablir la fonctionnalité de la passe à poissons à la fin de l'été. Cette passe a été également été mise en assec au mois de décembre pour effectuer des travaux sur les dispositifs de franchissement et de comptage des anguilles, avec notamment l'installation d'un compteur automatique qui sera opérationnel en 2026.
 
 \begin{figure}[htpb]
 \centering
@@ -4341,20 +4344,20 @@ En effet, la vanne de régulation de la sortie hydraulique destinée à mainteni
 \label{plot_DC_DF_Poses_RD}
 \end{figure}
 
-La fonctionnalité des ouvrages de franchissement et de comptage sur les barrages de Pontoise (Figure \ref{plot_DC_DF_Pontoise}) et de Carandeau (Figure \ref{plot_DC_DF_Carandeau}) a été bonne sur l'ensemble de l'année \Sexpr{annee}. 
-
-\begin{figure}[htpb]
-\centering
-\includegraphics[width=0.8\textwidth,height=0.3\textheight,keepaspectratio]{plot_DC_DF_Carandeau}
-\caption{Fonctionnement des dispositifs de franchissement et de comptage à Carandeau.}
-\label{plot_DC_DF_Carandeau}
-\end{figure}
+La fonctionnalité des ouvrages de franchissement et de comptage sur les barrages de Pontoise (Figure \ref{plot_DC_DF_Pontoise}) et de Carandeau (Figure \ref{plot_DC_DF_Carandeau}) a été bonne sur l'ensemble de l'année \Sexpr{annee}. Le seul arrêt a concerné la fermeture de la passe à poissons de Pontoise pour permettre la réalisation de travaux à l'entrée hydraulique de celle-ci pendant une semaine.
 
 \begin{figure}[htpb]
 \centering
 \includegraphics[width=0.8\textwidth,height=0.3\textheight,keepaspectratio]{plot_DC_DF_Pontoise}
 \caption{Fonctionnement des dispositifs de franchissement et de comptage à Pontoise.}
 \label{plot_DC_DF_Pontoise}
+\end{figure}
+
+\begin{figure}[htpb]
+\centering
+\includegraphics[width=0.8\textwidth,height=0.3\textheight,keepaspectratio]{plot_DC_DF_Carandeau}
+\caption{Fonctionnement des dispositifs de franchissement et de comptage à Carandeau.}
+\label{plot_DC_DF_Carandeau}
 \end{figure}
 
 \clearpage
